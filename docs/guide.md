@@ -107,7 +107,7 @@ The built-in prompts are Explain, Summarize, Translate, Proofread, and Draft a r
 adds your own, orders them in the right-click menu, and stars the one "Ask pi" uses. Every prompt is in the menu both
 for selected text and for the page. The switch at the end of a prompt's row turns it off: it leaves the menu and the
 `/` list but stays in Settings, ready to turn on again. The starred prompt stays on. A prompt can ask a question or set a task, as in
-[the example prompts](../README.md#example-prompts).
+[the saved prompts](../README.md#saved-prompts).
 
 A prompt puts the selected text where it says `{{selection}}` (or the whole page, with nothing selected), the page's
 title and address where it says `{{title}}` and `{{url}}`, and the answer language where it says `{{language}}`.

@@ -10,6 +10,8 @@ and types, moves through a site and its tab group, runs scripts to pull out data
 Use your ChatGPT plan, or your own OpenRouter, OpenAI, Anthropic, or DeepSeek API key. There is no pi-aside server:
 requests go straight from your browser to your provider.
 
+[Install](#install) · [Quick start](#quick-start) · [Examples](#examples)
+
 ## Why pi-aside
 
 **What it can do**
@@ -43,45 +45,57 @@ requests go straight from your browser to your provider.
 - **Your model, no middleman.** Four providers besides ChatGPT, a different model per message if you like, and each
   chat's cost shown as it grows. Open source (MIT), no analytics.
 
-## What you can ask
+## Examples
 
-- *"When did these come out? Chart them by decade, and highlight the ones from the 2020s."* On Wikipedia's list of the
-  highest-grossing films, one script counts every row and marks the rows on the page, and pi draws the chart.
-- *"I get this since upgrading to Vite 3. Is it a known issue? How do I fix it?"* With a screenshot of the error
-  attached, pi searches the repository's issues, reads the one that matches, and says what fixes it.
-- *"What are the 5 most popular stories of the past 24 hours?"* On Hacker News, pi writes one script that reads three
-  pages and ranks the stories.
-- *"Which of these raised its share of renewables the most since 2010?"* On a chart, pi takes a screenshot and reads
-  it.
-- *"Compare the three laptops in this tab group: price, weight, battery, and ports."* pi reads each tab and makes a
-  table.
-- *"Which open issues labeled bug has nobody answered yet? Oldest first."* On a GitHub repository, pi sets the filters
-  and reads the list.
-- *"Fill in this form from the details below, and stop before you submit."* pi types into each field and leaves the
-  last click to you.
+Select text and right-click **Ask pi**, or press `Ctrl+Shift+Y` (`Cmd+Shift+Y` on a Mac), and ask about it. Or open pi
+on any page and hand it a task, like the films table in the [animation above](#why-pi-aside).
 
-![pi-aside beside a chart of Our World in Data: it took a screenshot and compared the countries' share of renewables](docs/images/chart.png)
+<sub>The screenshots below show the real extension and its page tools on live sites. The model's replies in them are
+scripted: results and timing vary by model.</sub>
 
-Or just ask: select text and right-click **Ask pi**, or press `Ctrl+Shift+Y` (`Cmd+Shift+Y` on a Mac).
+### Explain a selection
+
+*"Explain this simply, with a diagram."* With a paragraph of MDN's HTTP caching guide selected, pi answers in two lines
+and draws what passes between the browser, the cache, and the server.
 
 ![pi-aside beside MDN's HTTP caching guide: a question about a selected paragraph, answered with a diagram](docs/images/explain.png)
 
-<sub>The screenshots show the real extension and its page tools on live sites. The model's replies in them are scripted:
-results and timing vary by model.</sub>
+### Read a chart
 
-## Example prompts
+*"Which of these raised its share of renewables the most since 2010?"* On a chart from Our World in Data, pi takes a
+screenshot, reads the lines, and gives each country's change.
+
+![pi-aside beside a chart of Our World in Data: it took a screenshot and compared the countries' share of renewables](docs/images/chart.png)
+
+### More to try
+
+- *"What are the 5 most popular stories of the past 24 hours?"* On Hacker News, pi writes one script that reads three
+  pages and ranks the stories.
+- *"Compare the three laptops in this tab group: price, weight, battery, and ports."* pi reads each tab and makes a
+  table.
+- *"Fill in this form from the details below, and stop before you submit."* pi types into each field and leaves the
+  last click to you.
+- *"I get this since upgrading to Vite 3. Is it a known issue? How do I fix it?"* With a screenshot of the error
+  attached, pi searches the repository's issues, reads the one that matches, and says what fixes it.
+
+### Saved prompts
 
 A prompt can set a whole task, scripts included. Add one in Settings > Prompts, and it shows in the right-click menu
-and as a `/command`. Both examples run scripts, so they need Allow User Scripts ([Quick start](#quick-start), step 4);
-choose **For this chat** on the script card, or set Run script to On, to skip the card next time.
+and as a `/command`. Both prompts below run scripts, so they need Allow User Scripts ([Quick start](#quick-start), step
+4); choose **For this chat** on the script card, or set Run script to On, to skip the card next time.
 
-### Translate a page in place
+#### Translate a page in place
 
 Translation extensions usually send a page to a translation service piece by piece, so the same name or term can come
 back translated three different ways. With this prompt, the model reads the whole page and translates it as one text,
 then a script puts each translated paragraph under its original on the page.
 
-Add it as "Translate in page":
+Add it as "Translate in page", then right-click any article and choose **Translate in page**. `{{selection}}` is the
+whole page when nothing is selected; select a few paragraphs first to translate only those. `{{language}}` is your
+answer language (Settings > Answers).
+
+<details>
+<summary>The prompt</summary>
 
 ```text
 Translate the text below into {{language}}, then embed the translation back into the original page, paragraph by paragraph: each translated paragraph right below its original. Keep the original text.
@@ -91,15 +105,13 @@ Style each translation as a plain paragraph in the page's own typography: no bor
 {{selection}}
 ```
 
-Then right-click any article and choose **Translate in page**. `{{selection}}` is the whole page when nothing is
-selected; select a few paragraphs first to translate only those. `{{language}}` is your answer language (Settings >
-Answers).
+</details>
 
 It is slower than a translation extension, but the translation reads as one piece, and with a ChatGPT plan it runs on
 your plan instead of a per-token bill. A higher thinking level (the bulb in the message box) can give a more careful
 translation, at the cost of more time.
 
-### Summarize a YouTube video
+#### Summarize a YouTube video
 
 pi reads the video's full captions with one script, without opening the transcript panel, and answers from them. By
 default it writes a summary: the main points first, then chapters whose timestamps open the video at that moment. To
@@ -211,7 +223,6 @@ mistakes. Keep Ask for email, banking, admin pages, and anywhere a wrong click m
 - [User guide](docs/guide.md): images and text files, chats and History, prompts and slash commands, models and
   thinking, editing a question, diagrams, web search, shortcuts, languages, and limits.
 - [CONTRIBUTING.md](CONTRIBUTING.md): building, checks, and tests.
-- [Issues](https://github.com/yzhg1983/pi-aside/issues): bugs and questions.
 
 pi-aside is unofficial: the pi project, which makes pi-durable, does not make or endorse it.
 
