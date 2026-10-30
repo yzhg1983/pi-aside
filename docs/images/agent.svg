@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="pi-aside beside Wikipedia's list of highest-grossing films: it reads the table, asks before running a script, marks the 2020s rows on the page, and charts the films by decade">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d2858"/><stop offset="1" stop-color="#111936"/></linearGradient>
+<filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="60"/></filter>
+<filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000" flood-opacity="0.45"/></filter>
+</defs>
+<style>
+@keyframes row2 { 0%, 37.73% { fill: #fff; } 40.00%, 93.64% { fill: #ffe08a; } 96.82%, 100% { fill: #fff; } } .row2 { animation: row2 11s infinite both; }
+@keyframes row3 { 0%, 39.73% { fill: #fff; } 42.00%, 93.64% { fill: #ffe08a; } 96.82%, 100% { fill: #fff; } } .row3 { animation: row3 11s infinite both; }
+@keyframes row5 { 0%, 41.73% { fill: #fff; } 44.00%, 93.64% { fill: #ffe08a; } 96.82%, 100% { fill: #fff; } } .row5 { animation: row5 11s infinite both; }
+@keyframes row8 { 0%, 43.73% { fill: #fff; } 46.00%, 93.64% { fill: #ffe08a; } 96.82%, 100% { fill: #fff; } } .row8 { animation: row8 11s infinite both; }
+@keyframes ask { 0%, 3.64% { opacity: 0; transform: translateY(8px); } 6.82%, 93.64% { opacity: 1; transform: translateY(0); } 96.82%, 100% { opacity: 0; } } .ask { animation: ask 11s infinite both; }
+@keyframes rail { 0%, 18.18% { opacity: 0; } 21.36%, 93.64% { opacity: 1; } 96.82%, 100% { opacity: 0; } } .rail { animation: rail 11s infinite both; }
+@keyframes s1 { 0%, 10.91% { opacity: 0; transform: translateY(6px); } 14.09%, 93.64% { opacity: 1; transform: translateY(0); } 96.82%, 100% { opacity: 0; } } .s1 { animation: s1 11s infinite both; }
+@keyframes card { 0%, 18.18% { opacity: 0; transform: translateY(6px); } 21.36%, 32.27% { opacity: 1; transform: translateY(0); } 34.55%, 100% { opacity: 0; } } .card { animation: card 11s infinite both; }
+@keyframes s2 { 0%, 33.64% { opacity: 0; transform: translateY(6px); } 36.82%, 93.64% { opacity: 1; transform: translateY(0); } 96.82%, 100% { opacity: 0; } } .s2 { animation: s2 11s infinite both; }
+@keyframes thread { 0%, 35.45% { opacity: 0; } 38.64%, 93.64% { opacity: 1; } 96.82%, 100% { opacity: 0; } } .thread { animation: thread 11s infinite both; }
+@keyframes dot { 0%, 35.45% { opacity: 0; } 38.64%, 93.64% { opacity: 1; } 96.82%, 100% { opacity: 0; } } .dot { animation: dot 11s infinite both; }
+@keyframes answer { 0%, 49.09% { opacity: 0; transform: translateY(6px); } 52.27%, 93.64% { opacity: 1; transform: translateY(0); } 96.82%, 100% { opacity: 0; } } .answer { animation: answer 11s infinite both; }
+@keyframes bar0 { 0%, 52.73% { transform: scaleY(0); } 58.18%, 93.64% { transform: scaleY(1); } 96.82%, 100% { transform: scaleY(0); } } .bar0 { transform-box: fill-box; transform-origin: bottom; animation: bar0 11s infinite both; }
+@keyframes label0 { 0%, 58.18% { opacity: 0; } 61.36%, 93.64% { opacity: 1; } 96.82%, 100% { opacity: 0; } } .label0 { animation: label0 11s infinite both; }
+@keyframes bar1 { 0%, 54.09% { transform: scaleY(0); } 59.55%, 93.64% { transform: scaleY(1); } 96.82%, 100% { transform: scaleY(0); } } .bar1 { transform-box: fill-box; transform-origin: bottom; animation: bar1 11s infinite both; }
+@keyframes label1 { 0%, 59.55% { opacity: 0; } 62.73%, 93.64% { opacity: 1; } 96.82%, 100% { opacity: 0; } } .label1 { animation: label1 11s infinite both; }
+@keyframes bar2 { 0%, 55.45% { transform: scaleY(0); } 60.91%, 93.64% { transform: scaleY(1); } 96.82%, 100% { transform: scaleY(0); } } .bar2 { transform-box: fill-box; transform-origin: bottom; animation: bar2 11s infinite both; }
+@keyframes label2 { 0%, 60.91% { opacity: 0; } 64.09%, 93.64% { opacity: 1; } 96.82%, 100% { opacity: 0; } } .label2 { animation: label2 11s infinite both; }
+@keyframes bar3 { 0%, 56.82% { transform: scaleY(0); } 62.27%, 93.64% { transform: scaleY(1); } 96.82%, 100% { transform: scaleY(0); } } .bar3 { transform-box: fill-box; transform-origin: bottom; animation: bar3 11s infinite both; }
+@keyframes label3 { 0%, 62.27% { opacity: 0; } 65.45%, 93.64% { opacity: 1; } 96.82%, 100% { opacity: 0; } } .label3 { animation: label3 11s infinite both; }
+@keyframes pointer { 0%, 20.91% { opacity: 0; transform: translate(150px, 150px); } 22.73% { opacity: 1; transform: translate(150px, 150px); } 28.18% { opacity: 1; transform: translate(0, 0); } 29.55% { opacity: 1; transform: translate(0, 0) scale(0.85); } 30.91% { opacity: 1; transform: translate(0, 0); } 35.45% { opacity: 0; transform: translate(40px, 30px); } 100% { opacity: 0; } } .pointer { animation: pointer 11s infinite both; transform-box: fill-box; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } .card, .pointer { display: none; } .marked { fill: #ffe08a; } }
+</style>
+<rect width="1200" height="640" rx="18" fill="url(#bg)"/>
+<g font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif">
+<circle cx="1040" cy="40" r="260" fill="#3157d5" opacity="0.18" filter="url(#blur)"/>
+<circle cx="120" cy="620" r="220" fill="#6f8ff0" opacity="0.12" filter="url(#blur)"/>
+<rect x="60" y="30" width="34" height="34" rx="8.84" fill="#3157d5"/>
+<text x="77" y="54.480000000000004" text-anchor="middle" font-size="21.76" font-weight="700" fill="#fff">π</text>
+<rect x="98.08000000000001" y="30" width="9.18" height="34" rx="4.59" fill="#6f8ff0"/>
+<text x="124" y="56" font-size="26" font-weight="700" fill="#fff" letter-spacing="-0.4">Ask once.<tspan fill="#9fb3ff" font-weight="500"> See every step.</tspan></text>
+<rect x="60" y="92" width="1080" height="488" rx="14" fill="#fff" filter="url(#shadow)"/>
+<path d="M60 106 a14 14 0 0 1 14 -14 H1126 a14 14 0 0 1 14 14 V132 H60 Z" fill="#e8ebf3"/>
+<circle cx="82" cy="112" r="6" fill="#ff5f57"/>
+<circle cx="102" cy="112" r="6" fill="#febc2e"/>
+<circle cx="122" cy="112" r="6" fill="#28c840"/>
+<rect x="160" y="101" width="420" height="22" rx="11" fill="#fff"/>
+<text x="176" y="117" font-size="12.5" fill="#6b7280">en.wikipedia.org/wiki/List_of_highest-grossing_films</text>
+<path d="M735 132 H1140 V566 a14 14 0 0 1 -14 14 H735 Z" fill="#f4f6fb"/>
+<rect x="735" y="132" width="2" height="448" fill="#3157d5"/>
+<text x="92" y="168" font-size="21" font-weight="600" fill="#1f2937" font-family="Georgia, 'Times New Roman', serif">Highest-grossing films</text>
+<rect x="92" y="180" width="610" height="1" fill="#c8ccd6"/>
+<rect x="92" y="198" width="610" height="30" fill="#eaecf0" stroke="#c8ccd6"/>
+<text x="106" y="218" font-size="13" font-weight="600" fill="#1f2937">Rank</text>
+<text x="162" y="218" font-size="13" font-weight="600" fill="#1f2937">Title</text>
+<text x="492" y="218" font-size="13" font-weight="600" fill="#1f2937">Worldwide gross</text>
+<text x="632" y="218" font-size="13" font-weight="600" fill="#1f2937">Year</text>
+<rect x="92" y="228" width="610" height="36" fill="#fff" stroke="#c8ccd6"/>
+<text x="106" y="251" font-size="14" fill="#1f2937">1</text>
+<text x="162" y="251" font-size="14" font-style="italic" fill="#3366cc">Avengers: Endgame</text>
+<text x="492" y="251" font-size="14" fill="#1f2937">$2.94B</text>
+<text x="632" y="251" font-size="14" fill="#1f2937">2019</text>
+<rect x="92" y="264" width="610" height="36" fill="#fff" stroke="#c8ccd6"/>
+<text x="106" y="287" font-size="14" fill="#1f2937">2</text>
+<text x="162" y="287" font-size="14" font-style="italic" fill="#3366cc">Avatar</text>
+<text x="492" y="287" font-size="14" fill="#1f2937">$2.92B</text>
+<text x="632" y="287" font-size="14" fill="#1f2937">2009</text>
+<rect x="92" y="300" width="610" height="36" fill="#fff" stroke="#c8ccd6" class="marked row2"/>
+<text x="106" y="323" font-size="14" fill="#1f2937">3</text>
+<text x="162" y="323" font-size="14" font-style="italic" fill="#3366cc">Spider-Man: Brand New Day</text>
+<text x="492" y="323" font-size="14" fill="#1f2937">$2.52B</text>
+<text x="632" y="323" font-size="14" fill="#1f2937">2026</text>
+<rect x="92" y="336" width="610" height="36" fill="#fff" stroke="#c8ccd6" class="marked row3"/>
+<text x="106" y="359" font-size="14" fill="#1f2937">4</text>
+<text x="162" y="359" font-size="14" font-style="italic" fill="#3366cc">Avatar: The Way of Water</text>
+<text x="492" y="359" font-size="14" fill="#1f2937">$2.33B</text>
+<text x="632" y="359" font-size="14" fill="#1f2937">2022</text>
+<rect x="92" y="372" width="610" height="36" fill="#fff" stroke="#c8ccd6"/>
+<text x="106" y="395" font-size="14" fill="#1f2937">5</text>
+<text x="162" y="395" font-size="14" font-style="italic" fill="#3366cc">Titanic</text>
+<text x="492" y="395" font-size="14" fill="#1f2937">$2.26B</text>
+<text x="632" y="395" font-size="14" fill="#1f2937">1997</text>
+<rect x="92" y="408" width="610" height="36" fill="#fff" stroke="#c8ccd6" class="marked row5"/>
+<text x="106" y="431" font-size="14" fill="#1f2937">6</text>
+<text x="162" y="431" font-size="14" font-style="italic" fill="#3366cc">Ne Zha 2</text>
+<text x="492" y="431" font-size="14" fill="#1f2937">$2.22B</text>
+<text x="632" y="431" font-size="14" fill="#1f2937">2025</text>
+<rect x="92" y="444" width="610" height="36" fill="#fff" stroke="#c8ccd6"/>
+<text x="106" y="467" font-size="14" fill="#1f2937">7</text>
+<text x="162" y="467" font-size="14" font-style="italic" fill="#3366cc">Star Wars: The Force Awakens</text>
+<text x="492" y="467" font-size="14" fill="#1f2937">$2.07B</text>
+<text x="632" y="467" font-size="14" fill="#1f2937">2015</text>
+<rect x="92" y="480" width="610" height="36" fill="#fff" stroke="#c8ccd6"/>
+<text x="106" y="503" font-size="14" fill="#1f2937">8</text>
+<text x="162" y="503" font-size="14" font-style="italic" fill="#3366cc">Avengers: Infinity War</text>
+<text x="492" y="503" font-size="14" fill="#1f2937">$2.05B</text>
+<text x="632" y="503" font-size="14" fill="#1f2937">2018</text>
+<rect x="92" y="516" width="610" height="36" fill="#fff" stroke="#c8ccd6" class="marked row8"/>
+<text x="106" y="539" font-size="14" fill="#1f2937">9</text>
+<text x="162" y="539" font-size="14" font-style="italic" fill="#3366cc">Spider-Man: No Way Home</text>
+<text x="492" y="539" font-size="14" fill="#1f2937">$1.92B</text>
+<text x="632" y="539" font-size="14" fill="#1f2937">2021</text>
+<g class="ask">
+<rect x="784.2" y="148" width="335.8" height="60" rx="14" fill="#3157d5"/>
+<text x="800.2" y="172" font-size="15.5" fill="#fff">When did these come out? Chart them</text>
+<text x="800.2" y="193" font-size="15.5" fill="#fff">by decade, and mark the 2020s.</text>
+</g>
+<rect x="762.2" y="232" width="1.6" height="58" fill="#d6dae3" class="rail"/>
+<g class="s1">
+<circle cx="763" cy="232" r="5" fill="none" stroke="#9aa3b5" stroke-width="1.6"/>
+<text x="779" y="237" font-size="14.5" fill="#6b7280">Read the page: 50 rows, 6 columns</text>
+</g>
+<g class="card">
+<rect x="757" y="252" width="363" height="78" rx="10" fill="#fff" stroke="#d6dae3"/>
+<text x="771" y="277" font-size="14.5" font-weight="600" fill="#1f2937">Run a script on en.wikipedia.org?</text>
+<text x="771" y="296" font-size="12.5" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">for (const row of table.rows) …</text>
+<rect x="771" y="303" width="62" height="20" rx="6" fill="#3157d5"/>
+<text x="802" y="317.5" text-anchor="middle" font-size="13" font-weight="600" fill="#fff">Allow</text>
+<rect x="839" y="303" width="56" height="20" rx="6" fill="#fff" stroke="#c8ccd6"/>
+<text x="867" y="317.5" text-anchor="middle" font-size="13" fill="#1f2937">Deny</text>
+</g>
+<g class="s2">
+<circle cx="763" cy="290" r="5" fill="none" stroke="#9aa3b5" stroke-width="1.6"/>
+<text x="779" y="295" font-size="14.5" fill="#6b7280">Ran a script: counted 50, marked 14</text>
+<text x="779" y="311" font-size="12.5" fill="#8a93a6" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">for (const row of table.rows) …</text>
+</g>
+<path d="M753 293 C 687 293, 695 330, 696 330" fill="none" stroke="#3157d5" stroke-width="2" stroke-dasharray="5 5" class="thread"/>
+<circle cx="696" cy="330" r="4" fill="#3157d5" class="dot"/>
+<g class="answer">
+<text x="757" y="350" font-size="16" fill="#1f2937"><tspan font-weight="700">32 of 50</tspan> came out in the 2010s;</text>
+<text x="757" y="372" font-size="16" fill="#1f2937">the <tspan font-weight="700">14</tspan> from the 2020s are marked.</text>
+<rect x="757" y="388" width="363" height="170" rx="10" fill="#fff" stroke="#d6dae3"/>
+<text x="938.5" y="411" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1f2937">Films per decade</text>
+</g>
+<rect x="792.5" y="532.875" width="52" height="3.125" rx="3" fill="#5b7bd9" class="bar0"/>
+<g class="label0">
+<text x="818.5" y="526.875" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1f2937">1</text>
+<text x="818.5" y="551" text-anchor="middle" font-size="12.5" fill="#6b7280">1990s</text>
+</g>
+<rect x="872.5" y="526.625" width="52" height="9.375" rx="3" fill="#5b7bd9" class="bar1"/>
+<g class="label1">
+<text x="898.5" y="520.625" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1f2937">3</text>
+<text x="898.5" y="551" text-anchor="middle" font-size="12.5" fill="#6b7280">2000s</text>
+</g>
+<rect x="952.5" y="436" width="52" height="100" rx="3" fill="#5b7bd9" class="bar2"/>
+<g class="label2">
+<text x="978.5" y="430" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1f2937">32</text>
+<text x="978.5" y="551" text-anchor="middle" font-size="12.5" fill="#6b7280">2010s</text>
+</g>
+<rect x="1032.5" y="492.25" width="52" height="43.75" rx="3" fill="#f2c230" class="bar3"/>
+<g class="label3">
+<text x="1058.5" y="486.25" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1f2937">14</text>
+<text x="1058.5" y="551" text-anchor="middle" font-size="12.5" fill="#6b7280">2020s</text>
+</g>
+<g class="pointer"><path transform="translate(802 314)" d="M0 0 L0 18 L5 13.5 L8.5 21 L11.5 19.6 L8 12.4 L14 12.4 Z" fill="#111" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></g>
+<text x="600" y="616" text-anchor="middle" font-size="13.5" fill="#8f9cc6">Illustration: the model's replies are scripted</text>
+</g>
+</svg>

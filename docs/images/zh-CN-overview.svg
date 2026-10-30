@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="440" viewBox="0 0 1200 440" role="img" aria-label="pi-aside：每个网页旁的 AI 智能体。读懂网页、操作网页、运行脚本、先问再做，用你自己的密钥。旁边是一篇文章，pi 直接在页面上标出了其中的论断，并注明两处没有出处。">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d2858"/><stop offset="1" stop-color="#111936"/></linearGradient>
+<filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="60"/></filter>
+<filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000" flood-opacity="0.45"/></filter>
+</defs>
+<rect width="1200" height="440" rx="18" fill="url(#bg)"/>
+<g font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif">
+<circle cx="1060" cy="30" r="260" fill="#3157d5" opacity="0.2" filter="url(#blur)"/>
+<circle cx="80" cy="460" r="220" fill="#6f8ff0" opacity="0.12" filter="url(#blur)"/>
+<rect x="64" y="64" width="58" height="58" rx="15.08" fill="#3157d5"/>
+<text x="93" y="105.75999999999999" text-anchor="middle" font-size="37.12" font-weight="700" fill="#fff">π</text>
+<rect x="128.96" y="64" width="15.66" height="58" rx="7.83" fill="#6f8ff0"/>
+<text x="152" y="111" font-size="50" font-weight="700" fill="#fff" letter-spacing="-1">pi-aside</text>
+<text x="64" y="182" font-size="30" font-weight="600" fill="#fff" letter-spacing="-0.4">每个网页旁的 AI 智能体。</text>
+<rect x="64" y="214" width="106" height="36" rx="18" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.18"/>
+<path transform="translate(78 224)" d="M4 1.5h6l3 3v10H4z M6.5 7.5h4 M6.5 10.5h4" fill="none" stroke="#9fb3ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="102" y="237.5" font-size="15" fill="#fff">读懂网页</text>
+<rect x="180" y="214" width="106" height="36" rx="18" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.18"/>
+<path transform="translate(194 224)" d="M4 2l9 5.2-4.2 1.1L6.6 12.6z" fill="none" stroke="#9fb3ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="218" y="237.5" font-size="15" fill="#fff">操作网页</text>
+<rect x="296" y="214" width="106" height="36" rx="18" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.18"/>
+<path transform="translate(310 224)" d="M5.5 4 2 8l3.5 4 M10.5 4 14 8l-3.5 4 M9.2 2.8 6.8 13.2" fill="none" stroke="#9fb3ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="334" y="237.5" font-size="15" fill="#fff">运行脚本</text>
+<rect x="412" y="214" width="106" height="36" rx="18" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.18"/>
+<path transform="translate(426 224)" d="M8 1.5l5.5 2.2v3.8c0 3.4-2.3 5.8-5.5 7-3.2-1.2-5.5-3.6-5.5-7V3.7z M5.6 8l1.7 1.7 3.2-3.4" fill="none" stroke="#9fb3ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="450" y="237.5" font-size="15" fill="#fff">先问再做</text>
+<rect x="64" y="260" width="151" height="36" rx="18" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.18"/>
+<path transform="translate(78 270)" d="M5.2 7.8a3.2 3.2 0 1 0 0.01 0z M7.6 9.1 14 2.7 M12.2 4.5l1.6 1.6 M10.4 6.3l1.4 1.4" fill="none" stroke="#9fb3ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="102" y="283.5" font-size="15" fill="#fff">用你自己的密钥</text>
+<text x="64" y="344" font-size="14" fill="#8f9cc6">ChatGPT 订阅，或 OpenRouter、OpenAI、Anthropic、DeepSeek 的 API 密钥。</text>
+<text x="64" y="366" font-size="14" fill="#8f9cc6">没有 pi-aside 服务器：请求直接发往模型服务商。</text>
+<rect x="640" y="54" width="516" height="338" rx="14" fill="#fff" filter="url(#shadow)"/>
+<path d="M640 68 a14 14 0 0 1 14 -14 H1142 a14 14 0 0 1 14 14 V94 H640 Z" fill="#e8ebf3"/>
+<circle cx="662" cy="74" r="6" fill="#ff5f57"/>
+<circle cx="682" cy="74" r="6" fill="#febc2e"/>
+<circle cx="702" cy="74" r="6" fill="#28c840"/>
+<rect x="740" y="63" width="386" height="22" rx="11" fill="#fff"/>
+<text x="756" y="79" font-size="12" fill="#6b7280">example.org/essays/four-day-week</text>
+<path d="M892 94 H1156 V378 a14 14 0 0 1 -14 14 H892 Z" fill="#f4f6fb"/>
+<rect x="892" y="94" width="2" height="298" fill="#3157d5"/>
+<text x="660" y="128" font-size="17" font-weight="700" fill="#1f2937" font-family="Georgia, 'Times New Roman', serif">The four-day week works</text>
+<rect x="660" y="152" width="208" height="6" rx="3" fill="#d3d8e1" opacity="1"/>
+<rect x="657" y="166" width="202" height="15" rx="3" fill="#ffe08a"/>
+<rect x="660" y="171" width="196" height="6" rx="3" fill="#8a7a50" opacity="0.55"/>
+<rect x="660" y="190" width="204" height="6" rx="3" fill="#d3d8e1" opacity="1"/>
+<rect x="660" y="209" width="150" height="6" rx="3" fill="#d3d8e1" opacity="1"/>
+<rect x="660" y="238" width="206" height="6" rx="3" fill="#d3d8e1" opacity="1"/>
+<rect x="657" y="252" width="194" height="15" rx="3" fill="#ffe08a"/>
+<rect x="660" y="257" width="188" height="6" rx="3" fill="#8a7a50" opacity="0.55"/>
+<rect x="657" y="271" width="204" height="15" rx="3" fill="#ffc9c9"/>
+<rect x="660" y="276" width="198" height="6" rx="3" fill="#8a7a50" opacity="0.55"/>
+<rect x="660" y="295" width="120" height="6" rx="3" fill="#d3d8e1" opacity="1"/>
+<rect x="660" y="324" width="202" height="6" rx="3" fill="#d3d8e1" opacity="1"/>
+<rect x="657" y="338" width="182" height="15" rx="3" fill="#ffc9c9"/>
+<rect x="660" y="343" width="176" height="6" rx="3" fill="#8a7a50" opacity="0.55"/>
+<rect x="657" y="357" width="210" height="15" rx="3" fill="#ffe08a"/>
+<rect x="660" y="362" width="204" height="6" rx="3" fill="#8a7a50" opacity="0.55"/>
+<g transform="rotate(-3 829 268)"><rect x="829" y="268" width="49" height="20" rx="3" fill="#ffe1e1" stroke="#00000014"/>
+<text x="837" y="282" font-size="11" font-weight="600" fill="#7a2e2e">无出处</text></g>
+<g transform="rotate(-3 829 344)"><rect x="829" y="344" width="49" height="20" rx="3" fill="#ffe1e1" stroke="#00000014"/>
+<text x="837" y="358" font-size="11" font-weight="600" fill="#7a2e2e">无出处</text></g>
+<rect x="986" y="108" width="156" height="54" rx="12" fill="#3157d5"/>
+<text x="999" y="129" font-size="13" fill="#fff">标出文中的论断，</text>
+<text x="999" y="147" font-size="13" fill="#fff">没有出处的单独注明。</text>
+<rect x="912.3" y="180" width="1.4" height="26" fill="#d6dae3"/>
+<circle cx="913" cy="180" r="6" fill="#e6f4ec" stroke="#2f9e66" stroke-width="1.3"/>
+<path d="M910.3 180 l1.9 1.9 3.4-3.6" fill="none" stroke="#2f9e66" stroke-width="1.4" stroke-linecap="round"/>
+<text x="926" y="184" font-size="12.5" fill="#6b7280">已读取页面</text>
+<circle cx="913" cy="206" r="6" fill="#e6f4ec" stroke="#2f9e66" stroke-width="1.3"/>
+<path d="M910.3 206 l1.9 1.9 3.4-3.6" fill="none" stroke="#2f9e66" stroke-width="1.4" stroke-linecap="round"/>
+<text x="926" y="210" font-size="12.5" fill="#6b7280">已运行脚本：5 处标记，2 条批注</text>
+<text x="908" y="240" font-size="13.5" font-weight="700" fill="#1f2937">5 个论断里有 2 个没有出处。</text>
+<rect x="908" y="256" width="200" height="7" rx="3.5" fill="#dfe3ea"/>
+<rect x="908" y="272" width="170" height="7" rx="3.5" fill="#dfe3ea"/>
+<rect x="908" y="288" width="186" height="7" rx="3.5" fill="#dfe3ea"/>
+<rect x="908" y="352" width="234" height="28" rx="14" fill="#fff" stroke="#d6dae3"/>
+</g>
+</svg>

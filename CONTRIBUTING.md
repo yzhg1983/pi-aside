@@ -66,7 +66,7 @@ Rules that keep the extension correct:
 | New dependency | `package.json` | A new `import(` fails the build until it is reviewed; a package without a licence fails it too. |
 | pi-durable or pi-ai API | any | Check the 1.4.0 types in `node_modules`, not the pi-mono source. |
 | Commit callback | any `commit()` | Await nothing outside `tx` (a Chrome call, a timer): every chat's commits, streaming included, run on one line. Make native calls before or after the commit, as `switch_tab` does. |
-| Icon or screenshots | `assets/`, `scripts/` | `CHROME=… npm run icons` or `npm run screenshots`, then commit what they write. The screenshots load live sites: check them before committing. In them the model's turns are scripted and the page tools run for real: they show the interface, not a model's accuracy or speed. |
+| Icon, illustrations, or screenshots | `assets/`, `scripts/` | `CHROME=… npm run icons`, `npm run illustrations` (the README's two drawings, SVG), or `npm run screenshots`, then commit what they write. The screenshots load live sites: check them before committing. In them the model's turns are scripted and the page tools run for real: they show the interface, not a model's accuracy or speed. |
 
 ## CI and releases
 

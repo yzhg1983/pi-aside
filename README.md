@@ -2,16 +2,13 @@
 
 English | [简体中文](README.zh-CN.md)
 
+![pi-aside: an AI agent beside every page. It reads the page, operates it, runs scripts, asks first, and uses your own key. Beside it, an essay whose claims pi marked up in place](docs/images/overview.svg)
+
 **An AI agent in Chrome's side panel.** Ask about the page you are on, or hand pi a task: it reads the page, clicks
 and types, moves through a site and its tab group, runs scripts to pull out data, and shows you every step.
 
 Use your ChatGPT plan, or your own OpenRouter, OpenAI, Anthropic, or DeepSeek API key. There is no pi-aside server:
 requests go straight from your browser to your provider.
-
-![pi-aside beside Wikipedia's list of highest-grossing films: one script counted the films by decade and highlighted the 2020s on the page, and pi charted the counts](docs/images/table.png)
-
-<sub>The screenshots show the real extension and its page tools on live sites. The model's replies in them are scripted:
-results and timing vary by model.</sub>
 
 ## Why pi-aside
 
@@ -30,7 +27,7 @@ results and timing vary by model.</sub>
   `/command`, such as [translating a page in place](#translate-a-page-in-place) or
   [summarizing a YouTube video](#summarize-a-youtube-video).
 
-![pi-aside beside a Vite issue on GitHub: from a screenshot of an error, it searched the issues, read the match, and said how to fix it](docs/images/issue.png)
+![An animation of pi-aside beside Wikipedia's list of highest-grossing films: it reads the table, asks before running a script, marks the 2020s rows on the page, and charts the films by decade](docs/images/agent.svg)
 
 **How it is different**
 
@@ -68,6 +65,9 @@ results and timing vary by model.</sub>
 Or just ask: select text and right-click **Ask pi**, or press `Ctrl+Shift+Y` (`Cmd+Shift+Y` on a Mac).
 
 ![pi-aside beside MDN's HTTP caching guide: a question about a selected paragraph, answered with a diagram](docs/images/explain.png)
+
+<sub>The screenshots show the real extension and its page tools on live sites. The model's replies in them are scripted:
+results and timing vary by model.</sub>
 
 ## Example prompts
 

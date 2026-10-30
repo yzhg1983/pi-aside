@@ -16,6 +16,7 @@
 		"build": "node build.mjs",
 		"check": "biome check --write . && tsc --noEmit",
 		"icons": "node scripts/icons.mjs",
+		"illustrations": "node scripts/illustrations.mjs",
 		"screenshots": "node scripts/screenshots.mjs",
 		"test": "vitest --run",
 		"test:diagrams": "node test/e2e/diagrams.mjs",
