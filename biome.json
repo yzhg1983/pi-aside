@@ -1,0 +1,32 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.6.3/schema.json",
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"preset": "recommended",
+			"style": {
+				"noNonNullAssertion": "off",
+				"useConst": "error"
+			}
+		}
+	},
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 3,
+		"lineWidth": 120
+	},
+	"files": {
+		"includes": [
+			"src/**",
+			"test/**",
+			"static/**",
+			"scripts/**",
+			"build.mjs",
+			"*.json",
+			"!**/node_modules",
+			"!**/dist"
+		]
+	}
+}

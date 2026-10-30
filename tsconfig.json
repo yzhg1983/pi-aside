@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"target": "ES2023",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"lib": ["ES2024", "DOM", "DOM.Iterable"],
+		"types": ["chrome"],
+		"strict": true,
+		"noEmit": true,
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"erasableSyntaxOnly": true,
+		"isolatedModules": true,
+		"skipLibCheck": true,
+		"noUncheckedIndexedAccess": true
+	},
+	"include": ["src", "test", "build.mjs"]
+}

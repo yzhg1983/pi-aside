@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+	<!-- pi-aside at 16 px: size-adjusted π and a separate companion rail. -->
+	<rect y="1" width="11" height="14" rx="3" fill="#3158d8" />
+	<rect x="12.5" y="1" width="3.5" height="14" rx="1.75" fill="#6084e9" />
+	<g fill="none" stroke="#fff" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round">
+		<path d="M2.35 5.3H8.6" />
+		<path d="M4.1 5.6C4.1 7.7 3.7 9.8 2.6 11" />
+		<path d="M6.9 5.6V9.5C6.9 11.3 7.7 11.7 8.9 11" />
+	</g>
+</svg>

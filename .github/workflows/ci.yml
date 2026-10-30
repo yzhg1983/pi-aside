@@ -1,0 +1,142 @@
+# Checks and the Chrome suites for pushes to main, pull requests, weekly, and on demand; an installable zip of each main
+# build. Other branches get CI through a pull request or a run from the Actions tab. A change to Markdown or docs/ alone
+# runs nothing: none of it is linted, tested, or built. Billing rounds each job up to a whole minute, so everything runs
+# in one job with one npm ci and one Chrome. The suites build their own temporary extensions and use only loopback
+# servers and in-process providers: no secrets, accounts, or paid requests (CONTRIBUTING.md, Browser test suites).
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**.md", "docs/**"]
+  pull_request:
+    paths-ignore: ["**.md", "docs/**"]
+  schedule:
+    # Weekly, for drift within the Chrome milestone between pushes; dependency updates come as Dependabot pull requests.
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The milestone the suites were last run on; bump it on purpose, not by drift.
+  CHROME_VERSION: "153"
+
+jobs:
+  ci:
+    name: Checks and Chrome suites
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx biome ci .
+      - run: npx tsc --noEmit
+      - run: npm test
+      # The store fallback first, for a review that refuses Run script: its manifest must not hold userScripts.
+      - run: npm run build -- --no-run-script
+      - run: node -e 'if (require("./dist/manifest.json").permissions.includes("userScripts")) process.exit(1)'
+      # Also fails on an unreviewed import( in the worker and on a package without a licence.
+      - run: npm run build
+      - name: Zip the extension
+        if: github.event_name == 'push'
+        run: cd dist && zip -qr "../pi-aside-${GITHUB_SHA::7}.zip" . -x '*.map'
+      - uses: actions/upload-artifact@v7
+        if: github.event_name == 'push'
+        with:
+          name: pi-aside-${{ github.sha }}
+          path: pi-aside-*.zip
+          retention-days: 30
+
+      # The suites run on the weekly and manual runs, and on a push or pull request that changes what they build or run.
+      # When the base commit can't be fetched (a force push), they run.
+      - name: Decide whether the Chrome suites run
+        id: suites
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          run=true
+          if [ "$GITHUB_EVENT_NAME" = push ] || [ "$GITHUB_EVENT_NAME" = pull_request ]; then
+            if git fetch -q --depth=1 origin "$BASE" 2>/dev/null; then
+              changed="$(git diff --name-only "$BASE" HEAD)"
+              echo "$changed"
+              pattern='^(src/|static/|test/e2e/|build\.mjs$|tsconfig\.json$|package(-lock)?\.json$|\.github/workflows/ci\.yml$)'
+              if ! grep -qE "$pattern" <<< "$changed"; then
+                run=false
+                echo "No change the Chrome suites cover: skipping them."
+              fi
+            fi
+          fi
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+      # The download of the milestone's latest build, kept for a week: the weekly run then picks up a newer one.
+      - name: Week for the Chrome cache
+        id: week
+        if: steps.suites.outputs.run == 'true'
+        run: echo "week=$(date -u +%G-%V)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v6
+        if: steps.suites.outputs.run == 'true'
+        with:
+          path: ${{ runner.tool_cache }}/setup-chrome
+          key: chrome-${{ env.CHROME_VERSION }}-${{ steps.week.outputs.week }}
+      - id: chrome
+        if: steps.suites.outputs.run == 'true'
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: ${{ env.CHROME_VERSION }}
+          # The runner image has Chrome's libraries already; installing them only ran apt-get for nothing.
+          install-dependencies: false
+      - run: '"$CHROME" --version'
+        if: steps.suites.outputs.run == 'true'
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+      # Every suite runs even when an earlier one fails, so one run shows all the failures.
+      - run: npm run test:selection
+        if: ${{ !cancelled() && steps.chrome.outcome == 'success' }}
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:localization
+        if: ${{ !cancelled() && steps.chrome.outcome == 'success' }}
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:screenshots
+        if: ${{ !cancelled() && steps.chrome.outcome == 'success' }}
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:storage
+        if: ${{ !cancelled() && steps.chrome.outcome == 'success' }}
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:wake
+        if: ${{ !cancelled() && steps.chrome.outcome == 'success' }}
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:diagrams
+        if: ${{ !cancelled() && steps.chrome.outcome == 'success' }}
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:slash
+        if: ${{ !cancelled() && steps.chrome.outcome == 'success' }}
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:edit
+        if: ${{ !cancelled() && steps.chrome.outcome == 'success' }}
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:attachments
+        if: ${{ !cancelled() && steps.chrome.outcome == 'success' }}
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:page-tools
+        if: ${{ !cancelled() && steps.chrome.outcome == 'success' }}
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}

@@ -1,0 +1,62 @@
+# A version tag (v0.1.0) on a commit of main builds the extension and drafts a GitHub Release with the zip to upload to
+# the Chrome Web Store (CONTRIBUTING.md, CI and releases). The tag must match package.json's version. Publish the draft on
+# GitHub after checking it.
+
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and draft the release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # The whole history, to check that the tag is on main.
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Check the tag
+        run: |
+          version="$(node -p 'require("./package.json").version')"
+          if [ "$GITHUB_REF_NAME" != "v$version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json's version $version"
+            exit 1
+          fi
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::Tag $GITHUB_REF_NAME is not on main"
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+      - run: npm ci --ignore-scripts
+      - run: npx biome ci .
+      - run: npx tsc --noEmit
+      - run: npm test
+      # Also fails when the manifest's version differs from package.json's.
+      - run: npm run build
+      - name: Zip the extension
+        run: cd dist && zip -qr "../pi-aside-$VERSION.zip" . -x '*.map'
+      # The store fallback without Run script, for a review that refuses it as remote code.
+      - run: npm run build -- --no-run-script
+      - run: node -e 'if (require("./dist/manifest.json").permissions.includes("userScripts")) process.exit(1)'
+      - name: Zip the extension without Run script
+        run: cd dist && zip -qr "../pi-aside-$VERSION-no-run-script.zip" . -x '*.map'
+      - name: Draft the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$GITHUB_REF_NAME" "pi-aside-$VERSION.zip" "pi-aside-$VERSION-no-run-script.zip"
+          --draft --verify-tag --generate-notes --title "pi-aside $VERSION"

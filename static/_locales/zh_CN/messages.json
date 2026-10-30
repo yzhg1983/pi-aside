@@ -1,0 +1,1619 @@
+{
+	"localeCode": {
+		"message": "zh-CN"
+	},
+	"presetExplain": {
+		"message": "解释"
+	},
+	"presetSummarize": {
+		"message": "总结"
+	},
+	"presetTranslate": {
+		"message": "翻译为$1"
+	},
+	"presetProofread": {
+		"message": "校对"
+	},
+	"presetReply": {
+		"message": "起草回复"
+	},
+	"languageEnglish": {
+		"message": "英语"
+	},
+	"languageChinese": {
+		"message": "中文"
+	},
+	"menuAsk": {
+		"message": "询问 pi"
+	},
+	"menuAdd": {
+		"message": "添加到消息"
+	},
+	"menuPageAsk": {
+		"message": "向 pi 询问此页面"
+	},
+	"newChat": {
+		"message": "新对话"
+	},
+	"history": {
+		"message": "历史记录"
+	},
+	"settings": {
+		"message": "设置"
+	},
+	"reconnecting": {
+		"message": "正在重新连接..."
+	},
+	"extensionUpdated": {
+		"message": "扩展程序已更新。"
+	},
+	"reloadPanel": {
+		"message": "重新加载面板"
+	},
+	"dismiss": {
+		"message": "关闭"
+	},
+	"provider": {
+		"message": "提供商"
+	},
+	"useChatGPTPlan": {
+		"message": "使用你的 ChatGPT 套餐"
+	},
+	"chatGPTPlanOffer": {
+		"message": "在此应用中完成符合条件的 AI 请求，使用量计入你的 ChatGPT 套餐或积分余额。"
+	},
+	"continueChatGPT": {
+		"message": "使用 ChatGPT 继续"
+	},
+	"keySavedChrome": {
+		"message": "密钥已保存。Chrome 会询问一次。"
+	},
+	"planSavedChrome": {
+		"message": "ChatGPT 登录信息已保存。Chrome 会询问一次。"
+	},
+	"allowAccess": {
+		"message": "允许访问"
+	},
+	"chat": {
+		"message": "对话"
+	},
+	"jumpLatest": {
+		"message": "跳转到最新消息"
+	},
+	"drafts": {
+		"message": "草稿"
+	},
+	"chooseModel": {
+		"message": "选择模型"
+	},
+	"filterModels": {
+		"message": "筛选模型"
+	},
+	"models": {
+		"message": "模型"
+	},
+	"sendPlainText": {
+		"message": "作为纯文本发送"
+	},
+	"dontAttach": {
+		"message": "不附加"
+	},
+	"message": {
+		"message": "消息"
+	},
+	"composerKeys": {
+		"message": "Enter 发送 · Shift+Enter 换行 · / 运行提示词"
+	},
+	"slashNeedsText": {
+		"message": "请在 $1 后输入文本，或附加一个页面来运行它。"
+	},
+	"connecting": {
+		"message": "正在连接..."
+	},
+	"thinking": {
+		"message": "思考"
+	},
+	"off": {
+		"message": "关闭"
+	},
+	"on": {
+		"message": "开启"
+	},
+	"ask": {
+		"message": "询问"
+	},
+	"stop": {
+		"message": "停止"
+	},
+	"stopEsc": {
+		"message": "停止（Esc）"
+	},
+	"sendEnter": {
+		"message": "发送（Enter）"
+	},
+	"send": {
+		"message": "发送"
+	},
+	"usingChatGPTPlan": {
+		"message": "ChatGPT 套餐"
+	},
+	"manageUsage": {
+		"message": "使用量"
+	},
+	"backChat": {
+		"message": "返回对话"
+	},
+	"backEsc": {
+		"message": "返回（Esc）"
+	},
+	"filterChats": {
+		"message": "筛选对话"
+	},
+	"providers": {
+		"message": "提供商"
+	},
+	"providersNote": {
+		"message": "使用 API 密钥，或使用 ChatGPT 套餐访问 OpenAI。模型选择器会列出对应模型。"
+	},
+	"answers": {
+		"message": "回答"
+	},
+	"answerLanguage": {
+		"message": "回答语言"
+	},
+	"languageAuto": {
+		"message": "自动（跟随 Chrome 语言）"
+	},
+	"answerLanguageNote": {
+		"message": "仅控制回答语言和翻译目标语言。自动模式跟随 Chrome；界面始终跟随 Chrome。"
+	},
+	"sendingSection": {
+		"message": "发送"
+	},
+	"whilePiWorks": {
+		"message": "pi 工作时"
+	},
+	"joinTask": {
+		"message": "加入当前任务"
+	},
+	"joinTaskTip": {
+		"message": "按 Enter 后，消息在当前步骤完成后加入 pi 正在进行的任务"
+	},
+	"afterAnswer": {
+		"message": "等待回答"
+	},
+	"afterAnswerTip": {
+		"message": "按 Enter 后，消息在 pi 回答完成后发送"
+	},
+	"whilePiWorksNote": {
+		"message": "pi 工作时按 Enter 发送消息的方式。按 Alt+Enter 则按另一种方式发送。"
+	},
+	"sendDefaultPrompt": {
+		"message": "使用默认提示词发送"
+	},
+	"sendAtOnce": {
+		"message": "立即发送"
+	},
+	"composeFirstTip": {
+		"message": "先放入消息框编辑"
+	},
+	"editFirst": {
+		"message": "先编辑"
+	},
+	"selectionNote": {
+		"message": "“询问 pi”使用“提示词”中标有星号的提示词。“添加到消息”始终仅将选中文本放入消息框。"
+	},
+	"prompts": {
+		"message": "提示词"
+	},
+	"promptsNote": {
+		"message": "pi 菜单中的项目，按此顺序排列。星号标记“询问 pi”使用的提示词。关闭的提示词保留在此，但不显示在菜单和 / 列表中。"
+	},
+	"addPrompt": {
+		"message": "添加提示词"
+	},
+	"resetPrompts": {
+		"message": "重置为内置提示词"
+	},
+	"resetQuestion": {
+		"message": "重新使用内置提示词？"
+	},
+	"resetWarning": {
+		"message": "你的修改和新增提示词将被删除。"
+	},
+	"reset": {
+		"message": "重置"
+	},
+	"cancel": {
+		"message": "取消"
+	},
+	"tools": {
+		"message": "工具"
+	},
+	"toolsScope": {
+		"message": "适用于所有对话和所有网站。"
+	},
+	"readPage": {
+		"message": "读取页面"
+	},
+	"readPageNote": {
+		"message": "读取页面文本。"
+	},
+	"observePage": {
+		"message": "观察页面"
+	},
+	"observePageNote": {
+		"message": "列出页面中的链接、按钮、输入框和标题。"
+	},
+	"actPage": {
+		"message": "操作页面"
+	},
+	"actPageNote": {
+		"message": "点击、输入、滚动并访问同一网站的页面；也可沿链接访问你允许的其他网站。"
+	},
+	"actAskNote": {
+		"message": "：每次回答时，pi 会对每个网站询问一次。"
+	},
+	"actOnNote": {
+		"message": "：pi 可直接点击和输入而不再询问，包括点击“提交”或“删除”等按钮。"
+	},
+	"runScript": {
+		"message": "运行脚本"
+	},
+	"runScriptNote": {
+		"message": "在页面上运行 pi 编写的 JavaScript。"
+	},
+	"scriptWarning": {
+		"message": "脚本会以你的登录身份在网站上运行：它可以读取和更改你能操作的任何内容，并将读取的内容发送到其他网站。“询问”：pi 会先显示每个脚本；选择“本次回答”或“本次对话”后，该网站的后续脚本将直接运行，不再询问，直到回答或对话结束（新建对话、关闭 Chrome 或更改此处设置）。“开启”：脚本会直接运行，不再询问。“停止”不会终止已在运行的脚本。"
+	},
+	"needsUserScripts": {
+		"message": "需要在 Chrome 中为 pi 开启“允许用户脚本”"
+	},
+	"openDetails": {
+		"message": "打开 pi 的扩展详情页"
+	},
+	"screenshotPage": {
+		"message": "截取页面"
+	},
+	"screenshotPageNote": {
+		"message": "将标签页显示的内容截为图像。"
+	},
+	"screenshotWarning": {
+		"message": "图像包含屏幕上的内容，包括你在输入框中输入的内容，并会发送给模型提供商。pi 可能先滚动页面，即使“操作页面”已关闭。通过工具栏按钮、菜单或快捷键在网站上打开 pi 后可用；若 Chrome 允许 pi 访问所有网站（设置 > 高级 > 网站），则可在任何网站使用。"
+	},
+	"callsPerAnswer": {
+		"message": "每次回答的页面工具调用次数"
+	},
+	"callsNote": {
+		"message": "5 至 200 次，所有页面工具合计。"
+	},
+	"advanced": {
+		"message": "高级"
+	},
+	"advancedSections": {
+		"message": "网站 · 快捷键 · 诊断"
+	},
+	"sites": {
+		"message": "网站"
+	},
+	"sitesNote": {
+		"message": "pi 可直接访问这些网站而不再询问，包括通过链接跳转到这些网站。对于其他网站，pi 只能访问你打开 pi 时所在的页面；需要其他网站时会先询问你。"
+	},
+	"allowAllSites": {
+		"message": "允许所有网站"
+	},
+	"sitesProvidersNote": {
+		"message": "pi 也可直接读取以下网站，因为它需要访问这些网站来连接提供商。Chrome 的 pi 详情页会在“网站访问权限”下列出它们。"
+	},
+	"shortcuts": {
+		"message": "快捷键"
+	},
+	"changeShortcuts": {
+		"message": "更改快捷键"
+	},
+	"diagnostics": {
+		"message": "诊断"
+	},
+	"diagnosticsNote": {
+		"message": "扩展程序状态、测试探测和日志，用于报告问题。"
+	},
+	"openDiagnostics": {
+		"message": "打开诊断"
+	},
+	"screenshot": {
+		"message": "截图"
+	},
+	"screenshotFull": {
+		"message": "截图，原始尺寸"
+	},
+	"manifestDescription": {
+		"message": "侧边栏里的 AI 智能体：询问当前网页，或让它替你点击、输入、收集数据。非官方，基于 pi-durable。"
+	},
+	"openPi": {
+		"message": "打开 pi"
+	},
+	"commandAsk": {
+		"message": "向 pi 询问选中文本（默认提示词）"
+	},
+	"commandAdd": {
+		"message": "将选中文本添加到消息框（无提示词）"
+	},
+	"commandPanel": {
+		"message": "打开 pi 面板"
+	},
+	"copied": {
+		"message": "已复制"
+	},
+	"copyFailed": {
+		"message": "复制失败"
+	},
+	"copy": {
+		"message": "复制"
+	},
+	"copyCode": {
+		"message": "复制代码"
+	},
+	"copyMarkdown": {
+		"message": "将回答复制为 Markdown"
+	},
+	"show": {
+		"message": "显示"
+	},
+	"hide": {
+		"message": "隐藏"
+	},
+	"showKey": {
+		"message": "显示密钥"
+	},
+	"hideKey": {
+		"message": "隐藏密钥"
+	},
+	"save": {
+		"message": "保存"
+	},
+	"saved": {
+		"message": "已保存"
+	},
+	"getKey": {
+		"message": "获取密钥"
+	},
+	"apiKey": {
+		"message": "$1 API 密钥"
+	},
+	"keyPrivacy": {
+		"message": "Chrome 会请求访问 $1。密钥仅保存在此浏览器配置文件中。"
+	},
+	"keyRefused": {
+		"message": "未保存：Chrome 未允许访问 $1。"
+	},
+	"notAllowed": {
+		"message": "未获允许。点击“允许访问”重试。"
+	},
+	"signInRefused": {
+		"message": "未开始：Chrome 未允许登录所需的访问权限。"
+	},
+	"signInStarted": {
+		"message": "请在新标签页中继续。"
+	},
+	"signedIn": {
+		"message": "已登录"
+	},
+	"connectProvider": {
+		"message": "连接提供商"
+	},
+	"allowProvider": {
+		"message": "允许 pi 访问 $1"
+	},
+	"pasteKey": {
+		"message": "请先粘贴密钥"
+	},
+	"providerPickAfterSave": {
+		"message": "$1。请在“设置”中选择 $2 模型以使用它。"
+	},
+	"providerChangedAfterSave": {
+		"message": "$1。此对话现在使用 $2。"
+	},
+	"providerUnchangedAfterSave": {
+		"message": "$1，但模型未更改：$2"
+	},
+	"signInAgain": {
+		"message": "重新登录"
+	},
+	"verify": {
+		"message": "验证"
+	},
+	"remove": {
+		"message": "移除"
+	},
+	"add": {
+		"message": "添加"
+	},
+	"anotherAccount": {
+		"message": "使用其他账号"
+	},
+	"cancelSignIn": {
+		"message": "取消登录"
+	},
+	"webSearch": {
+		"message": "网页搜索"
+	},
+	"webSearchNote": {
+		"message": "允许 OpenAI 在需要时搜索网页。使用 API 密钥的搜索会产生额外费用。"
+	},
+	"signedInChatGPT": {
+		"message": "已通过 ChatGPT 登录"
+	},
+	"chatGPTAccount": {
+		"message": "ChatGPT 账号：$1"
+	},
+	"savedAccount": {
+		"message": "已保存"
+	},
+	"signOut": {
+		"message": "退出登录"
+	},
+	"signOutQuestion": {
+		"message": "退出 ChatGPT 登录？"
+	},
+	"removeKeyQuestion": {
+		"message": "移除 $1 密钥？"
+	},
+	"noSendUntilSignIn": {
+		"message": "重新登录或添加密钥后，此对话才能发送消息。"
+	},
+	"noSendUntilKey": {
+		"message": "添加密钥后，此对话才能发送消息。"
+	},
+	"keySaved": {
+		"message": "$1 密钥已保存"
+	},
+	"keyRemoved": {
+		"message": "$1 密钥已移除"
+	},
+	"verifying": {
+		"message": "正在验证..."
+	},
+	"signedOutChatGPT": {
+		"message": "已退出 ChatGPT 登录"
+	},
+	"signOutUnconfirmed": {
+		"message": "已在此处退出登录。OpenAI 未确认；请在 ChatGPT 设置中结束会话。"
+	},
+	"answering": {
+		"message": "正在回答"
+	},
+	"answerComplete": {
+		"message": "回答完成"
+	},
+	"answerFailed": {
+		"message": "回答失败：$1"
+	},
+	"queued": {
+		"message": "已排队"
+	},
+	"queuedSteer": {
+		"message": "将加入当前任务"
+	},
+	"queuedFollowUp": {
+		"message": "回答后发送"
+	},
+	"storageFull": {
+		"message": "Chrome 已没有空间保存 pi-aside 的对话，新的消息和回答不会被保存。请释放磁盘空间，或在“设置 > 高级 > 数据”中删除所有对话。"
+	},
+	"storageOpenFailed": {
+		"message": "无法打开对话存储：$1"
+	},
+	"answerUsage": {
+		"message": "此回答：$1"
+	},
+	"showFullSize": {
+		"message": "显示原始尺寸"
+	},
+	"showMore": {
+		"message": "展开"
+	},
+	"showLess": {
+		"message": "收起"
+	},
+	"working": {
+		"message": "正在处理"
+	},
+	"retrying": {
+		"message": "正在重试：$1"
+	},
+	"answerAttempt": {
+		"message": "$1 · 第 $2 次尝试"
+	},
+	"chromeDenied": {
+		"message": "Chrome 未允许"
+	},
+	"run": {
+		"message": "运行"
+	},
+	"deny": {
+		"message": "拒绝"
+	},
+	"allow": {
+		"message": "允许"
+	},
+	"runScriptQuestion": {
+		"message": "在 $1 上运行此脚本？"
+	},
+	"piSays": {
+		"message": "pi 说明：$1"
+	},
+	"scriptAskWarning": {
+		"message": "脚本会以你的登录身份在 $1 上运行。它可以更改该网站的内容，并将数据发送到其他网站。"
+	},
+	"actQuestion": {
+		"message": "允许 pi 在此次回答中操作 $1？"
+	},
+	"actWarning": {
+		"message": "它可以自行在该网站点击和输入，包括点击“提交”或“删除”等按钮。"
+	},
+	"onAllSites": {
+		"message": "在所有网站"
+	},
+	"onSite": {
+		"message": "在 $1"
+	},
+	"needsMovedSite": {
+		"message": "pi 需要访问此标签页跳转后的网站。"
+	},
+	"movedSiteHint": {
+		"message": "如只想允许此网站：点“取消”，在此标签页点击 pi 的工具栏按钮，然后重新提问。"
+	},
+	"tabMovedTo": {
+		"message": "标签页已跳转到"
+	},
+	"tabMovedLastSeen": {
+		"message": "标签页已跳转；最后一次看到它前往 $1"
+	},
+	"tabMovedElsewhere": {
+		"message": "标签页已跳转到其他网站"
+	},
+	"needsSite": {
+		"message": "pi 需要访问 $1 才能继续。"
+	},
+	"siteAskNote": {
+		"message": "Chrome 会请你确认。随后 pi 可直接读取该网站的页面而不再询问；其他页面工具仍按各自设置执行。可在“设置 > 高级 > 网站”中移除权限。"
+	},
+	"piAsks": {
+		"message": "pi 请求确认"
+	},
+	"sending": {
+		"message": "正在发送..."
+	},
+	"retry": {
+		"message": "重试"
+	},
+	"noCompleteAnswer": {
+		"message": "未获得完整回答。"
+	},
+	"addKeyFirst": {
+		"message": "请先添加密钥"
+	},
+	"summarizePage": {
+		"message": "总结页面"
+	},
+	"askPage": {
+		"message": "想让 pi 在此页面做些什么？"
+	},
+	"askPageHint": {
+		"message": "询问页面或选中文本。"
+	},
+	"askHint": {
+		"message": "输入问题以开始。"
+	},
+	"clearComposerFirst": {
+		"message": "请先发送或清空消息框"
+	},
+	"putInComposer": {
+		"message": "放入消息框"
+	},
+	"showFewer": {
+		"message": "收起"
+	},
+	"moreDraft": {
+		"message": "还有 $1 份草稿"
+	},
+	"moreDrafts": {
+		"message": "还有 $1 份草稿"
+	},
+	"notSent": {
+		"message": "未发送"
+	},
+	"notSentReason": {
+		"message": "未发送：$1"
+	},
+	"edit": {
+		"message": "编辑"
+	},
+	"discardDraft": {
+		"message": "丢弃草稿"
+	},
+	"addedToMessage": {
+		"message": "已添加到消息"
+	},
+	"readSiteNoClick": {
+		"message": "pi 可直接读取 $1，无需点击"
+	},
+	"pageReadTip": {
+		"message": "$1\npi 可直接读取 $2，无需点击。"
+	},
+	"alwaysAllowSite": {
+		"message": "始终允许 pi 访问 $1"
+	},
+	"alwaysAllowSiteTip": {
+		"message": "$1：pi 可直接读取其页面，无需点击，即使你离开后再次返回也一样。Chrome 可能先询问；可在“设置 > 高级 > 网站”中移除权限。"
+	},
+	"newChatFailed": {
+		"message": "新建对话失败：$1"
+	},
+	"loading": {
+		"message": "正在加载..."
+	},
+	"noChatsMatch": {
+		"message": "没有匹配的对话"
+	},
+	"noEarlierChats": {
+		"message": "没有更早的对话"
+	},
+	"running": {
+		"message": "进行中"
+	},
+	"current": {
+		"message": "当前"
+	},
+	"recommended": {
+		"message": "推荐"
+	},
+	"started": {
+		"message": "开始于 $1"
+	},
+	"loadModelsFailed": {
+		"message": "无法加载模型：$1"
+	},
+	"modelBusyTip": {
+		"message": "$1：$2。请等待回答完成，或停止回答后更改模型。"
+	},
+	"modelAria": {
+		"message": "模型：$1，提供商 $2。更改模型"
+	},
+	"loadingModels": {
+		"message": "正在加载模型..."
+	},
+	"addKeyListModels": {
+		"message": "请在“设置”中添加密钥以列出模型"
+	},
+	"noModelsMatch": {
+		"message": "没有匹配的模型"
+	},
+	"noKeyPrefix": {
+		"message": "没有密钥："
+	},
+	"inSettingsSuffix": {
+		"message": " · 请前往设置"
+	},
+	"switching": {
+		"message": "正在切换..."
+	},
+	"nowUsing": {
+		"message": "现在使用 $1"
+	},
+	"thinkingLevel": {
+		"message": "思考：$1"
+	},
+	"thinkingNotSaved": {
+		"message": "思考设置未保存：$1"
+	},
+	"savedMenuFailed": {
+		"message": "已保存，但 pi 菜单未更新：$1"
+	},
+	"notSaved": {
+		"message": "未保存：$1"
+	},
+	"detailsFailed": {
+		"message": "无法打开 pi 的扩展详情页：$1"
+	},
+	"callsRange": {
+		"message": "未保存：必须在 $1 至 $2 之间"
+	},
+	"variableSelection": {
+		"message": "选中文本"
+	},
+	"variableTitle": {
+		"message": "页面标题"
+	},
+	"variableUrl": {
+		"message": "页面地址"
+	},
+	"variableLanguage": {
+		"message": "设置中的回答语言，例如 Chinese"
+	},
+	"promptMenuFailed": {
+		"message": "$1，但 pi 菜单未更新：$2"
+	},
+	"name": {
+		"message": "名称"
+	},
+	"prompt": {
+		"message": "提示词"
+	},
+	"insert": {
+		"message": "插入"
+	},
+	"delete": {
+		"message": "删除"
+	},
+	"newPrompt": {
+		"message": "新提示词"
+	},
+	"insertVariable": {
+		"message": "插入 $1：$2"
+	},
+	"unknownVariable": {
+		"message": "不是变量，将原样发送：$1"
+	},
+	"defaultPromptAria": {
+		"message": "$1：“询问 pi”使用此提示词"
+	},
+	"usePromptAria": {
+		"message": "让“询问 pi”使用 $1"
+	},
+	"defaultPromptTip": {
+		"message": "“询问 pi”使用此提示词"
+	},
+	"usePromptTip": {
+		"message": "让“询问 pi”使用此提示词"
+	},
+	"promptOffStarTip": {
+		"message": "开启此提示词后，才能让“询问 pi”使用它"
+	},
+	"promptSwitchAria": {
+		"message": "$1 显示在 pi 菜单中"
+	},
+	"promptOnTip": {
+		"message": "已开启：显示在 pi 菜单和 / 列表中"
+	},
+	"promptOffTip": {
+		"message": "已关闭：保留在此，但不显示在 pi 菜单和 / 列表中"
+	},
+	"movePromptUp": {
+		"message": "上移 $1"
+	},
+	"movePromptDown": {
+		"message": "下移 $1"
+	},
+	"moveUpTip": {
+		"message": "在 pi 菜单中上移"
+	},
+	"moveDownTip": {
+		"message": "在 pi 菜单中下移"
+	},
+	"editPromptAria": {
+		"message": "编辑 $1"
+	},
+	"savedPrompt": {
+		"message": "已保存 $1"
+	},
+	"movedPromptUp": {
+		"message": "已上移 $1"
+	},
+	"movedPromptDown": {
+		"message": "已下移 $1"
+	},
+	"notMoved": {
+		"message": "未移动：$1"
+	},
+	"promptTurnedOn": {
+		"message": "已开启 $1"
+	},
+	"promptTurnedOff": {
+		"message": "已关闭 $1"
+	},
+	"notSwitched": {
+		"message": "未更改：$1"
+	},
+	"deletePromptQuestion": {
+		"message": "删除“$1”？"
+	},
+	"newDefaultPrompt": {
+		"message": "“$1”将成为默认提示词。"
+	},
+	"deletedPrompt": {
+		"message": "已删除 $1"
+	},
+	"notDeleted": {
+		"message": "未删除：$1"
+	},
+	"saveOrCancel": {
+		"message": "请先保存或取消修改"
+	},
+	"promptsRestored": {
+		"message": "已恢复内置提示词"
+	},
+	"notReset": {
+		"message": "未重置：$1"
+	},
+	"none": {
+		"message": "无"
+	},
+	"removeSiteAria": {
+		"message": "移除 $1"
+	},
+	"removeSiteTip": {
+		"message": "移除 Chrome 对此网站的访问权限：pi 需要时会再次询问。若仍列有“所有网站”，pi 仍可访问它。pi 已读取的内容会保留。"
+	},
+	"removedSite": {
+		"message": "已移除 $1"
+	},
+	"chromeKeptSite": {
+		"message": "Chrome 保留了 $1"
+	},
+	"allSitesAllowed": {
+		"message": "pi 可访问所有网站"
+	},
+	"notSet": {
+		"message": "未设置"
+	},
+	"allSites": {
+		"message": "所有网站"
+	},
+	"allSchemeSites": {
+		"message": "所有 $1 网站"
+	},
+	"addKeySend": {
+		"message": "添加密钥后即可发送"
+	},
+	"allowAccessSend": {
+		"message": "允许访问后即可发送"
+	},
+	"enterSteers": {
+		"message": "Enter 加入当前任务 · Alt+Enter 在回答后发送"
+	},
+	"enterFollowsUp": {
+		"message": "Enter 在回答后发送 · Alt+Enter 加入当前任务"
+	},
+	"escStops": {
+		"message": "按 Esc 停止回答"
+	},
+	"verifyExpiredNote": {
+		"message": "ChatGPT 登录已失效；请选择“重新登录”"
+	},
+	"verifyForbiddenNote": {
+		"message": "密钥可能没有此项检查的权限；发送仍可能正常"
+	},
+	"verifyLimitedNote": {
+		"message": "请求过多或余额不足"
+	},
+	"verifyAccepted": {
+		"message": "已接受"
+	},
+	"verifyRejected": {
+		"message": "已拒绝"
+	},
+	"verifyExpired": {
+		"message": "已过期"
+	},
+	"verifyForbidden": {
+		"message": "无权限"
+	},
+	"verifyLimited": {
+		"message": "已限流"
+	},
+	"verifyNoPermission": {
+		"message": "无访问权限"
+	},
+	"verifyNetworkError": {
+		"message": "网络错误"
+	},
+	"planUsageLimit": {
+		"message": "已达到使用上限。请在 ChatGPT 设置中查看你的套餐或此应用的限额。"
+	},
+	"signInEnded": {
+		"message": "ChatGPT 登录已失效。请在 pi 的设置中选择重新登录。"
+	},
+	"signInRenewFailed": {
+		"message": "无法续期 ChatGPT 登录。请在“设置”中验证。"
+	},
+	"waitingSignIn": {
+		"message": "等待登录"
+	},
+	"notSetUp": {
+		"message": "未设置"
+	},
+	"signInEndedShort": {
+		"message": "登录已失效"
+	},
+	"needsAccess": {
+		"message": "需要访问权限"
+	},
+	"chatGPTPlan": {
+		"message": "ChatGPT 套餐"
+	},
+	"ready": {
+		"message": "就绪"
+	},
+	"chatUsesModel": {
+		"message": "此对话正在使用此模型"
+	},
+	"addProviderKeyFirst": {
+		"message": "请先在“设置”中添加 $1 密钥"
+	},
+	"waitOrStopAnswer": {
+		"message": "请等待回答完成，或停止回答"
+	},
+	"today": {
+		"message": "今天"
+	},
+	"yesterday": {
+		"message": "昨天"
+	},
+	"previousDays": {
+		"message": "过去 7 天"
+	},
+	"earlier": {
+		"message": "更早"
+	},
+	"timeNow": {
+		"message": "现在"
+	},
+	"timeMinutes": {
+		"message": "$1 分钟"
+	},
+	"timeHours": {
+		"message": "$1 小时"
+	},
+	"resumedNow": {
+		"message": "已继续刚刚开始的对话"
+	},
+	"resumedAgo": {
+		"message": "已继续 $1前开始的对话"
+	},
+	"resumedYesterday": {
+		"message": "已继续昨天 $1 开始的对话"
+	},
+	"resumedOn": {
+		"message": "已继续 $1 开始的对话"
+	},
+	"modelNoThinking": {
+		"message": "$1 不支持思考"
+	},
+	"thinkingHelp": {
+		"message": "思考：$1。更长的思考有助于解决复杂问题，但回答开始更慢，费用也更高。从下一条消息起生效。"
+	},
+	"thinkingMoved": {
+		"message": "$1 没有 $2 级别，将使用 $3。"
+	},
+	"thinkingNoOff": {
+		"message": "$1 无法关闭思考，将按默认级别思考。"
+	},
+	"thinkingMaxHelp": {
+		"message": "Max 可能比 High 慢得多，费用也高得多。"
+	},
+	"notConnected": {
+		"message": "未连接到扩展程序"
+	},
+	"connectionLost": {
+		"message": "扩展程序回复前连接已断开"
+	},
+	"callbackTitle": {
+		"message": "pi：使用 ChatGPT 登录"
+	},
+	"callbackSigningIn": {
+		"message": "正在通过 ChatGPT 登录"
+	},
+	"callbackFinishing": {
+		"message": "正在完成登录…"
+	},
+	"gotIt": {
+		"message": "知道了"
+	},
+	"notSignedIn": {
+		"message": "未登录"
+	},
+	"callbackNoReply": {
+		"message": "pi 未回复。请回到 pi 重新开始。"
+	},
+	"callbackPlanTitle": {
+		"message": "你正在使用 ChatGPT 套餐"
+	},
+	"callbackPlanNote": {
+		"message": "此应用中符合条件的使用量计入你的 ChatGPT 套餐。请在 ChatGPT 设置中管理使用量。"
+	},
+	"callbackBack": {
+		"message": "你可以返回 pi。"
+	},
+	"callbackError": {
+		"message": "pi 未回复（$1）。请回到 pi 重新开始。"
+	},
+	"announceNeedsSite": {
+		"message": "pi 需要访问 $1"
+	},
+	"movedSite": {
+		"message": "此标签页跳转后的网站"
+	},
+	"announceScript": {
+		"message": "pi 请求在 $1 上运行脚本"
+	},
+	"announceAct": {
+		"message": "pi 请求操作 $1"
+	},
+	"usageChatScope": {
+		"message": "整个对话，包括摘要和工具调用"
+	},
+	"usageInput": {
+		"message": "↑ 输入（不含缓存）：$1 个令牌"
+	},
+	"usageOutput": {
+		"message": "↓ 输出：$1 个令牌"
+	},
+	"usageCacheRead": {
+		"message": "R 从缓存读取：$1 个令牌"
+	},
+	"usageCacheWrite": {
+		"message": "W 写入缓存：$1 个令牌"
+	},
+	"usageCacheHit": {
+		"message": "CH 缓存命中：上次请求的 $1"
+	},
+	"usageCost": {
+		"message": "费用：约 $1，按标价估算，不是账单"
+	},
+	"usagePlanCost": {
+		"message": "包含 ChatGPT 套餐的回答，套餐不按令牌计费"
+	},
+	"usageContext": {
+		"message": "上下文：已用 $1（窗口：$2 个令牌）"
+	},
+	"usageContextUnknown": {
+		"message": "上下文：未知，收到下一条回复后更新（窗口：$1 个令牌）"
+	},
+	"usageCompaction": {
+		"message": "接近上限时，pi 会自动汇总较早的消息。"
+	},
+	"oneTool": {
+		"message": "1 次工具调用"
+	},
+	"toolCount": {
+		"message": "$1 次工具调用"
+	},
+	"answerTime": {
+		"message": "用时：$1"
+	},
+	"answerTimeSplit": {
+		"message": "用时：$1（模型 $2 · 工具 $3）"
+	},
+	"answerTools": {
+		"message": "工具："
+	},
+	"toolCallsFailed": {
+		"message": "$1（$2 次失败）"
+	},
+	"answerTokens": {
+		"message": "令牌：$1"
+	},
+	"tokensIn": {
+		"message": "输入 $1"
+	},
+	"tokensInCached": {
+		"message": "输入 $1（$2 来自缓存）"
+	},
+	"tokensCacheWrite": {
+		"message": "写入缓存 $1"
+	},
+	"tokensOut": {
+		"message": "输出 $1"
+	},
+	"answerCost": {
+		"message": "费用：约 $1"
+	},
+	"answerPlanCost": {
+		"message": "使用 ChatGPT 套餐，套餐不按令牌计费"
+	},
+	"promptNameRequired": {
+		"message": "请为提示词命名"
+	},
+	"promptNameTooLong": {
+		"message": "名称过长：最多 $1 个字符"
+	},
+	"promptNameDuplicate": {
+		"message": "已有同名提示词"
+	},
+	"promptSelectionRequired": {
+		"message": "请在所选文本应放入的位置添加 {{selection}}"
+	},
+	"promptTemplateTooLong": {
+		"message": "提示词过长：最多 $1 个字符"
+	},
+	"promptIdMissing": {
+		"message": "提示词缺少 ID"
+	},
+	"promptLimit": {
+		"message": "最多 $1 个提示词"
+	},
+	"promptKeepOne": {
+		"message": "请至少保留一个已开启的提示词"
+	},
+	"promptDeletedNotice": {
+		"message": "此提示词已删除，未发送任何内容。"
+	},
+	"promptOffNotice": {
+		"message": "此提示词已关闭，未发送任何内容。"
+	},
+	"promptDefaultOn": {
+		"message": "“询问 pi”使用此提示词：请先将另一个提示词设为默认"
+	},
+	"promptOffDefault": {
+		"message": "此提示词已关闭：请先开启它"
+	},
+	"pageReadRefused": {
+		"message": "pi 无法读取此页面：$1"
+	},
+	"chromeReadRefused": {
+		"message": "Chrome 不允许 pi 读取此页面"
+	},
+	"tabReloadedUnsent": {
+		"message": "Chrome 已重新加载此标签页，未发送任何内容"
+	},
+	"selectionReadFailed": {
+		"message": "未能读取所选文本：$1"
+	},
+	"selectTextFirst": {
+		"message": "请先在页面上选择文本"
+	},
+	"pageHasNoChat": {
+		"message": "此页面没有显示任何标签页的对话"
+	},
+	"modelUnknown": {
+		"message": "未知模型 $1/$2"
+	},
+	"questionGone": {
+		"message": "此请求已不存在"
+	},
+	"signOutFirst": {
+		"message": "请先在设置中退出 ChatGPT"
+	},
+	"removeKeyToSignIn": {
+		"message": "请先在设置中移除 OpenAI 密钥，再使用 ChatGPT 登录"
+	},
+	"signInPermissionMissing": {
+		"message": "未获允许：尚未授予登录所需的 Chrome 访问权限"
+	},
+	"providerKeyMissing": {
+		"message": "没有 $1 密钥：请先添加密钥再发送"
+	},
+	"providerSubscriptionRefused": {
+		"message": "$1 密钥是订阅令牌；pi 需要 API 密钥"
+	},
+	"providerPermissionMissing": {
+		"message": "没有访问 $1 的权限：请先授权再发送"
+	},
+	"requestFailed": {
+		"message": "请求失败"
+	},
+	"answerStopped": {
+		"message": "已停止"
+	},
+	"messagesSummarized": {
+		"message": "较早的消息已汇总。"
+	},
+	"newContextNotice": {
+		"message": "已开始新的上下文。"
+	},
+	"toolFailed": {
+		"message": "$1 执行失败"
+	},
+	"actedOnPage": {
+		"message": "已操作页面"
+	},
+	"ranScript": {
+		"message": "已运行脚本"
+	},
+	"tookScreenshot": {
+		"message": "已截图"
+	},
+	"tookElementScreenshot": {
+		"message": "已截取 $1 的图像"
+	},
+	"observedPage": {
+		"message": "已观察页面：$1"
+	},
+	"observedPageFind": {
+		"message": "已观察页面：$1（查找：$2）"
+	},
+	"waitedOnPage": {
+		"message": "已在页面上等待：$1"
+	},
+	"readPageNotice": {
+		"message": "已读取页面：$1"
+	},
+	"readSelectionNotice": {
+		"message": "已读取所选文本：$1"
+	},
+	"pageChangedSuffix": {
+		"message": "（标签页此后已发生变化）"
+	},
+	"readCount": {
+		"message": "$1 · 读取 $2 次"
+	},
+	"imagePlaceholder": {
+		"message": "[图片]"
+	},
+	"menuUpdateFailed": {
+		"message": "Chrome 未能更新菜单"
+	},
+	"verifyTimeout": {
+		"message": "超时"
+	},
+	"verifyNoKey": {
+		"message": "没有密钥"
+	},
+	"subscriptionRefused": {
+		"message": "这是订阅令牌；pi 需要 API 密钥"
+	},
+	"tabChatChanged": {
+		"message": "此标签页的对话已更改；$1"
+	},
+	"tabClosed": {
+		"message": "标签页已关闭；$1"
+	},
+	"nothingSent": {
+		"message": "未发送任何内容"
+	},
+	"nothingStopped": {
+		"message": "未停止任何内容"
+	},
+	"tryAgain": {
+		"message": "请重试"
+	},
+	"modelUnchanged": {
+		"message": "模型未更改"
+	},
+	"chatMessageGone": {
+		"message": "此消息已不在对话中"
+	},
+	"chatBusy": {
+		"message": "对话正在进行中：请等待回答完成或将其停止"
+	},
+	"chatMessageAnswered": {
+		"message": "此消息已有回答"
+	},
+	"chatGone": {
+		"message": "此对话已不存在"
+	},
+	"chatBusyModel": {
+		"message": "对话正在进行中：请等待回答完成或停止后再更改模型"
+	},
+	"authNotWaiting": {
+		"message": "此登录请求已结束。请在 pi 中重新开始。"
+	},
+	"authKeySaved": {
+		"message": "此期间已保存 OpenAI API 密钥。请先在 pi 的设置中将其移除，再登录。"
+	},
+	"authReplaced": {
+		"message": "此登录请求已取消或被新的请求替代。"
+	},
+	"authOtherAccount": {
+		"message": "这不是 pi 使用的 ChatGPT 账号。如需切换，请先退出登录，再在 pi 的设置中选择使用其他账号。"
+	},
+	"authStopping": {
+		"message": "pi 仍在停止使用 OpenAI 的任务。请稍后在 pi 中重新开始。"
+	},
+	"authTokenFailed": {
+		"message": "OpenAI 登录失败（$1）"
+	},
+	"authResponseStatus": {
+		"message": "OpenAI 返回了 $1"
+	},
+	"authDiscoveryIssuer": {
+		"message": "OpenAI 的发现文档指定了不同的签发方"
+	},
+	"authDiscoveryEndpoint": {
+		"message": "OpenAI 的发现文档指定了 auth.openai.com 之外的端点"
+	},
+	"authNotJwt": {
+		"message": "OpenAI 的 ID 令牌不是 JWT"
+	},
+	"authNotRs256": {
+		"message": "OpenAI 的 ID 令牌未使用 RS256"
+	},
+	"authNoTokenKey": {
+		"message": "OpenAI 的密钥集中没有与 ID 令牌匹配的密钥"
+	},
+	"authInvalidSignature": {
+		"message": "OpenAI 的 ID 令牌签名无效"
+	},
+	"authTokenIssuer": {
+		"message": "OpenAI 的 ID 令牌签发方不匹配"
+	},
+	"authTokenClient": {
+		"message": "OpenAI 的 ID 令牌属于其他客户端"
+	},
+	"authTokenExpired": {
+		"message": "OpenAI 的 ID 令牌已过期"
+	},
+	"authTokenSignIn": {
+		"message": "OpenAI 的 ID 令牌属于其他登录请求"
+	},
+	"authTokenAccount": {
+		"message": "OpenAI 的 ID 令牌未指定账号"
+	},
+	"authTokenNotObject": {
+		"message": "OpenAI 的令牌响应不是对象"
+	},
+	"authTokenFieldMissing": {
+		"message": "OpenAI 的令牌响应缺少 $1"
+	},
+	"authPlanNotGranted": {
+		"message": "未获准使用 ChatGPT 套餐。请重新登录。"
+	},
+	"authInvalidExpiry": {
+		"message": "OpenAI 的令牌响应缺少有效的 expires_in"
+	},
+	"authUseSettings": {
+		"message": "请从 pi 的设置中登录 ChatGPT"
+	},
+	"authNoClientId": {
+		"message": "ChatGPT 登录缺少客户端 ID"
+	},
+	"authDidNotConnect": {
+		"message": "未能连接 ChatGPT（$1）。请在 pi 中重新开始。"
+	},
+	"authRegistrationMismatch": {
+		"message": "ChatGPT 的响应属于 pi 的其他注册记录。请在 pi 中重新开始。"
+	},
+	"runForAnswer": {
+		"message": "本次回答"
+	},
+	"runForChat": {
+		"message": "本次对话"
+	},
+	"runForAnswerTip": {
+		"message": "运行此脚本，并在本次回答中直接运行 pi 在 $1 上的后续脚本，不再询问"
+	},
+	"runForChatTip": {
+		"message": "运行此脚本，并在本次对话中直接运行 pi 在 $1 上的脚本，不再询问，直到新建对话或关闭 Chrome"
+	},
+	"runNextScripts": {
+		"message": "运行，并直接运行后续脚本："
+	},
+	"userScriptsOn": {
+		"message": "Chrome 中 pi 的“允许用户脚本”已开启。"
+	},
+	"userScriptsOff": {
+		"message": "Chrome 中 pi 的“允许用户脚本”已关闭，pi 无法运行脚本。请在 pi 的扩展详情页中开启。"
+	},
+	"diagram": {
+		"message": "图表"
+	},
+	"diagramSource": {
+		"message": "源代码"
+	},
+	"viewerFullSize": {
+		"message": "$1，原始尺寸"
+	},
+	"moreForChat": {
+		"message": "$1的更多操作"
+	},
+	"more": {
+		"message": "更多"
+	},
+	"removeFromHistory": {
+		"message": "从历史记录中移除"
+	},
+	"stopAnswerFirst": {
+		"message": "请先停止回答"
+	},
+	"rename": {
+		"message": "重命名"
+	},
+	"exportMarkdown": {
+		"message": "导出为 Markdown"
+	},
+	"chatTitle": {
+		"message": "对话标题"
+	},
+	"notRenamed": {
+		"message": "未重命名：$1"
+	},
+	"exported": {
+		"message": "已导出"
+	},
+	"notExported": {
+		"message": "未导出：$1"
+	},
+	"removedChat": {
+		"message": "已移除“$1”。"
+	},
+	"undo": {
+		"message": "撤销"
+	},
+	"notRestored": {
+		"message": "未恢复：$1"
+	},
+	"removedFromHistory": {
+		"message": "已从历史记录中移除"
+	},
+	"notRemoved": {
+		"message": "未移除：$1"
+	},
+	"data": {
+		"message": "数据"
+	},
+	"chatDataNote": {
+		"message": "对话会保留 pi 从页面读取的内容，以及页面工具的操作和结果。"
+	},
+	"deleteAllChatsOffer": {
+		"message": "删除所有对话…"
+	},
+	"deleteAllChatsQuestion": {
+		"message": "删除所有对话？"
+	},
+	"deleteAllChatsWarning": {
+		"message": "这将删除所有对话和 pi 从页面读取的内容。设置、密钥和登录信息会保留。此操作无法撤销。"
+	},
+	"deleteAllChats": {
+		"message": "删除所有对话"
+	},
+	"deleting": {
+		"message": "正在删除..."
+	},
+	"allChatsDeleted": {
+		"message": "已删除所有对话"
+	},
+	"copyMessage": {
+		"message": "复制消息"
+	},
+	"editMessage": {
+		"message": "编辑消息"
+	},
+	"editNote": {
+		"message": "将从此处开始新对话并发送。当前对话保留在历史记录中。"
+	},
+	"editActedNote": {
+		"message": "pi 在此消息之后对页面执行的操作不会撤销。"
+	},
+	"editEmpty": {
+		"message": "请输入要发送的消息"
+	},
+	"editedFrom": {
+		"message": "编辑自之前的对话。"
+	},
+	"openOriginal": {
+		"message": "打开原对话"
+	},
+	"editedChat": {
+		"message": "已编辑"
+	},
+	"reloadedPage": {
+		"message": "已重新加载页面"
+	},
+	"wentTo": {
+		"message": "已前往 $1"
+	},
+	"stepClick": {
+		"message": "已点击 $1"
+	},
+	"stepType": {
+		"message": "已在 $2 中输入 $1"
+	},
+	"stepTypeSubmit": {
+		"message": "已在 $2 中输入 $1，并提交了表单"
+	},
+	"stepPress": {
+		"message": "已按下 $1"
+	},
+	"stepPressIn": {
+		"message": "已在 $2 中按下 $1"
+	},
+	"stepChoose": {
+		"message": "已在 $2 中选择 $1"
+	},
+	"stepScrollPage": {
+		"message": "已将页面$1"
+	},
+	"stepScrollBox": {
+		"message": "已将 $1 $2"
+	},
+	"stepUp": {
+		"message": "向上滚动"
+	},
+	"stepDown": {
+		"message": "向下滚动"
+	},
+	"stepTop": {
+		"message": "滚动到顶部"
+	},
+	"stepBottom": {
+		"message": "滚动到底部"
+	},
+	"stepAtEnd": {
+		"message": "$1（$2）"
+	},
+	"stepAtTop": {
+		"message": "已到顶部"
+	},
+	"stepAtBottom": {
+		"message": "已到底部"
+	},
+	"stepReveal": {
+		"message": "已将 $1 滚动到可见位置"
+	},
+	"stepSwitchTab": {
+		"message": "已切换到标签页 $1"
+	},
+	"stepCloseTab": {
+		"message": "已关闭标签页 $1"
+	},
+	"stepTabClosed": {
+		"message": "标签页 $1 已经关闭"
+	},
+	"stepToolsMoved": {
+		"message": "$1；页面工具现在作用于标签页 $2"
+	},
+	"attachFiles": {
+		"message": "添加图片或文本文件"
+	},
+	"removeAttachment": {
+		"message": "移除 $1"
+	},
+	"attachPreparing": {
+		"message": "正在处理 $1…"
+	},
+	"attachedImage": {
+		"message": "图片"
+	},
+	"attachedImageSize": {
+		"message": "$1 × $2 · $3 KB"
+	},
+	"attachedFileChars": {
+		"message": "$1 · $2 个字符"
+	},
+	"attachNotText": {
+		"message": "$1 不是图片或文本文件：pi 只能添加这两类文件。"
+	},
+	"attachFileTooLong": {
+		"message": "$1 超过了 $2 个字符。"
+	},
+	"attachFileTooBig": {
+		"message": "$1 太大，无法添加。"
+	},
+	"attachFilesTooLong": {
+		"message": "一条消息里的文本文件合计最多 $1 个字符。"
+	},
+	"attachTooMany": {
+		"message": "一条消息最多只能添加 $1 个附件。"
+	},
+	"attachImageUnreadable": {
+		"message": "pi 无法读取图片 $1。"
+	},
+	"attachImageTooDetailed": {
+		"message": "图片 $1 细节太多，缩小后仍无法发送。"
+	},
+	"attachInvalid": {
+		"message": "附件无效，请重新添加。"
+	},
+	"attachmentGone": {
+		"message": "这条消息的附件已变化，请重新点击编辑。"
+	},
+	"attachmentsNotKept": {
+		"message": "已停止，附件未保留"
+	},
+	"modelNoImages": {
+		"message": "这个模型无法读取图片：请换一个模型，或移除图片。"
+	},
+	"imagesOverCount": {
+		"message": "这个对话的每次请求已带有 $1 张图片，加上这条消息会达到 $2 张，超过了 pi 的上限（$3 张）。请新建对话，或少发几张图片。"
+	},
+	"imagesOverSize": {
+		"message": "这个对话的图片已占每次请求 $1 MB，加上这条消息会达到 $2 MB，超过了 pi 的上限（$3 MB）。请新建对话，或少发几张图片。"
+	},
+	"attachedFile": {
+		"message": "文件"
+	},
+	"showImage": {
+		"message": "查看 $1 原图"
+	}
+}

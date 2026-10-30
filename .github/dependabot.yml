@@ -1,0 +1,16 @@
+# Dependencies are pinned to exact versions (CONTRIBUTING.md, "New dependency"), so updates arrive as pull requests that CI
+# checks. After a pele update, the diagrams suite covers the pictures and their colors.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    versioning-strategy: increase
+    groups:
+      pi:
+        patterns: ["@earendil-works/*"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>pi-aside diagnostics</title>
+		<link rel="stylesheet" href="panel.css" />
+		<script type="module" src="diagnostics.js"></script>
+	</head>
+	<body class="page">
+		<header class="bar">
+			<h1>pi-aside diagnostics</h1>
+			<span id="connection" class="dot" title="Connecting"></span>
+		</header>
+
+		<h2>Status</h2>
+		<dl id="status"></dl>
+
+		<h2>Log</h2>
+		<p class="note">What pi-aside's background worker did, newest last. It holds no keys; add it when you report a problem.</p>
+		<div class="row">
+			<button type="button" id="clear-log">Clear log</button>
+			<button type="button" id="reload">Reload extension</button>
+		</div>
+		<pre id="log"></pre>
+
+		<h2>Developer tests</h2>
+		<p class="note">
+			For testing pi-aside itself; you do not need them. "Send a long prompt" sends a real request with your key to the
+			chat of the tab this page was opened from, and the provider bills it. With "Keepalive while busy" off, Chrome
+			can stop pi-aside during an answer: the answer then starts again, and is billed again.
+		</p>
+		<div class="row">
+			<button type="button" id="long">Send a long prompt</button>
+			<button type="button" id="abort">Stop</button>
+			<button type="button" id="conformance">Run storage conformance</button>
+			<label><input id="keepalive" type="checkbox" checked /> Keepalive while busy</label>
+		</div>
+	</body>
+</html>

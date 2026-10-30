@@ -1,0 +1,2523 @@
+/* The side panel, the diagnostics page (body.page), which uses .bar, .dot, .row, h1, h2, pre, and dl, and the ChatGPT
+   callback page (body.page.callback). */
+
+:root {
+	color-scheme: light dark;
+	--fg: #1d1d1f;
+	--muted: #6e6e73;
+	--bg: #ffffff;
+	--panel: #f5f5f7;
+	--panel-hover: #e9e9ed;
+	--border: #d2d2d7;
+	--accent: #0a66c2;
+	--ok: #1a7f37;
+	--warn: #b35c00;
+	--bad: #c62828;
+	/* Questions; muted text on it is 4.58:1. */
+	--user-bg: #eef4fc;
+	/* Code; it needs its border, since it is close to the page color. */
+	--code-bg: #f3f3f6;
+	/* Primary buttons: white text on it is 5.69:1. */
+	--primary: #0a66c2;
+	--focus: #0a66c2;
+	--radius-s: 6px;
+	--radius-m: 10px;
+	--radius-l: 14px;
+	font:
+		13px / 1.4 system-ui,
+		sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--fg: #f5f5f7;
+		--muted: #a1a1a6;
+		--bg: #1c1c1e;
+		--panel: #2c2c2e;
+		--panel-hover: #3a3a3c;
+		--border: #3a3a3c;
+		--accent: #4ea1ff;
+		--ok: #4ac26b;
+		--warn: #f0a640;
+		--bad: #ff6b6b;
+		--user-bg: #243652;
+		--code-bg: #2a2a2d;
+		/* White text on it is 4.94:1; the lighter accent is for links and rings. */
+		--primary: #1f6fd1;
+		--focus: #4ea1ff;
+	}
+}
+
+/* Any class or ID rule that sets `display` would otherwise show a hidden element. */
+[hidden] {
+	/* biome-ignore lint/complexity/noImportantStyles: `hidden` must win over every rule that sets `display`. */
+	display: none !important;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	/* Chrome gives an extension page's body 75% and the system's fonts: the root's font, 13px, is the panel's. */
+	font: inherit;
+	display: flex;
+	flex-direction: column;
+	background: var(--bg);
+	color: var(--fg);
+}
+
+body.page {
+	display: block;
+	padding: 0 12px 24px;
+	height: auto;
+}
+
+:focus-visible {
+	outline: 2px solid var(--focus);
+	outline-offset: 1px;
+}
+
+.bar {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 12px;
+	border-bottom: 1px solid var(--border);
+}
+
+.grow {
+	flex: 1;
+}
+
+h1 {
+	font-size: 15px;
+	margin: 0;
+}
+
+h2 {
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--muted);
+	margin: 14px 0 6px;
+}
+
+.muted {
+	color: var(--muted);
+}
+
+.error {
+	color: var(--bad);
+}
+
+.row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	align-items: center;
+	margin: 6px 0;
+}
+
+.row > input:not([type="checkbox"]):not([type="radio"]) {
+	flex: 1;
+	min-width: 0;
+}
+
+label {
+	display: block;
+	margin: 4px 0;
+}
+
+.row > label {
+	display: inline;
+	margin: 0;
+}
+
+input,
+select,
+textarea,
+button {
+	font: inherit;
+	color: inherit;
+	background: var(--panel);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-s);
+	padding: 4px 8px;
+}
+
+select[size],
+textarea {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+button {
+	cursor: pointer;
+}
+
+button.primary {
+	background: var(--primary);
+	border-color: var(--primary);
+	color: #fff;
+}
+
+button:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+.dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--muted);
+	flex: none;
+}
+
+.dot.ok {
+	background: var(--ok);
+}
+
+.dot.bad {
+	background: var(--bad);
+}
+
+.dot.warn {
+	background: var(--warn);
+}
+
+/* Not set up: a ring, so it reads as empty, not as a muted state. */
+.dot.unset {
+	box-sizing: border-box;
+	border: 1.5px solid var(--muted);
+	background: none;
+}
+
+dl {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: 2px 10px;
+	margin: 0;
+}
+
+dt {
+	color: var(--muted);
+}
+
+dd {
+	margin: 0;
+	overflow-wrap: anywhere;
+}
+
+pre {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	font-size: 11px;
+	background: var(--panel);
+	border-radius: var(--radius-s);
+	padding: 8px;
+	max-height: 420px;
+	overflow-y: auto;
+}
+
+ul {
+	margin: 4px 0;
+	padding-left: 18px;
+}
+
+.small {
+	font-size: 11px;
+	white-space: nowrap;
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* Icons: <svg class="icon"><use href="#i-name"/></svg>, drawn with the text color. */
+.icon {
+	width: 16px;
+	height: 16px;
+	flex: none;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.75;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.icon.filled {
+	fill: currentColor;
+}
+
+.icon-button {
+	flex: none;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: 0;
+	border-radius: var(--radius-s);
+	background: none;
+	color: var(--muted);
+	display: inline-grid;
+	place-items: center;
+}
+
+.icon-button:hover:not(:disabled),
+.icon-button[aria-pressed="true"] {
+	background: var(--panel-hover);
+	color: var(--fg);
+}
+
+.icon-button.small {
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
+}
+
+.icon-button.small .icon {
+	width: 12px;
+	height: 12px;
+}
+
+.text-button {
+	height: 24px;
+	padding: 0 6px;
+	border: 0;
+	border-radius: var(--radius-s);
+	background: none;
+	color: var(--muted);
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: inherit;
+}
+
+.text-button:hover:not(:disabled) {
+	background: var(--panel-hover);
+	color: var(--fg);
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Text buttons are not compact icon buttons. */
+.text-button .icon {
+	width: 13px;
+	height: 13px;
+}
+
+.small-button {
+	height: 24px;
+	padding: 0 10px;
+	font-size: 12px;
+}
+
+/* Header: New chat, History, Settings. */
+
+.bar.top {
+	flex: none;
+	height: 40px;
+	box-sizing: border-box;
+	padding: 0 6px 0 10px;
+	gap: 2px;
+}
+
+.picker {
+	flex: 0 1 auto;
+	min-width: 0;
+	height: 26px;
+	box-sizing: border-box;
+	padding: 0 6px 0 9px;
+	border: 0;
+	border-radius: 13px;
+	background: var(--panel);
+	font:
+		600 12px / 26px system-ui,
+		sans-serif;
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+}
+
+.picker:hover:not(:disabled, .off) {
+	background: var(--panel-hover);
+}
+
+.model[aria-expanded="true"] {
+	background: var(--panel-hover);
+}
+
+.model > span {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Model pickers are not compact icon buttons. */
+.model .icon {
+	width: 12px;
+	height: 12px;
+	color: var(--muted);
+}
+
+/* The provider after the model's name: Haiku through Anthropic and through OpenRouter look different. */
+.model > .via {
+	flex: none;
+	margin-left: 4px;
+	font-weight: 400;
+	color: var(--muted);
+}
+
+/* Thinking: an icon, then a native select without its own box, so the keyboard and the menu are Chrome's. */
+.think {
+	flex: none;
+	gap: 3px;
+	padding: 0 4px 0 8px;
+	cursor: pointer;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Thinking pickers are not compact icon buttons. */
+.think > .icon {
+	width: 12px;
+	height: 12px;
+	color: var(--muted);
+}
+
+.think > .icon:first-child {
+	width: 13px;
+	height: 13px;
+}
+
+.think select {
+	appearance: none;
+	/* As wide as the level shown, not the widest one. */
+	field-sizing: content;
+	height: 26px;
+	padding: 0 1px;
+	border: 0;
+	background: transparent;
+	font: inherit;
+	cursor: inherit;
+}
+
+.think select:focus-visible {
+	outline: none;
+}
+
+/* The levels' list opens above the picker with every level shown (design 6.37). A system menu, as macOS draws it, puts
+   the chosen level over the picker, so at the panel's bottom the levels after it went off the screen. */
+.think select,
+.think select::picker(select) {
+	appearance: base-select;
+}
+
+.think select::picker-icon {
+	display: none;
+}
+
+.think select::picker(select) {
+	position-area: block-start span-inline-end;
+	position-try-fallbacks: flip-block;
+	margin: 0 0 4px;
+	min-inline-size: 120px;
+	padding: 4px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-m);
+	background: var(--bg);
+	color: var(--fg);
+	box-shadow: 0 6px 24px rgb(0 0 0 / 0.18);
+}
+
+/* Options inherit the picker's 26 px line. */
+.think option {
+	min-block-size: 0;
+	padding: 4px 8px;
+	line-height: 18px;
+	border-radius: var(--radius-s);
+	cursor: pointer;
+}
+
+.think option::checkmark {
+	display: none;
+}
+
+.think option:hover:not(:disabled),
+.think option:focus-visible {
+	outline: none;
+	background: var(--panel-hover);
+}
+
+.think option:checked {
+	background: var(--user-bg);
+	box-shadow: inset 3px 0 0 var(--accent);
+}
+
+/* A level the model lacks: its tooltip says what the model uses instead. */
+.think option:disabled {
+	color: var(--muted);
+	cursor: default;
+}
+
+.think:focus-within {
+	outline: 2px solid var(--focus);
+	outline-offset: 1px;
+}
+
+/* A model that cannot think: the level does not apply to it. */
+.think.off {
+	opacity: 0.55;
+	cursor: default;
+}
+
+.banner {
+	flex: none;
+	margin: 8px 12px 0;
+	padding: 6px 8px;
+	border-radius: var(--radius-s);
+	background: var(--panel);
+	border: 1px solid var(--border);
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	overflow-wrap: anywhere;
+}
+
+.banner > span {
+	flex: 1;
+}
+
+.note-bar {
+	flex: none;
+	margin: 8px 12px 0;
+	padding: 4px 4px 4px 10px;
+	border-radius: var(--radius-m);
+	background: var(--panel);
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	font-size: 12px;
+	overflow-wrap: anywhere;
+}
+
+.note-bar > span {
+	flex: 1;
+}
+
+/* Views: the chat, History, and Settings take the space under the header in turn. */
+
+.view {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.view-title {
+	flex: none;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px;
+	border-bottom: 1px solid var(--border);
+}
+
+.view-title h2 {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+	text-transform: none;
+	letter-spacing: normal;
+	color: var(--fg);
+}
+
+.view-body {
+	flex: 1;
+	overflow-y: auto;
+	padding: 4px 12px 16px;
+}
+
+.view-body h3 {
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--muted);
+	margin: 16px 0 6px;
+}
+
+.view-body > section > h3:first-child {
+	margin-top: 10px;
+}
+
+.section-head {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+}
+
+/* A result line: what a click did, or why a button is disabled. */
+.result {
+	font-size: 12px;
+	color: var(--muted);
+	overflow-wrap: anywhere;
+}
+
+.result.ok {
+	color: var(--ok);
+}
+
+.result.bad {
+	color: var(--bad);
+}
+
+p.result {
+	margin: 6px 0 0;
+}
+
+p.result:empty {
+	display: none;
+}
+
+.pill {
+	flex: none;
+	padding: 0 6px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	font-size: 10.5px;
+	line-height: 16px;
+	color: var(--muted);
+	white-space: nowrap;
+}
+
+.pill.accent {
+	border-color: transparent;
+	background: var(--user-bg);
+	color: var(--accent);
+}
+
+button.link {
+	height: auto;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--accent);
+}
+
+button.link:hover {
+	text-decoration: underline;
+}
+
+button.danger {
+	color: var(--bad);
+}
+
+.filter {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 6px 0;
+}
+
+/* Two or three choices as one control. Native radios, hidden but focusable; the selected one has a border and weight,
+   since a tint alone is under 3:1 in dark mode. */
+.segmented {
+	display: flex;
+	gap: 2px;
+	min-inline-size: 0;
+	margin: 0;
+	padding: 2px;
+	border: 0;
+	border-radius: 8px;
+	background: var(--panel);
+}
+
+/* The setup card's four providers: two rows of two. */
+#setup-providers {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.segmented label {
+	position: relative;
+	flex: 1;
+	margin: 0;
+	padding: 3px 8px;
+	border: 1px solid transparent;
+	border-radius: var(--radius-s);
+	text-align: center;
+	color: var(--muted);
+	cursor: pointer;
+}
+
+.segmented input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1px;
+	height: 1px;
+	margin: 0;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.segmented label:has(input:checked) {
+	border-color: var(--accent);
+	background: var(--bg);
+	color: var(--fg);
+	font-weight: 600;
+}
+
+.segmented label:has(input:focus-visible) {
+	outline: 2px solid var(--focus);
+	outline-offset: 1px;
+}
+
+/* Setup, in the chat view: a provider and its key, or the host permission. */
+.card {
+	flex: none;
+	margin: 8px 12px 0;
+	padding: 10px 12px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-m);
+}
+
+.card h3 {
+	margin: 0 0 8px;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.card p {
+	margin: 0 0 8px;
+}
+
+/* A key field with Show inside, Save, and a note with "Get a key". */
+.key-form {
+	margin-top: 8px;
+}
+
+.key-line {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.key-line > button {
+	flex: none;
+	height: 28px;
+}
+
+.key-field {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-s);
+	background: var(--panel);
+}
+
+.key-field:focus-within {
+	border-color: var(--focus);
+	box-shadow: 0 0 0 1px var(--focus);
+}
+
+.key-field input {
+	flex: 1;
+	min-width: 0;
+	height: 26px;
+	box-sizing: border-box;
+	border: 0;
+	background: none;
+}
+
+.key-field input:focus-visible {
+	outline: none;
+}
+
+.reveal {
+	flex: none;
+	height: 22px;
+	margin-right: 2px;
+	font-size: 12px;
+}
+
+.note {
+	margin: 6px 0 0;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+.note a,
+.plan-note a,
+.key-body a,
+.reason a,
+body.callback a,
+.card .note a {
+	color: var(--accent);
+}
+
+/* Sign in with ChatGPT (design 6.20): the offer in the setup card and OpenAI's row, the note under the composer, and
+   the callback page. */
+.plan-offer {
+	margin-top: 8px;
+	padding-top: 8px;
+	border-top: 1px solid var(--border);
+	font-size: 12px;
+}
+
+.plan-offer p {
+	margin: 0 0 6px;
+}
+
+.plan-note {
+	margin: 2px 0 0;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+/* Under the message box, after the pickers where it fits, else on the line below with its text in line with the
+   model's name: the gap before it is its padding, as a line's first item has no column gap (design 6.36). */
+.composer-under > .plan-note {
+	flex: none;
+	margin: 0;
+	padding: 0 5px;
+	white-space: nowrap;
+}
+
+body.callback {
+	max-width: 480px;
+	margin: 0 auto;
+	padding-top: 48px;
+}
+
+body.callback h1 {
+	margin-bottom: 8px;
+	font-size: 18px;
+}
+
+/* The model picker: a list box of about 5.5 rows, each the name and its tags over the ID. */
+.listbox {
+	position: relative;
+	max-height: 248px;
+	overflow-y: auto;
+	padding: 2px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-m);
+}
+
+/* A provider's name over its models; the arrow keys pass it. */
+.group-name {
+	padding: 6px 8px 2px;
+	font-size: 11px;
+	font-weight: 600;
+	color: var(--muted);
+}
+
+.option {
+	padding: 4px 8px;
+	border-radius: var(--radius-s);
+	cursor: pointer;
+}
+
+.option:hover {
+	background: var(--panel-hover);
+}
+
+.option[aria-selected="true"] {
+	background: var(--user-bg);
+	box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.option .line {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.option .name,
+.option .id {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.option .name {
+	flex: 0 1 auto;
+}
+
+.option .id {
+	font-size: 11.5px;
+	color: var(--muted);
+}
+
+.none {
+	padding: 12px 8px;
+	text-align: center;
+	color: var(--muted);
+}
+
+/* A field's label over its control: the prompt form. */
+.field label {
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin: 8px 0;
+}
+
+.field select,
+.field input {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.confirm p {
+	margin: 6px 0 0;
+}
+
+.confirm p > span {
+	display: block;
+	color: var(--muted);
+}
+
+/* Settings > Prompts: a row per prompt, in menu order: the star, the name, Up, Down, and Edit, which opens the form in
+   the row. */
+.prompts {
+	margin: 6px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.prompts > li {
+	padding: 4px 0;
+	border-top: 1px solid var(--border);
+}
+
+.prompts > li:has(> .prompt-head[hidden]) {
+	padding: 8px 0;
+}
+
+.prompt-head {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	min-height: 28px;
+}
+
+.prompt-head .name {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.prompt-head .small-button {
+	flex: none;
+	margin-left: 4px;
+}
+
+.prompt-head .icon-button.small:disabled {
+	opacity: 0.3;
+}
+
+/* A prompt's switch, at the end of its row: on puts the prompt in the pi menu and the / list. The name of a prompt
+   that is off is muted. */
+.prompt-head .switch {
+	position: relative;
+	flex: none;
+	width: 28px;
+	height: 16px;
+	margin-left: 4px;
+	padding: 0;
+	border: 1px solid var(--muted);
+	border-radius: 8px;
+	background: var(--bg);
+}
+
+.prompt-head .switch::after {
+	content: "";
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: var(--muted);
+}
+
+.prompt-head .switch[aria-checked="true"] {
+	border-color: var(--primary);
+	background: var(--primary);
+}
+
+.prompt-head .switch[aria-checked="true"]::after {
+	left: 14px;
+	background: #fff;
+}
+
+.prompts > li.off .name {
+	color: var(--muted);
+}
+
+/* The default prompt's star is filled; the others are outlines that fill on hover. */
+.star[aria-pressed="true"],
+.star[aria-pressed="true"]:hover:not(:disabled) {
+	background: none;
+	color: #e0a000;
+}
+
+.star[aria-pressed="true"] .icon,
+.star:hover:not(:disabled) .icon {
+	fill: currentColor;
+}
+
+.prompts .field:first-child {
+	margin-top: 0;
+}
+
+.prompts textarea {
+	min-height: 104px;
+	max-height: 320px;
+	resize: vertical;
+}
+
+.variables {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+.variables button {
+	height: 22px;
+	padding: 0 6px;
+	border-radius: 8px;
+	font:
+		11.5px ui-monospace,
+		monospace;
+}
+
+.prompts .row,
+#prompts-actions {
+	margin: 8px 0 0;
+}
+
+.sites {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.sites li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 3px 0;
+}
+
+/* A site a line, in the code font, so each stands apart. */
+.sites li > span {
+	min-width: 0;
+	overflow-wrap: anywhere;
+	font:
+		12px ui-monospace,
+		monospace;
+}
+
+.sites.held {
+	margin-top: 4px;
+}
+
+.shortcuts {
+	margin: 0 0 6px;
+	padding: 0;
+	list-style: none;
+}
+
+.shortcuts li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 3px 0;
+}
+
+.shortcuts .key {
+	flex: none;
+}
+
+.foot {
+	margin: 24px 0 0;
+	font-size: 12px;
+}
+
+/* Settings: one card per group, a title, then rows of a label and its control. */
+.group {
+	margin: 10px 0 0;
+	padding: 4px 12px 10px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-l);
+}
+
+.view-body .group h3,
+.view-body .group .section-head h3 {
+	margin: 8px 0 4px;
+	font-size: 13px;
+	text-transform: none;
+	letter-spacing: normal;
+	color: var(--fg);
+}
+
+.group h4 {
+	margin: 12px 0 2px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.group > .note:last-child {
+	margin-top: 8px;
+}
+
+/* A section's line under its heading: what all of it is about. */
+.section-head + .note {
+	margin-top: 0;
+}
+
+.setting {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	min-height: 34px;
+}
+
+/* A setting's name: bold, so its line under it reads as about it. */
+.setting > label,
+/* biome-ignore lint/style/noDescendingSpecificity: Setting labels are not confirmation-message spans. */
+.setting > span,
+.tool-text > span:first-child {
+	margin: 0;
+	/* Wraps when the row is too narrow, as with a wider system font at 320 px, instead of pushing its control out. */
+	flex: 0 1 auto;
+	min-width: 0;
+	font-weight: 600;
+}
+
+.setting > select {
+	min-width: 0;
+	max-width: 60%;
+}
+
+.setting > .segmented {
+	flex: 0 1 auto;
+}
+
+.setting > .segmented label {
+	padding: 2px 8px;
+	white-space: nowrap;
+}
+
+/* Tools (design 6.23): a tool and its line on the left, its modes on the right, what they mean under them; a rule
+   between tools. */
+.tool {
+	margin-top: 8px;
+	padding-top: 4px;
+	border-top: 1px solid var(--border);
+}
+
+.tool > .setting {
+	align-items: flex-start;
+}
+
+.tool > .setting > .segmented,
+.tool > .setting > input {
+	margin-top: 4px;
+}
+
+.tool > .note {
+	margin-top: 2px;
+}
+
+.modes b {
+	font-weight: 600;
+	color: var(--fg);
+}
+
+/* What Run script can do: a warning, apart from the lines that only explain. */
+.warning {
+	margin: 6px 0 0;
+	padding: 6px 8px;
+	border-left: 3px solid var(--warn);
+	border-radius: var(--radius-s);
+	background: var(--panel);
+	font-size: 12px;
+}
+
+.needs {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: 6px;
+}
+
+.setting > .tool-text {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	min-width: 0;
+	padding: 4px 0;
+}
+
+.tool-text .note {
+	margin: 0;
+}
+
+/* Allow User Scripts: the line takes the full width, the button goes under it. */
+#user-scripts-row {
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 6px;
+}
+
+#user-scripts {
+	margin: 0;
+}
+
+#open-details {
+	white-space: nowrap;
+}
+
+/* Off while Run script is Ask or On: scripts cannot run, so the line is boxed and tinted, apart from the warning
+   above it, which only explains. */
+#user-scripts-row.attention {
+	padding: 8px;
+	border: 1px solid var(--warn);
+	border-radius: var(--radius-s);
+	background: color-mix(in srgb, var(--warn) 12%, transparent);
+}
+
+#user-scripts-row.attention #user-scripts {
+	color: var(--fg);
+	font-weight: 600;
+}
+
+#calls-per-answer {
+	flex: none;
+	width: 64px;
+}
+
+/* Advanced: Sites, Shortcuts, and Diagnostics, folded. */
+.advanced {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.advanced > summary {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	padding: 10px 0;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.advanced > summary .muted {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 12px;
+	font-weight: 400;
+}
+
+.advanced[open] {
+	padding-bottom: 10px;
+}
+
+.advanced > section:first-of-type h4 {
+	margin-top: 0;
+}
+
+/* Settings > Providers: a row per provider, its dot, name, and status; a click opens its actions under it. */
+.keys {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.keys > li + li {
+	border-top: 1px solid var(--border);
+}
+
+.key-toggle {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	width: 100%;
+	min-height: 36px;
+	padding: 0 4px;
+	border: 0;
+	border-radius: var(--radius-s);
+	background: none;
+	text-align: left;
+}
+
+.key-toggle > .status-text {
+	margin-left: auto;
+	font-size: 12px;
+	color: var(--muted);
+	white-space: nowrap;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Provider disclosure icons are not prompt stars. */
+.key-toggle > .icon {
+	width: 12px;
+	height: 12px;
+	color: var(--muted);
+	transition: transform 0.15s;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Disclosure rotation does not override prompt-star fill. */
+.key-toggle[aria-expanded="true"] > .icon {
+	transform: rotate(180deg);
+}
+
+.key-toggle:hover {
+	background: var(--panel);
+}
+
+.key-body {
+	padding: 0 2px 10px 18px;
+}
+
+.key-body > p {
+	margin: 0 0 4px;
+	font-size: 12px;
+}
+
+.keys .row {
+	margin: 4px 0 0;
+}
+
+/* In a row, the key gets its own line, with Save and Cancel under it. */
+.keys .key-line {
+	flex-wrap: wrap;
+}
+
+.keys .key-field {
+	flex-basis: 100%;
+}
+
+.keys > li > .result {
+	margin: 0 2px 8px 18px;
+}
+
+/* History: rows under day groups; the title on up to 2 lines, the time on the right. */
+.history {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.history-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	width: 100%;
+	padding: 6px 8px;
+	border: 0;
+	border-radius: var(--radius-s);
+	background: none;
+	text-align: left;
+}
+
+.history-row:hover {
+	background: var(--panel-hover);
+}
+
+.history-row .label {
+	flex: 1;
+	min-width: 0;
+}
+
+.history-row .title {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	overflow-wrap: anywhere;
+}
+
+/* The page a chat is about, on one line. */
+.history-row .address {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+.history-row time {
+	flex: none;
+	padding-top: 1px;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+.history-row .pill {
+	margin-top: 1px;
+}
+
+/* A History row and its ⋯ menu: Rename, Export as Markdown, Remove from History (design 6.30). */
+.history-item {
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+	gap: 2px;
+}
+
+.history-item > .history-row {
+	flex: 1;
+	min-width: 0;
+}
+
+.history-item > .chat-more {
+	flex: none;
+	margin-top: 6px;
+}
+
+.history-item > .rename {
+	flex: 1;
+	min-width: 0;
+	margin: 2px 0;
+}
+
+.menu {
+	position: absolute;
+	top: 30px;
+	right: 0;
+	z-index: 3;
+	display: flex;
+	flex-direction: column;
+	min-width: 180px;
+	padding: 4px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-m);
+	background: var(--bg);
+	box-shadow: 0 6px 24px rgb(0 0 0 / 0.18);
+}
+
+.menu[hidden] {
+	display: none;
+}
+
+.menu > button {
+	padding: 6px 8px;
+	border: 0;
+	border-radius: var(--radius-s);
+	background: none;
+	text-align: left;
+}
+
+.menu > button:hover:not(:disabled),
+.menu > button:focus-visible {
+	background: var(--panel-hover);
+}
+
+/* Transcript. Its content box fills the height, so the empty state can center. */
+
+.transcript-wrap {
+	position: relative;
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+#transcript {
+	flex: 1;
+	overflow-y: auto;
+	scrollbar-gutter: stable;
+	display: flex;
+	flex-direction: column;
+}
+
+.stream {
+	flex: 1 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 12px;
+}
+
+.stream > div {
+	display: contents;
+}
+
+.msg {
+	overflow-wrap: anywhere;
+	min-width: 0;
+}
+
+/* A question: a bubble on the right. A selection shows its preset, the quote, and its page. */
+.msg.user {
+	align-self: flex-end;
+	max-width: 85%;
+	box-sizing: border-box;
+	margin-top: 12px;
+	padding: 8px 12px;
+	border-radius: var(--radius-l) var(--radius-l) 4px var(--radius-l);
+	background: var(--user-bg);
+	font-size: 14px;
+	line-height: 1.45;
+}
+
+.msg.user.queued {
+	background: transparent;
+	border: 1px dashed var(--border);
+}
+
+/* A sent question, with Copy and Edit under it on hover or focus. Edit puts a box in its place (design 6.34). */
+.turn {
+	align-self: flex-end;
+	max-width: 85%;
+	margin-top: 12px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.stream > .entries > .turn:first-child {
+	margin-top: 0;
+}
+
+.turn > .msg.user {
+	max-width: 100%;
+	margin-top: 0;
+}
+
+.actions.turn-actions {
+	gap: 0;
+	margin: 2px 0 0;
+}
+
+.turn:not(:hover, :focus-within) > .turn-actions {
+	opacity: 0;
+}
+
+.turn.editing {
+	align-self: stretch;
+	max-width: none;
+}
+
+.turn.editing > :not(.editor) {
+	display: none;
+}
+
+.msg.user.editor {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.edit-box {
+	min-height: 40px;
+	max-height: 240px;
+	field-sizing: content;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	resize: none;
+	line-height: 1.45;
+}
+
+.edit-box:focus-visible {
+	outline: none;
+}
+
+.edit-note {
+	margin: 0;
+	font-size: 11.5px;
+	color: var(--muted);
+}
+
+.edit-row {
+	display: flex;
+	justify-content: flex-end;
+	gap: 6px;
+}
+
+.tag {
+	display: block;
+	font-size: 11px;
+	color: var(--muted);
+}
+
+.preset {
+	display: block;
+	font:
+		600 11px / 16px system-ui,
+		sans-serif;
+	color: var(--accent);
+}
+
+.text,
+.quote-text {
+	white-space: pre-wrap;
+}
+
+.quote-text {
+	border-left: 2px solid var(--accent);
+	padding-left: 8px;
+	margin: 4px 0;
+}
+
+.clamp {
+	display: -webkit-box;
+	-webkit-line-clamp: 6;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.more {
+	border: 0;
+	padding: 0;
+	background: none;
+	color: var(--accent);
+	font-size: 12px;
+}
+
+.source {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	margin-top: 4px;
+	font-size: 11.5px;
+	color: var(--muted);
+	white-space: nowrap;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Source icon sizing is independent of prompt-star fill. */
+.source .icon {
+	width: 12px;
+	height: 12px;
+}
+
+.source .title {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Source links inherit their label color, unlike note links. */
+.source a {
+	flex: none;
+	color: inherit;
+}
+
+/* An answer: no box, full width. */
+.msg.assistant,
+.msg.live {
+	margin-top: 8px;
+	padding: 0 2px;
+	font-size: 14px;
+	line-height: 1.55;
+}
+
+.msg.notice {
+	align-self: center;
+	max-width: 100%;
+	margin: 4px 0;
+	text-align: center;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+/* The steps on the way to an answer (design 6.23): tools' lines and what the model said before a tool call, as one log
+   on a rail, left-aligned with the answer. A tool's line has a ring on the rail; it is cut at two lines. */
+.msg.step,
+.msg.step-note {
+	position: relative;
+	align-self: stretch;
+	margin: 0;
+	padding: 2px 2px 2px 20px;
+	text-align: left;
+}
+
+:not(.step, .step-note) + .msg.step,
+:not(.step, .step-note) + .msg.step-note {
+	margin-top: 8px;
+}
+
+.msg.step::before,
+.msg.step-note::before {
+	content: "";
+	position: absolute;
+	left: 6px;
+	top: 0;
+	bottom: 0;
+	border-left: 1.5px solid var(--border);
+}
+
+.msg.step::after {
+	content: "";
+	position: absolute;
+	left: 2.5px;
+	top: 7px;
+	box-sizing: border-box;
+	width: 9px;
+	height: 9px;
+	border: 1.5px solid var(--muted);
+	border-radius: 50%;
+	background: var(--bg);
+}
+
+/* A step that failed: its ring in red, with the reason under it. */
+.msg.step:has(> .reason)::after {
+	border-color: var(--bad);
+}
+
+.step-text {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+}
+
+/* A note's usage icon follows its text on the same line. */
+/* biome-ignore lint/style/noDescendingSpecificity: Layout does not override the earlier inter-step margin. */
+.msg.step-note {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	column-gap: 2px;
+	font-size: 12.5px;
+	line-height: 1.45;
+}
+
+.msg.step-note > .md {
+	min-width: 0;
+}
+
+/* What the model thought: folded and muted, above the answer. */
+.thinking {
+	margin: 2px 0 6px;
+	font-size: 12.5px;
+	color: var(--muted);
+}
+
+.thinking > summary {
+	width: fit-content;
+	cursor: pointer;
+	font-size: 12px;
+}
+
+.thinking-text {
+	margin-top: 4px;
+	padding-left: 10px;
+	border-left: 2px solid var(--border);
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.reason {
+	display: block;
+	margin-top: 4px;
+	font-size: 12px;
+	color: var(--bad);
+}
+
+.actions {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 4px 0 0 -6px;
+	font-size: 11.5px;
+	color: var(--muted);
+}
+
+/* Without Copy, the line aligns with the answer. */
+.actions.usage-only {
+	margin-left: 0;
+}
+
+/* After a step note's text, on its line. */
+.step-note > .actions {
+	margin: 0;
+}
+
+/* A step note's thinking, folded, takes a line of its own. */
+.msg.step-note > .thinking {
+	flex-basis: 100%;
+}
+
+/* An answer's time and tools after Copy, the rest in its tooltip; a small icon holds the tooltip without them. */
+.answer-stats {
+	padding: 2px 4px;
+	border-radius: 6px;
+	white-space: nowrap;
+	cursor: help;
+}
+
+.answer-stats:hover,
+.answer-stats:focus-visible {
+	color: var(--fg);
+}
+
+.usage-hint {
+	display: inline-grid;
+	place-items: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
+	cursor: help;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Usage glyph sizing is independent of prompt-star fill. */
+.usage-hint .icon {
+	width: 13px;
+	height: 13px;
+}
+
+.usage-hint:hover,
+.usage-hint:focus-visible {
+	color: var(--fg);
+}
+
+.live-head {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+.live-head > span:last-child {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.pulse {
+	flex: none;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--accent);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+	animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+	50% {
+		opacity: 0.25;
+		transform: scale(0.7);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pulse {
+		animation: none;
+	}
+}
+
+/* What an action on the page did, under its summary. */
+.detail {
+	display: block;
+	margin-top: 2px;
+	overflow-wrap: anywhere;
+}
+
+/* A screenshot under its line, small; a click shows it whole (design 6.26). */
+.shot {
+	display: block;
+	width: fit-content;
+	max-width: 100%;
+	margin-top: 4px;
+	padding: 0;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-s);
+	overflow: hidden;
+	background: none;
+	cursor: zoom-in;
+}
+
+.shot img {
+	display: block;
+	max-width: 100%;
+	max-height: 120px;
+}
+
+.viewer {
+	max-width: calc(100vw - 16px);
+	max-height: calc(100vh - 16px);
+	padding: 0;
+	border: 0;
+	border-radius: var(--radius-s);
+	background: none;
+	cursor: zoom-out;
+}
+
+/* It has focus when open, for Esc: the image is the whole of it, so no ring. */
+.viewer:focus-visible {
+	outline: none;
+}
+
+.viewer::backdrop {
+	background: rgb(0 0 0 / 0.7);
+}
+
+.viewer img {
+	display: block;
+	max-width: calc(100vw - 16px);
+	max-height: calc(100vh - 16px);
+}
+
+/* An Ask card of act_on_page or run_script, in the transcript under the answer it waits in. */
+.ask {
+	margin-top: 8px;
+	padding: 8px 10px;
+	border: 1px solid var(--accent);
+	border-radius: var(--radius-m);
+	font-size: 13px;
+}
+
+.ask p {
+	margin: 0 0 8px;
+	overflow-wrap: anywhere;
+}
+
+.ask p > span {
+	display: block;
+	margin-top: 2px;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+/* A script card's second row: Run for the site's next scripts too, under a muted label. */
+.ask .row.later {
+	margin-top: 2px;
+}
+
+.ask .row.later > span {
+	flex-basis: 100%;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+/* A script card's code: what runs, in full. */
+.ask pre {
+	margin: 0 0 8px;
+	max-height: 240px;
+	overflow: auto;
+	font-family: ui-monospace, monospace;
+	white-space: pre-wrap;
+}
+
+.retry {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 8px;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+.empty {
+	margin: auto;
+	max-width: 260px;
+	padding: 16px 0;
+	text-align: center;
+	color: var(--muted);
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Empty-chat headings are outside Settings groups. */
+.empty h3 {
+	margin: 0 0 8px;
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--fg);
+}
+
+.empty p {
+	margin: 4px 0;
+}
+
+.empty strong {
+	color: var(--fg);
+	font-weight: 600;
+}
+
+.suggestions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	margin-top: 12px;
+}
+
+.suggestion {
+	height: 28px;
+	padding: 0 12px;
+	border-radius: 14px;
+	background: var(--bg);
+	color: var(--fg);
+}
+
+.suggestion:hover {
+	background: var(--panel-hover);
+}
+
+kbd {
+	font: inherit;
+	padding: 0 4px;
+	border: 1px solid var(--border);
+	border-radius: 4px;
+}
+
+.jump {
+	position: absolute;
+	left: 50%;
+	bottom: 8px;
+	transform: translateX(-50%);
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border-radius: 50%;
+	background: var(--bg);
+	box-shadow: 0 1px 4px rgb(0 0 0 / 15%);
+	display: grid;
+	place-items: center;
+}
+
+/* Drafts: one compact row each. */
+
+#drafts {
+	flex: none;
+	max-height: 30vh;
+	overflow-y: auto;
+	padding: 0 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+#drafts:not(:empty) {
+	padding-top: 4px;
+}
+
+.draft {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 4px 4px 10px;
+	border: 1px dashed var(--border);
+	border-radius: var(--radius-m);
+	font-size: 12px;
+}
+
+.draft > div {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Draft labels are not script-approval scope labels. */
+.draft > div > span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.drafts-toggle {
+	align-self: flex-start;
+	padding: 2px 4px;
+}
+
+/* Composer: chips, the text, then the status and the buttons, in one box. */
+
+footer {
+	position: relative;
+	flex: none;
+	padding: 8px 12px 12px;
+}
+
+/* The chat's total, over the message box in line with its text; whole in its tooltip when a narrow panel cuts it. */
+.chat-usage {
+	margin: 0 0 4px 11px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 12px;
+	color: var(--muted);
+	cursor: default;
+}
+
+/* The model picker: above the message box, as wide as it, with a list of about 5.5 rows or less on a short panel. */
+.popup {
+	position: absolute;
+	left: 12px;
+	right: 12px;
+	bottom: calc(100% - 4px);
+	z-index: 2;
+	padding: 4px 8px 6px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-l);
+	background: var(--bg);
+	box-shadow: 0 6px 24px rgb(0 0 0 / 0.18);
+}
+
+.popup .listbox {
+	max-height: min(248px, 45vh);
+}
+
+.popup .note,
+/* biome-ignore lint/style/noDescendingSpecificity: Model-picker messages are outside provider-settings rows. */
+.popup .result {
+	margin: 6px 2px 0;
+}
+
+.popup .result:empty {
+	display: none;
+}
+
+.composer-box {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 6px 8px 6px 10px;
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	background: var(--bg);
+}
+
+.composer-box:focus-within {
+	border-color: var(--focus);
+	box-shadow: 0 0 0 1px var(--focus);
+}
+
+.chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+}
+
+.attach {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	max-width: 100%;
+	height: 22px;
+	box-sizing: border-box;
+	padding: 0 1px 0 8px;
+	border-radius: 11px;
+	background: var(--panel);
+	font-size: 12px;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Attachment icon sizing is independent of prompt-star fill. */
+.attach > .icon {
+	width: 12px;
+	height: 12px;
+	color: var(--muted);
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Attachment labels are not script-approval scope labels. */
+.attach > span {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Images and text files in the message box, and under a sent message (design 6.42). */
+.attachments,
+.attached {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: 4px;
+}
+
+.attached {
+	margin-top: 4px;
+}
+
+.attached[hidden],
+.attachments[hidden] {
+	display: none;
+}
+
+.msg.user .attachment {
+	background: var(--bg);
+}
+
+.attachment.preparing {
+	color: var(--muted);
+}
+
+.attachment > .thumb {
+	display: flex;
+	flex: none;
+	margin-left: -5px;
+	padding: 0;
+	border: 0;
+	border-radius: 4px;
+	overflow: hidden;
+	background: none;
+	cursor: zoom-in;
+}
+
+.attachment > .thumb[hidden] {
+	display: none;
+}
+
+/* The paperclip, before the text on its last line. */
+.composer-line > .attach-files {
+	width: 24px;
+	height: 24px;
+	margin-left: -4px;
+}
+
+/* Slash commands (design 6.33): the matching prompts, over the message they complete. */
+.slash-menu {
+	max-height: 180px;
+	background: var(--bg);
+}
+
+.slash-menu .option .id {
+	margin-left: auto;
+	padding-left: 8px;
+}
+
+#composer {
+	min-height: 20px;
+	max-height: 160px;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	resize: none;
+	font-size: 14px;
+	line-height: 20px;
+	overflow-y: auto;
+}
+
+#composer:focus-visible {
+	outline: none;
+}
+
+/* The model and thinking pickers under the box, as text: the chips' pills were for a row inside it. "Using ChatGPT plan
+   · Manage usage" follows them, or takes the line below (design 6.36). */
+.composer-under {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	column-gap: 2px;
+	row-gap: 2px;
+	margin: 4px 0 -6px 2px;
+	min-height: 26px;
+}
+
+/* Tighter than a chip: without pills the chips' padding read as a gap between the model and its thinking level. */
+.composer-under > .picker {
+	padding: 0 3px 0 5px;
+	background: transparent;
+	font-weight: 500;
+}
+
+.composer-under > .model[aria-expanded="true"] {
+	background: var(--panel-hover);
+}
+
+/* The text, then Stop and Send at its end, on its last line. */
+.composer-line {
+	display: flex;
+	align-items: flex-end;
+	gap: 4px;
+}
+
+.composer-line > #composer {
+	flex: 1;
+	min-width: 0;
+	align-self: center;
+}
+
+/* Only while there is something to say: an error, a draft not sent, sending, or an answer running. */
+.status {
+	margin: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+.status.bad {
+	color: var(--bad);
+}
+
+/* A hint of two parts keeps each whole: the second takes a line of its own where both do not fit beside Stop. */
+.status.parts {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 0.3em;
+}
+
+.status-part {
+	min-width: 0;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* The status, then Stop at its end while an answer runs; the row shows only with either. */
+.status-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.status-row:not(:has(> :not([hidden]))) {
+	display: none;
+}
+
+.status-row > .status {
+	flex: 1;
+	min-width: 0;
+}
+
+.stop {
+	flex: none;
+	height: 22px;
+	margin-left: auto;
+	padding: 0 8px 0 6px;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	border: 0;
+	border-radius: 11px;
+	background: var(--panel);
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.stop:hover {
+	background: var(--panel-hover);
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Stop glyph sizing is independent of prompt-star fill. */
+.stop .icon {
+	width: 10px;
+	height: 10px;
+}
+
+/* Send: a round icon button. */
+.round-button {
+	flex: none;
+	display: inline-grid;
+	place-items: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: 0;
+	border-radius: 14px;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Send glyph sizing is independent of prompt-star fill. */
+.send .icon {
+	width: 16px;
+	height: 16px;
+	stroke-width: 2.25;
+}
+
+/* Nothing to send, or it cannot be sent: Send keeps its room, so the text does not reflow when it shows. */
+.send:disabled {
+	visibility: hidden;
+}
+
+/* A narrow panel keeps the model chip's name only (its tooltip names the provider), so the name keeps room. */
+@media (max-width: 400px) {
+	.model > .via {
+		display: none;
+	}
+}
+
+/* Answers: Markdown built from DOM nodes (src/panel/markdown.ts). */
+
+.md > :first-child {
+	margin-top: 0;
+}
+
+.md > :last-child {
+	margin-bottom: 0;
+}
+
+.md p,
+.md ul,
+.md ol,
+.md blockquote,
+.md table,
+.md .code {
+	margin: 8px 0;
+}
+
+.md ul {
+	padding-left: 1.3em;
+}
+
+.md ol {
+	padding-left: 1.8em;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Answer headings are outside Settings and callback headings. */
+.md h1,
+.md h2,
+/* biome-ignore lint/style/noDescendingSpecificity: Answer headings are not Settings section headings. */
+.md h3,
+/* biome-ignore lint/style/noDescendingSpecificity: Answer headings are not Advanced-settings headings. */
+.md h4,
+.md h5,
+.md h6 {
+	font-size: 14px;
+	font-weight: 600;
+	text-transform: none;
+	letter-spacing: normal;
+	color: inherit;
+	margin: 12px 0 4px;
+}
+
+.md code {
+	font:
+		12px / 1.5 ui-monospace,
+		monospace;
+	background: var(--code-bg);
+	border-radius: 4px;
+	padding: 1px 4px;
+}
+
+.md pre code {
+	background: none;
+	padding: 0;
+}
+
+.md .code {
+	position: relative;
+}
+
+.md pre {
+	margin: 0;
+	max-height: none;
+	padding: 8px 34px 8px 10px;
+	background: var(--code-bg);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	white-space: pre;
+	overflow-wrap: normal;
+	overflow-x: auto;
+}
+
+.md .code > button {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	width: 24px;
+	height: 24px;
+	background: var(--code-bg);
+}
+
+/* A Mermaid diagram (design 6.32): its picture, which opens full size, and its code folded under "Source". */
+.md .diagram {
+	margin: 8px 0;
+}
+
+.diagram-open {
+	display: block;
+	width: fit-content;
+	max-width: 100%;
+	padding: 0;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	overflow: hidden;
+	background: var(--code-bg);
+	cursor: zoom-in;
+}
+
+.diagram-open img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+.attachment > .thumb img {
+	width: 18px;
+	height: 18px;
+	object-fit: cover;
+}
+
+/* A tiny image sent stays visible; it is not scaled down below this. */
+.attached > .shot img {
+	min-width: 24px;
+	min-height: 24px;
+	object-fit: contain;
+}
+
+.diagram-source > summary {
+	width: fit-content;
+	margin-top: 2px;
+	cursor: pointer;
+	font-size: 12px;
+	color: var(--muted);
+}
+
+.diagram-source > .code,
+.diagram-source > pre {
+	margin-top: 4px;
+}
+
+.md blockquote {
+	border-left: 3px solid var(--border);
+	padding-left: 8px;
+	color: var(--muted);
+}
+
+.md table {
+	border-collapse: collapse;
+	display: block;
+	overflow-x: auto;
+}
+
+.md th,
+.md td {
+	border: 1px solid var(--border);
+	padding: 2px 6px;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: Answer links use the same accent as earlier note links. */
+.md a {
+	color: var(--accent);
+}

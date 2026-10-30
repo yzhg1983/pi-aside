@@ -1,0 +1,1619 @@
+{
+	"localeCode": {
+		"message": "en"
+	},
+	"presetExplain": {
+		"message": "Explain"
+	},
+	"presetSummarize": {
+		"message": "Summarize"
+	},
+	"presetTranslate": {
+		"message": "Translate to $1"
+	},
+	"presetProofread": {
+		"message": "Proofread"
+	},
+	"presetReply": {
+		"message": "Draft a reply"
+	},
+	"languageEnglish": {
+		"message": "English"
+	},
+	"languageChinese": {
+		"message": "Chinese"
+	},
+	"menuAsk": {
+		"message": "Ask pi"
+	},
+	"menuAdd": {
+		"message": "Add to message"
+	},
+	"menuPageAsk": {
+		"message": "Ask pi about this page"
+	},
+	"newChat": {
+		"message": "New chat"
+	},
+	"history": {
+		"message": "History"
+	},
+	"settings": {
+		"message": "Settings"
+	},
+	"reconnecting": {
+		"message": "Reconnecting..."
+	},
+	"extensionUpdated": {
+		"message": "The extension was updated."
+	},
+	"reloadPanel": {
+		"message": "Reload panel"
+	},
+	"dismiss": {
+		"message": "Dismiss"
+	},
+	"provider": {
+		"message": "Provider"
+	},
+	"useChatGPTPlan": {
+		"message": "Use your ChatGPT plan"
+	},
+	"chatGPTPlanOffer": {
+		"message": "Complete eligible AI requests in this app with usage included in your ChatGPT plan or credits balance."
+	},
+	"continueChatGPT": {
+		"message": "Continue with ChatGPT"
+	},
+	"keySavedChrome": {
+		"message": "The key is saved. Chrome asks once."
+	},
+	"planSavedChrome": {
+		"message": "The ChatGPT sign-in is saved. Chrome asks once."
+	},
+	"allowAccess": {
+		"message": "Allow access"
+	},
+	"chat": {
+		"message": "Chat"
+	},
+	"jumpLatest": {
+		"message": "Jump to latest"
+	},
+	"drafts": {
+		"message": "Drafts"
+	},
+	"chooseModel": {
+		"message": "Choose a model"
+	},
+	"filterModels": {
+		"message": "Filter models"
+	},
+	"models": {
+		"message": "Models"
+	},
+	"sendPlainText": {
+		"message": "Send as plain text"
+	},
+	"dontAttach": {
+		"message": "Don't attach"
+	},
+	"message": {
+		"message": "Message"
+	},
+	"composerKeys": {
+		"message": "Enter sends · Shift+Enter adds a line · / runs a prompt"
+	},
+	"slashNeedsText": {
+		"message": "Type text after $1, or attach a page to run it for."
+	},
+	"connecting": {
+		"message": "Connecting..."
+	},
+	"thinking": {
+		"message": "Thinking"
+	},
+	"off": {
+		"message": "Off"
+	},
+	"on": {
+		"message": "On"
+	},
+	"ask": {
+		"message": "Ask"
+	},
+	"stop": {
+		"message": "Stop"
+	},
+	"stopEsc": {
+		"message": "Stop (Esc)"
+	},
+	"sendEnter": {
+		"message": "Send (Enter)"
+	},
+	"send": {
+		"message": "Send"
+	},
+	"usingChatGPTPlan": {
+		"message": "Using ChatGPT plan"
+	},
+	"manageUsage": {
+		"message": "Manage usage"
+	},
+	"backChat": {
+		"message": "Back to the chat"
+	},
+	"backEsc": {
+		"message": "Back (Esc)"
+	},
+	"filterChats": {
+		"message": "Filter chats"
+	},
+	"providers": {
+		"message": "Providers"
+	},
+	"providersNote": {
+		"message": "An API key, or your ChatGPT plan for OpenAI. The model picker lists their models."
+	},
+	"answers": {
+		"message": "Answers"
+	},
+	"answerLanguage": {
+		"message": "Answer language"
+	},
+	"languageAuto": {
+		"message": "Auto (Chrome language)"
+	},
+	"answerLanguageNote": {
+		"message": "Controls answers and the translation target only. Auto follows Chrome; the interface always follows Chrome."
+	},
+	"sendingSection": {
+		"message": "Sending"
+	},
+	"whilePiWorks": {
+		"message": "While pi works"
+	},
+	"joinTask": {
+		"message": "Join the task"
+	},
+	"joinTaskTip": {
+		"message": "Enter adds the message to the task pi is doing, after its current step"
+	},
+	"afterAnswer": {
+		"message": "Wait"
+	},
+	"afterAnswerTip": {
+		"message": "Enter sends the message when pi has answered"
+	},
+	"whilePiWorksNote": {
+		"message": "What Enter does with a message while pi works. Alt+Enter sends it the other way."
+	},
+	"sendDefaultPrompt": {
+		"message": "Send it with the default prompt"
+	},
+	"sendAtOnce": {
+		"message": "Send at once"
+	},
+	"composeFirstTip": {
+		"message": "Put it in the message box to edit first"
+	},
+	"editFirst": {
+		"message": "Edit first"
+	},
+	"selectionNote": {
+		"message": "Ask pi uses the prompt starred under Prompts. \"Add to message\" always puts only the selected text in the message box."
+	},
+	"prompts": {
+		"message": "Prompts"
+	},
+	"promptsNote": {
+		"message": "The pi menu's items, in this order. The star marks the one Ask pi uses. A prompt switched off stays here, out of the menu and the / list."
+	},
+	"addPrompt": {
+		"message": "Add prompt"
+	},
+	"resetPrompts": {
+		"message": "Reset to built-in prompts"
+	},
+	"resetQuestion": {
+		"message": "Use the built-in prompts again?"
+	},
+	"resetWarning": {
+		"message": "Your changes and the prompts you added are deleted."
+	},
+	"reset": {
+		"message": "Reset"
+	},
+	"cancel": {
+		"message": "Cancel"
+	},
+	"tools": {
+		"message": "Tools"
+	},
+	"toolsScope": {
+		"message": "For every chat and every site."
+	},
+	"readPage": {
+		"message": "Read page"
+	},
+	"readPageNote": {
+		"message": "Reads the text of the page."
+	},
+	"observePage": {
+		"message": "Observe page"
+	},
+	"observePageNote": {
+		"message": "Lists the links, buttons, fields, and headings on the page."
+	},
+	"actPage": {
+		"message": "Act on page"
+	},
+	"actPageNote": {
+		"message": "Clicks, types, scrolls, and goes to pages of the same site; follows links to other sites you allow."
+	},
+	"actAskNote": {
+		"message": ": pi asks once per answer for each site."
+	},
+	"actOnNote": {
+		"message": ": pi may click and type without asking, also on buttons such as Submit or Delete."
+	},
+	"runScript": {
+		"message": "Run script"
+	},
+	"runScriptNote": {
+		"message": "Runs JavaScript that pi writes, on the page."
+	},
+	"scriptWarning": {
+		"message": "A script runs as you on the site, with your login: it could read and change anything you can there, and send what it reads to other sites. Ask: pi shows each script first; \"For this answer\" or \"For this chat\" lets the next ones on that site run without asking until the answer, or the chat, ends (a new chat, Chrome closing, or a change here). On: scripts run without asking. Stop does not end a script that is already running."
+	},
+	"needsUserScripts": {
+		"message": "Needs Chrome's \"Allow User Scripts\" for pi"
+	},
+	"openDetails": {
+		"message": "Open pi's Chrome details page"
+	},
+	"screenshotPage": {
+		"message": "Screenshot page"
+	},
+	"screenshotPageNote": {
+		"message": "Captures what the tab shows, as an image."
+	},
+	"screenshotWarning": {
+		"message": "The image shows what is on screen, also what you typed into fields, and goes to the model's provider. pi may scroll the page first, also with Act on page Off. Works after you open pi on the site with its toolbar button, menu, or shortcut, or on any site when Chrome allows pi on all sites (Settings > Advanced > Sites)."
+	},
+	"callsPerAnswer": {
+		"message": "Page tool calls per answer"
+	},
+	"callsNote": {
+		"message": "5 to 200, for all page tools together."
+	},
+	"advanced": {
+		"message": "Advanced"
+	},
+	"advancedSections": {
+		"message": "Sites · Shortcuts · Diagnostics"
+	},
+	"sites": {
+		"message": "Sites"
+	},
+	"sitesNote": {
+		"message": "pi uses these sites without asking, also when a link takes the tab there. On other sites, only the page you open pi on; when pi needs another site, it asks you first."
+	},
+	"allowAllSites": {
+		"message": "Allow all sites"
+	},
+	"sitesProvidersNote": {
+		"message": "pi also reads these without a click: it has access to them for your providers. Chrome's details page for pi lists them under Site access."
+	},
+	"shortcuts": {
+		"message": "Shortcuts"
+	},
+	"changeShortcuts": {
+		"message": "Change shortcuts"
+	},
+	"diagnostics": {
+		"message": "Diagnostics"
+	},
+	"diagnosticsNote": {
+		"message": "The extension's status, test probes, and log, for reporting a problem."
+	},
+	"openDiagnostics": {
+		"message": "Open diagnostics"
+	},
+	"screenshot": {
+		"message": "Screenshot"
+	},
+	"screenshotFull": {
+		"message": "Screenshot, full size"
+	},
+	"manifestDescription": {
+		"message": "An AI agent in the side panel: ask about a page, or let it click, type, and gather data for you. Unofficial; built on pi-durable."
+	},
+	"openPi": {
+		"message": "Open pi"
+	},
+	"commandAsk": {
+		"message": "Ask pi about the selection (default prompt)"
+	},
+	"commandAdd": {
+		"message": "Add the selection to the message box (no prompt)"
+	},
+	"commandPanel": {
+		"message": "Open the pi panel"
+	},
+	"copied": {
+		"message": "Copied"
+	},
+	"copyFailed": {
+		"message": "Copy failed"
+	},
+	"copy": {
+		"message": "Copy"
+	},
+	"copyCode": {
+		"message": "Copy code"
+	},
+	"copyMarkdown": {
+		"message": "Copy the answer as Markdown"
+	},
+	"show": {
+		"message": "Show"
+	},
+	"hide": {
+		"message": "Hide"
+	},
+	"showKey": {
+		"message": "Show the key"
+	},
+	"hideKey": {
+		"message": "Hide the key"
+	},
+	"save": {
+		"message": "Save"
+	},
+	"saved": {
+		"message": "Saved"
+	},
+	"getKey": {
+		"message": "Get a key"
+	},
+	"apiKey": {
+		"message": "$1 API key"
+	},
+	"keyPrivacy": {
+		"message": "Chrome will ask for access to $1. The key stays in this browser profile."
+	},
+	"keyRefused": {
+		"message": "Not saved: Chrome access to $1 was not allowed."
+	},
+	"notAllowed": {
+		"message": "Not allowed. Click Allow access to try again."
+	},
+	"signInRefused": {
+		"message": "Not started: Chrome access for the sign-in was not allowed."
+	},
+	"signInStarted": {
+		"message": "Continue in the new tab."
+	},
+	"signedIn": {
+		"message": "Signed in"
+	},
+	"connectProvider": {
+		"message": "Connect a provider"
+	},
+	"allowProvider": {
+		"message": "Allow pi to reach $1"
+	},
+	"pasteKey": {
+		"message": "Paste a key first"
+	},
+	"providerPickAfterSave": {
+		"message": "$1. Pick a $2 model in Settings to use it."
+	},
+	"providerChangedAfterSave": {
+		"message": "$1. This chat now uses $2."
+	},
+	"providerUnchangedAfterSave": {
+		"message": "$1, but the model did not change: $2"
+	},
+	"signInAgain": {
+		"message": "Sign in again"
+	},
+	"verify": {
+		"message": "Verify"
+	},
+	"remove": {
+		"message": "Remove"
+	},
+	"add": {
+		"message": "Add"
+	},
+	"anotherAccount": {
+		"message": "Use another account"
+	},
+	"cancelSignIn": {
+		"message": "Cancel sign-in"
+	},
+	"webSearch": {
+		"message": "Web search"
+	},
+	"webSearchNote": {
+		"message": "Lets OpenAI search the web when needed. API-key searches cost extra."
+	},
+	"signedInChatGPT": {
+		"message": "Signed in with ChatGPT"
+	},
+	"chatGPTAccount": {
+		"message": "ChatGPT account: $1"
+	},
+	"savedAccount": {
+		"message": "saved"
+	},
+	"signOut": {
+		"message": "Sign out"
+	},
+	"signOutQuestion": {
+		"message": "Sign out of ChatGPT?"
+	},
+	"removeKeyQuestion": {
+		"message": "Remove the $1 key?"
+	},
+	"noSendUntilSignIn": {
+		"message": "This chat cannot send until you sign in again or add a key."
+	},
+	"noSendUntilKey": {
+		"message": "This chat cannot send until you add a key."
+	},
+	"keySaved": {
+		"message": "$1 key saved"
+	},
+	"keyRemoved": {
+		"message": "$1 key removed"
+	},
+	"verifying": {
+		"message": "Verifying..."
+	},
+	"signedOutChatGPT": {
+		"message": "Signed out of ChatGPT"
+	},
+	"signOutUnconfirmed": {
+		"message": "Signed out here. OpenAI did not confirm; end the session in your ChatGPT settings."
+	},
+	"answering": {
+		"message": "Answering"
+	},
+	"answerComplete": {
+		"message": "Answer complete"
+	},
+	"answerFailed": {
+		"message": "Answer failed: $1"
+	},
+	"queued": {
+		"message": "Queued"
+	},
+	"queuedSteer": {
+		"message": "Joins the task"
+	},
+	"queuedFollowUp": {
+		"message": "After the answer"
+	},
+	"storageFull": {
+		"message": "Chrome has no room left to save pi-aside's chats, so new messages and answers are not saved. Free up disk space, or delete all chats in Settings > Advanced > Data."
+	},
+	"storageOpenFailed": {
+		"message": "The chat storage could not open: $1"
+	},
+	"answerUsage": {
+		"message": "This answer: $1"
+	},
+	"showFullSize": {
+		"message": "Show full size"
+	},
+	"showMore": {
+		"message": "Show more"
+	},
+	"showLess": {
+		"message": "Show less"
+	},
+	"working": {
+		"message": "Working"
+	},
+	"retrying": {
+		"message": "Retrying: $1"
+	},
+	"answerAttempt": {
+		"message": "$1 · attempt $2"
+	},
+	"chromeDenied": {
+		"message": "Chrome did not allow it"
+	},
+	"run": {
+		"message": "Run"
+	},
+	"deny": {
+		"message": "Deny"
+	},
+	"allow": {
+		"message": "Allow"
+	},
+	"runScriptQuestion": {
+		"message": "Run this script on $1?"
+	},
+	"piSays": {
+		"message": "pi says: $1"
+	},
+	"scriptAskWarning": {
+		"message": "Runs as you on $1, with your login. It could change things there and send data to other sites."
+	},
+	"actQuestion": {
+		"message": "Allow pi to act on $1 in this answer?"
+	},
+	"actWarning": {
+		"message": "It may click and type there by itself, also on buttons such as Submit or Delete."
+	},
+	"onAllSites": {
+		"message": "On all sites"
+	},
+	"onSite": {
+		"message": "On $1"
+	},
+	"needsMovedSite": {
+		"message": "pi needs the site this tab moved to."
+	},
+	"movedSiteHint": {
+		"message": "For this site only: Cancel, click pi's toolbar button on this tab, and ask again."
+	},
+	"tabMovedTo": {
+		"message": "Tab moved to"
+	},
+	"tabMovedLastSeen": {
+		"message": "Tab moved; last seen going to $1"
+	},
+	"tabMovedElsewhere": {
+		"message": "Tab moved to another site"
+	},
+	"needsSite": {
+		"message": "pi needs $1 to continue."
+	},
+	"siteAskNote": {
+		"message": "Chrome asks you to confirm. pi then reads pages there without asking; the other page tools follow their own settings. Settings > Advanced > Sites removes it."
+	},
+	"piAsks": {
+		"message": "pi asks"
+	},
+	"sending": {
+		"message": "Sending..."
+	},
+	"retry": {
+		"message": "Retry"
+	},
+	"noCompleteAnswer": {
+		"message": "No complete answer."
+	},
+	"addKeyFirst": {
+		"message": "Add a key first"
+	},
+	"summarizePage": {
+		"message": "Summarize page"
+	},
+	"askPage": {
+		"message": "What would you like pi to do on this page?"
+	},
+	"askPageHint": {
+		"message": "Ask a question about the page or selected text."
+	},
+	"askHint": {
+		"message": "Type a question to get started."
+	},
+	"clearComposerFirst": {
+		"message": "Send or clear the message box first"
+	},
+	"putInComposer": {
+		"message": "Put it in the message box"
+	},
+	"showFewer": {
+		"message": "Show fewer"
+	},
+	"moreDraft": {
+		"message": "$1 more draft"
+	},
+	"moreDrafts": {
+		"message": "$1 more drafts"
+	},
+	"notSent": {
+		"message": "Not sent"
+	},
+	"notSentReason": {
+		"message": "Not sent: $1"
+	},
+	"edit": {
+		"message": "Edit"
+	},
+	"discardDraft": {
+		"message": "Discard draft"
+	},
+	"addedToMessage": {
+		"message": "Added to the message"
+	},
+	"readSiteNoClick": {
+		"message": "pi reads $1 without a click"
+	},
+	"pageReadTip": {
+		"message": "$1\npi reads $2 without a click."
+	},
+	"alwaysAllowSite": {
+		"message": "Always allow pi on $1"
+	},
+	"alwaysAllowSiteTip": {
+		"message": "$1: pi reads its pages without a click, also after you leave and come back. Chrome may ask first; Settings > Advanced > Sites removes it."
+	},
+	"newChatFailed": {
+		"message": "New chat failed: $1"
+	},
+	"loading": {
+		"message": "Loading..."
+	},
+	"noChatsMatch": {
+		"message": "No chats match"
+	},
+	"noEarlierChats": {
+		"message": "No earlier chats"
+	},
+	"running": {
+		"message": "Running"
+	},
+	"current": {
+		"message": "Current"
+	},
+	"recommended": {
+		"message": "Recommended"
+	},
+	"started": {
+		"message": "Started $1"
+	},
+	"loadModelsFailed": {
+		"message": "Could not load the models: $1"
+	},
+	"modelBusyTip": {
+		"message": "$1: $2. Wait for the answer, or stop it, to change it."
+	},
+	"modelAria": {
+		"message": "Model: $1 via $2. Change model"
+	},
+	"loadingModels": {
+		"message": "Loading the models..."
+	},
+	"addKeyListModels": {
+		"message": "Add a key in Settings to list its models"
+	},
+	"noModelsMatch": {
+		"message": "No models match"
+	},
+	"noKeyPrefix": {
+		"message": "No key: "
+	},
+	"inSettingsSuffix": {
+		"message": " · in Settings"
+	},
+	"switching": {
+		"message": "Switching..."
+	},
+	"nowUsing": {
+		"message": "Now using $1"
+	},
+	"thinkingLevel": {
+		"message": "Thinking: $1"
+	},
+	"thinkingNotSaved": {
+		"message": "Thinking not saved: $1"
+	},
+	"savedMenuFailed": {
+		"message": "Saved, but the pi menu did not update: $1"
+	},
+	"notSaved": {
+		"message": "Not saved: $1"
+	},
+	"detailsFailed": {
+		"message": "Cannot open pi's Chrome details page: $1"
+	},
+	"callsRange": {
+		"message": "Not saved: from $1 to $2"
+	},
+	"variableSelection": {
+		"message": "The selected text"
+	},
+	"variableTitle": {
+		"message": "The page's title"
+	},
+	"variableUrl": {
+		"message": "The page's address"
+	},
+	"variableLanguage": {
+		"message": "The language in Settings, such as Chinese"
+	},
+	"promptMenuFailed": {
+		"message": "$1, but the pi menu did not update: $2"
+	},
+	"name": {
+		"message": "Name"
+	},
+	"prompt": {
+		"message": "Prompt"
+	},
+	"insert": {
+		"message": "Insert"
+	},
+	"delete": {
+		"message": "Delete"
+	},
+	"newPrompt": {
+		"message": "New prompt"
+	},
+	"insertVariable": {
+		"message": "Insert $1: $2"
+	},
+	"unknownVariable": {
+		"message": "Not a variable, sent as written: $1"
+	},
+	"defaultPromptAria": {
+		"message": "$1: Ask pi uses it"
+	},
+	"usePromptAria": {
+		"message": "Use $1 for Ask pi"
+	},
+	"defaultPromptTip": {
+		"message": "Ask pi uses this prompt"
+	},
+	"usePromptTip": {
+		"message": "Use this prompt for Ask pi"
+	},
+	"promptOffStarTip": {
+		"message": "Turn this prompt on to use it for Ask pi"
+	},
+	"promptSwitchAria": {
+		"message": "$1 in the pi menu"
+	},
+	"promptOnTip": {
+		"message": "On: in the pi menu and the / list"
+	},
+	"promptOffTip": {
+		"message": "Off: kept here, but not in the pi menu or the / list"
+	},
+	"movePromptUp": {
+		"message": "Move $1 up"
+	},
+	"movePromptDown": {
+		"message": "Move $1 down"
+	},
+	"moveUpTip": {
+		"message": "Move up in the pi menu"
+	},
+	"moveDownTip": {
+		"message": "Move down in the pi menu"
+	},
+	"editPromptAria": {
+		"message": "Edit $1"
+	},
+	"savedPrompt": {
+		"message": "Saved $1"
+	},
+	"movedPromptUp": {
+		"message": "Moved $1 up"
+	},
+	"movedPromptDown": {
+		"message": "Moved $1 down"
+	},
+	"notMoved": {
+		"message": "Not moved: $1"
+	},
+	"promptTurnedOn": {
+		"message": "Turned $1 on"
+	},
+	"promptTurnedOff": {
+		"message": "Turned $1 off"
+	},
+	"notSwitched": {
+		"message": "Not changed: $1"
+	},
+	"deletePromptQuestion": {
+		"message": "Delete \"$1\"? "
+	},
+	"newDefaultPrompt": {
+		"message": "\"$1\" becomes the default."
+	},
+	"deletedPrompt": {
+		"message": "Deleted $1"
+	},
+	"notDeleted": {
+		"message": "Not deleted: $1"
+	},
+	"saveOrCancel": {
+		"message": "Save or cancel the changes first"
+	},
+	"promptsRestored": {
+		"message": "Built-in prompts restored"
+	},
+	"notReset": {
+		"message": "Not reset: $1"
+	},
+	"none": {
+		"message": "None"
+	},
+	"removeSiteAria": {
+		"message": "Remove $1"
+	},
+	"removeSiteTip": {
+		"message": "Removes Chrome's access to this site: pi asks again when it needs it. While All sites is listed, pi still reaches it. What pi has already read stays."
+	},
+	"removedSite": {
+		"message": "Removed $1"
+	},
+	"chromeKeptSite": {
+		"message": "Chrome kept $1"
+	},
+	"allSitesAllowed": {
+		"message": "pi can reach all sites"
+	},
+	"notSet": {
+		"message": "Not set"
+	},
+	"allSites": {
+		"message": "All sites"
+	},
+	"allSchemeSites": {
+		"message": "All $1 sites"
+	},
+	"addKeySend": {
+		"message": "Add a key to send"
+	},
+	"allowAccessSend": {
+		"message": "Allow access to send"
+	},
+	"enterSteers": {
+		"message": "Enter joins the task · Alt+Enter sends after the answer"
+	},
+	"enterFollowsUp": {
+		"message": "Enter sends after the answer · Alt+Enter joins the task"
+	},
+	"escStops": {
+		"message": "Esc stops the answer"
+	},
+	"verifyExpiredNote": {
+		"message": "the ChatGPT sign-in ended; choose Sign in again"
+	},
+	"verifyForbiddenNote": {
+		"message": "the key may lack permission for this check; sends can still work"
+	},
+	"verifyLimitedNote": {
+		"message": "too many requests, or no credit"
+	},
+	"verifyAccepted": {
+		"message": "accepted"
+	},
+	"verifyRejected": {
+		"message": "rejected"
+	},
+	"verifyExpired": {
+		"message": "expired"
+	},
+	"verifyForbidden": {
+		"message": "forbidden"
+	},
+	"verifyLimited": {
+		"message": "limited"
+	},
+	"verifyNoPermission": {
+		"message": "no permission"
+	},
+	"verifyNetworkError": {
+		"message": "network error"
+	},
+	"planUsageLimit": {
+		"message": "Usage limit reached. Review your plan or this app's limit in ChatGPT settings."
+	},
+	"signInEnded": {
+		"message": "The ChatGPT sign-in ended. Choose Sign in again in pi's Settings."
+	},
+	"signInRenewFailed": {
+		"message": "The ChatGPT sign-in could not be renewed. Verify it in Settings."
+	},
+	"waitingSignIn": {
+		"message": "Waiting for sign-in"
+	},
+	"notSetUp": {
+		"message": "Not set up"
+	},
+	"signInEndedShort": {
+		"message": "Sign-in ended"
+	},
+	"needsAccess": {
+		"message": "Needs access"
+	},
+	"chatGPTPlan": {
+		"message": "ChatGPT plan"
+	},
+	"ready": {
+		"message": "Ready"
+	},
+	"chatUsesModel": {
+		"message": "This chat uses it"
+	},
+	"addProviderKeyFirst": {
+		"message": "Add a $1 key in Settings first"
+	},
+	"waitOrStopAnswer": {
+		"message": "Wait for the answer, or stop it"
+	},
+	"today": {
+		"message": "Today"
+	},
+	"yesterday": {
+		"message": "Yesterday"
+	},
+	"previousDays": {
+		"message": "Previous 7 days"
+	},
+	"earlier": {
+		"message": "Earlier"
+	},
+	"timeNow": {
+		"message": "now"
+	},
+	"timeMinutes": {
+		"message": "$1 min"
+	},
+	"timeHours": {
+		"message": "$1 h"
+	},
+	"resumedNow": {
+		"message": "Continued a chat started just now"
+	},
+	"resumedAgo": {
+		"message": "Continued a chat started $1 ago"
+	},
+	"resumedYesterday": {
+		"message": "Continued a chat started yesterday at $1"
+	},
+	"resumedOn": {
+		"message": "Continued a chat started on $1"
+	},
+	"modelNoThinking": {
+		"message": "$1 does not think"
+	},
+	"thinkingHelp": {
+		"message": "Thinking: $1. Longer thinking can help with hard questions, but answers start later and cost more. Applies from your next message."
+	},
+	"thinkingMoved": {
+		"message": "$1 has no $2 level; it uses $3."
+	},
+	"thinkingNoOff": {
+		"message": "$1 cannot turn thinking off; it thinks at its default level."
+	},
+	"thinkingMaxHelp": {
+		"message": "Max can take much longer and cost much more than High."
+	},
+	"notConnected": {
+		"message": "Not connected to the extension"
+	},
+	"connectionLost": {
+		"message": "The connection to the extension was lost before it answered"
+	},
+	"callbackTitle": {
+		"message": "pi: Sign in with ChatGPT"
+	},
+	"callbackSigningIn": {
+		"message": "Signing in with ChatGPT"
+	},
+	"callbackFinishing": {
+		"message": "Finishing the sign-in…"
+	},
+	"gotIt": {
+		"message": "Got it"
+	},
+	"notSignedIn": {
+		"message": "Not signed in"
+	},
+	"callbackNoReply": {
+		"message": "pi did not answer. Start again in pi."
+	},
+	"callbackPlanTitle": {
+		"message": "You're using your ChatGPT plan"
+	},
+	"callbackPlanNote": {
+		"message": "Eligible usage in this app uses your ChatGPT plan. Manage usage in your ChatGPT settings."
+	},
+	"callbackBack": {
+		"message": "You can go back to pi."
+	},
+	"callbackError": {
+		"message": "pi did not answer ($1). Start again in pi."
+	},
+	"announceNeedsSite": {
+		"message": "pi needs $1"
+	},
+	"movedSite": {
+		"message": "the site this tab moved to"
+	},
+	"announceScript": {
+		"message": "pi asks to run a script on $1"
+	},
+	"announceAct": {
+		"message": "pi asks to act on $1"
+	},
+	"usageChatScope": {
+		"message": "This chat, including summaries and tool calls"
+	},
+	"usageInput": {
+		"message": "↑ Input, not from cache: $1 tokens"
+	},
+	"usageOutput": {
+		"message": "↓ Output: $1 tokens"
+	},
+	"usageCacheRead": {
+		"message": "R Read from cache: $1 tokens"
+	},
+	"usageCacheWrite": {
+		"message": "W Written to cache: $1 tokens"
+	},
+	"usageCacheHit": {
+		"message": "CH Cache hit: $1 of the last request"
+	},
+	"usageCost": {
+		"message": "Cost: about $1, estimated from list prices; not a bill"
+	},
+	"usagePlanCost": {
+		"message": "Includes answers on the ChatGPT plan, which does not bill per token"
+	},
+	"usageContext": {
+		"message": "Context: $1 of the model's $2-token window"
+	},
+	"usageContextUnknown": {
+		"message": "Context: unknown until the next answer (window: $1 tokens)"
+	},
+	"usageCompaction": {
+		"message": "Near the limit, pi summarizes older messages automatically."
+	},
+	"oneTool": {
+		"message": "1 tool"
+	},
+	"toolCount": {
+		"message": "$1 tools"
+	},
+	"answerTime": {
+		"message": "Time: $1"
+	},
+	"answerTimeSplit": {
+		"message": "Time: $1 (model $2 · tools $3)"
+	},
+	"answerTools": {
+		"message": "Tools:"
+	},
+	"toolCallsFailed": {
+		"message": "$1 ($2 failed)"
+	},
+	"answerTokens": {
+		"message": "Tokens: $1"
+	},
+	"tokensIn": {
+		"message": "$1 in"
+	},
+	"tokensInCached": {
+		"message": "$1 in ($2 cached)"
+	},
+	"tokensCacheWrite": {
+		"message": "$1 cache write"
+	},
+	"tokensOut": {
+		"message": "$1 out"
+	},
+	"answerCost": {
+		"message": "Cost: ~$1"
+	},
+	"answerPlanCost": {
+		"message": "On the ChatGPT plan, which does not bill per token"
+	},
+	"promptNameRequired": {
+		"message": "Give the prompt a name"
+	},
+	"promptNameTooLong": {
+		"message": "The name is too long: at most $1 characters"
+	},
+	"promptNameDuplicate": {
+		"message": "Another prompt has this name"
+	},
+	"promptSelectionRequired": {
+		"message": "Add {{selection}} where the selected text goes"
+	},
+	"promptTemplateTooLong": {
+		"message": "The prompt is too long: at most $1 characters"
+	},
+	"promptIdMissing": {
+		"message": "The prompt has no ID"
+	},
+	"promptLimit": {
+		"message": "At most $1 prompts"
+	},
+	"promptKeepOne": {
+		"message": "Keep at least one prompt that is on"
+	},
+	"promptDeletedNotice": {
+		"message": "This prompt was deleted. Nothing was sent."
+	},
+	"promptOffNotice": {
+		"message": "This prompt is off. Nothing was sent."
+	},
+	"promptDefaultOn": {
+		"message": "Ask pi uses this prompt: make another one the default first"
+	},
+	"promptOffDefault": {
+		"message": "This prompt is off: turn it on first"
+	},
+	"pageReadRefused": {
+		"message": "pi cannot read this page: $1"
+	},
+	"chromeReadRefused": {
+		"message": "Chrome did not let pi read it"
+	},
+	"tabReloadedUnsent": {
+		"message": "Chrome reloaded the tab; nothing was sent"
+	},
+	"selectionReadFailed": {
+		"message": "No selection was read: $1"
+	},
+	"selectTextFirst": {
+		"message": "Select text on the page first"
+	},
+	"pageHasNoChat": {
+		"message": "This page shows no tab's chat"
+	},
+	"modelUnknown": {
+		"message": "Unknown model $1/$2"
+	},
+	"questionGone": {
+		"message": "The question is gone"
+	},
+	"signOutFirst": {
+		"message": "Sign out of ChatGPT in Settings first"
+	},
+	"removeKeyToSignIn": {
+		"message": "Remove the OpenAI key in Settings to sign in with ChatGPT"
+	},
+	"signInPermissionMissing": {
+		"message": "Not allowed: Chrome access for the sign-in was not granted"
+	},
+	"providerKeyMissing": {
+		"message": "No $1 key: add one to send"
+	},
+	"providerSubscriptionRefused": {
+		"message": "The $1 key is a subscription token; pi needs an API key"
+	},
+	"providerPermissionMissing": {
+		"message": "No permission to reach $1: grant it to send"
+	},
+	"requestFailed": {
+		"message": "The request failed"
+	},
+	"answerStopped": {
+		"message": "Stopped"
+	},
+	"messagesSummarized": {
+		"message": "Earlier messages were summarized."
+	},
+	"newContextNotice": {
+		"message": "New context."
+	},
+	"toolFailed": {
+		"message": "$1 failed"
+	},
+	"actedOnPage": {
+		"message": "Acted on the page"
+	},
+	"ranScript": {
+		"message": "Ran a script"
+	},
+	"tookScreenshot": {
+		"message": "Took a screenshot"
+	},
+	"tookElementScreenshot": {
+		"message": "Took a screenshot of $1"
+	},
+	"observedPage": {
+		"message": "Observed the page: $1"
+	},
+	"observedPageFind": {
+		"message": "Observed the page: $1 (find: $2)"
+	},
+	"waitedOnPage": {
+		"message": "Waited on the page: $1"
+	},
+	"readPageNotice": {
+		"message": "Read the page: $1"
+	},
+	"readSelectionNotice": {
+		"message": "Read selected text: $1"
+	},
+	"pageChangedSuffix": {
+		"message": " (the tab has changed since)"
+	},
+	"readCount": {
+		"message": "$1 · $2 reads"
+	},
+	"imagePlaceholder": {
+		"message": "[image]"
+	},
+	"menuUpdateFailed": {
+		"message": "Chrome did not update the menu"
+	},
+	"verifyTimeout": {
+		"message": "timeout"
+	},
+	"verifyNoKey": {
+		"message": "no key"
+	},
+	"subscriptionRefused": {
+		"message": "This is a subscription token; pi needs an API key"
+	},
+	"tabChatChanged": {
+		"message": "This tab's chat changed; $1"
+	},
+	"tabClosed": {
+		"message": "The tab was closed; $1"
+	},
+	"nothingSent": {
+		"message": "nothing was sent"
+	},
+	"nothingStopped": {
+		"message": "nothing was stopped"
+	},
+	"tryAgain": {
+		"message": "try again"
+	},
+	"modelUnchanged": {
+		"message": "the model did not change"
+	},
+	"chatMessageGone": {
+		"message": "That message is no longer in the chat"
+	},
+	"chatBusy": {
+		"message": "The chat is busy: wait for the answer or stop it"
+	},
+	"chatMessageAnswered": {
+		"message": "That message was answered"
+	},
+	"chatGone": {
+		"message": "That chat no longer exists"
+	},
+	"chatBusyModel": {
+		"message": "The chat is busy: wait for the answer or stop it before you change the model"
+	},
+	"authNotWaiting": {
+		"message": "This sign-in is no longer waiting. Start again in pi."
+	},
+	"authKeySaved": {
+		"message": "An OpenAI API key was saved meanwhile. Remove it in pi's Settings to sign in."
+	},
+	"authReplaced": {
+		"message": "This sign-in was canceled or replaced by a newer one."
+	},
+	"authOtherAccount": {
+		"message": "This is not the ChatGPT account pi uses. To switch, sign out, then choose Use another account in pi's Settings."
+	},
+	"authStopping": {
+		"message": "pi is still stopping the work that used OpenAI. Start again in pi."
+	},
+	"authTokenFailed": {
+		"message": "OpenAI sign-in failed ($1)"
+	},
+	"authResponseStatus": {
+		"message": "OpenAI answered $1"
+	},
+	"authDiscoveryIssuer": {
+		"message": "OpenAI's discovery names another issuer"
+	},
+	"authDiscoveryEndpoint": {
+		"message": "OpenAI's discovery names an endpoint off auth.openai.com"
+	},
+	"authNotJwt": {
+		"message": "OpenAI's ID token is not a JWT"
+	},
+	"authNotRs256": {
+		"message": "OpenAI's ID token is not RS256"
+	},
+	"authNoTokenKey": {
+		"message": "OpenAI's key set has no key for the ID token"
+	},
+	"authInvalidSignature": {
+		"message": "OpenAI's ID token signature is not valid"
+	},
+	"authTokenIssuer": {
+		"message": "OpenAI's ID token has another issuer"
+	},
+	"authTokenClient": {
+		"message": "OpenAI's ID token is for another client"
+	},
+	"authTokenExpired": {
+		"message": "OpenAI's ID token has expired"
+	},
+	"authTokenSignIn": {
+		"message": "OpenAI's ID token is for another sign-in"
+	},
+	"authTokenAccount": {
+		"message": "OpenAI's ID token names no account"
+	},
+	"authTokenNotObject": {
+		"message": "OpenAI's token response is not an object"
+	},
+	"authTokenFieldMissing": {
+		"message": "OpenAI's token response has no $1"
+	},
+	"authPlanNotGranted": {
+		"message": "ChatGPT plan access was not granted. Sign in again."
+	},
+	"authInvalidExpiry": {
+		"message": "OpenAI's token response has no valid expires_in"
+	},
+	"authUseSettings": {
+		"message": "Sign in with ChatGPT from pi's Settings"
+	},
+	"authNoClientId": {
+		"message": "The ChatGPT sign-in has no client ID"
+	},
+	"authDidNotConnect": {
+		"message": "ChatGPT did not connect ($1). Start again in pi."
+	},
+	"authRegistrationMismatch": {
+		"message": "ChatGPT answered for another registration of pi. Start again in pi."
+	},
+	"runForAnswer": {
+		"message": "For this answer"
+	},
+	"runForChat": {
+		"message": "For this chat"
+	},
+	"runForAnswerTip": {
+		"message": "Run this script, and pi's next scripts on $1 in this answer without asking"
+	},
+	"runForChatTip": {
+		"message": "Run this script, and pi's scripts on $1 in this chat without asking, until a new chat or Chrome closes"
+	},
+	"runNextScripts": {
+		"message": "Run, and the next ones without asking:"
+	},
+	"userScriptsOn": {
+		"message": "Chrome's \"Allow User Scripts\" for pi is on."
+	},
+	"userScriptsOff": {
+		"message": "Chrome's \"Allow User Scripts\" for pi is off, so pi can't run scripts. Turn it on in pi's Chrome details page."
+	},
+	"diagram": {
+		"message": "Diagram"
+	},
+	"diagramSource": {
+		"message": "Source"
+	},
+	"viewerFullSize": {
+		"message": "$1, full size"
+	},
+	"moreForChat": {
+		"message": "More for $1"
+	},
+	"more": {
+		"message": "More"
+	},
+	"removeFromHistory": {
+		"message": "Remove from History"
+	},
+	"stopAnswerFirst": {
+		"message": "Stop the answer first"
+	},
+	"rename": {
+		"message": "Rename"
+	},
+	"exportMarkdown": {
+		"message": "Export as Markdown"
+	},
+	"chatTitle": {
+		"message": "Chat title"
+	},
+	"notRenamed": {
+		"message": "Not renamed: $1"
+	},
+	"exported": {
+		"message": "Exported"
+	},
+	"notExported": {
+		"message": "Not exported: $1"
+	},
+	"removedChat": {
+		"message": "Removed \"$1\"."
+	},
+	"undo": {
+		"message": "Undo"
+	},
+	"notRestored": {
+		"message": "Not restored: $1"
+	},
+	"removedFromHistory": {
+		"message": "Removed from History"
+	},
+	"notRemoved": {
+		"message": "Not removed: $1"
+	},
+	"data": {
+		"message": "Data"
+	},
+	"chatDataNote": {
+		"message": "Chats keep what pi read from pages, and what the page tools did and returned."
+	},
+	"deleteAllChatsOffer": {
+		"message": "Delete all chats…"
+	},
+	"deleteAllChatsQuestion": {
+		"message": "Delete all chats?"
+	},
+	"deleteAllChatsWarning": {
+		"message": "This deletes all chats and what pi read from pages. Your settings, keys, and sign-in stay. It can't be undone."
+	},
+	"deleteAllChats": {
+		"message": "Delete all chats"
+	},
+	"deleting": {
+		"message": "Deleting..."
+	},
+	"allChatsDeleted": {
+		"message": "All chats deleted"
+	},
+	"copyMessage": {
+		"message": "Copy message"
+	},
+	"editMessage": {
+		"message": "Edit message"
+	},
+	"editNote": {
+		"message": "Sends in a new chat from here. This chat stays in History."
+	},
+	"editActedNote": {
+		"message": "What pi did on pages after this message is not undone."
+	},
+	"editEmpty": {
+		"message": "Write a message to send"
+	},
+	"editedFrom": {
+		"message": "Edited from an earlier chat."
+	},
+	"openOriginal": {
+		"message": "Open original"
+	},
+	"editedChat": {
+		"message": "Edited"
+	},
+	"reloadedPage": {
+		"message": "Reloaded the page"
+	},
+	"wentTo": {
+		"message": "Went to $1"
+	},
+	"stepClick": {
+		"message": "Clicked $1"
+	},
+	"stepType": {
+		"message": "Typed $1 into $2"
+	},
+	"stepTypeSubmit": {
+		"message": "Typed $1 into $2 and submitted its form"
+	},
+	"stepPress": {
+		"message": "Pressed $1"
+	},
+	"stepPressIn": {
+		"message": "Pressed $1 in $2"
+	},
+	"stepChoose": {
+		"message": "Chose $1 in $2"
+	},
+	"stepScrollPage": {
+		"message": "Scrolled the page $1"
+	},
+	"stepScrollBox": {
+		"message": "Scrolled $1 $2"
+	},
+	"stepUp": {
+		"message": "up"
+	},
+	"stepDown": {
+		"message": "down"
+	},
+	"stepTop": {
+		"message": "top"
+	},
+	"stepBottom": {
+		"message": "bottom"
+	},
+	"stepAtEnd": {
+		"message": "$1 ($2)"
+	},
+	"stepAtTop": {
+		"message": "at the top"
+	},
+	"stepAtBottom": {
+		"message": "at the bottom"
+	},
+	"stepReveal": {
+		"message": "Scrolled $1 into view"
+	},
+	"stepSwitchTab": {
+		"message": "Switched to tab $1"
+	},
+	"stepCloseTab": {
+		"message": "Closed tab $1"
+	},
+	"stepTabClosed": {
+		"message": "Tab $1 was already closed"
+	},
+	"stepToolsMoved": {
+		"message": "$1; the page tools now work on tab $2"
+	},
+	"attachFiles": {
+		"message": "Attach images or text files"
+	},
+	"removeAttachment": {
+		"message": "Remove $1"
+	},
+	"attachPreparing": {
+		"message": "Preparing $1…"
+	},
+	"attachedImage": {
+		"message": "Image"
+	},
+	"attachedImageSize": {
+		"message": "$1 × $2 · $3 KB"
+	},
+	"attachedFileChars": {
+		"message": "$1 · $2 characters"
+	},
+	"attachNotText": {
+		"message": "$1 is not an image or a text file: pi attaches only those."
+	},
+	"attachFileTooLong": {
+		"message": "$1 is longer than $2 characters."
+	},
+	"attachFileTooBig": {
+		"message": "$1 is too large to attach."
+	},
+	"attachFilesTooLong": {
+		"message": "The text files of one message can have at most $1 characters in all."
+	},
+	"attachTooMany": {
+		"message": "A message can have at most $1 attachments."
+	},
+	"attachImageUnreadable": {
+		"message": "pi cannot read the image $1."
+	},
+	"attachImageTooDetailed": {
+		"message": "The image $1 is too detailed to send, even made smaller."
+	},
+	"attachInvalid": {
+		"message": "An attachment is not valid; add it again."
+	},
+	"attachmentGone": {
+		"message": "The attachments of this message changed; open Edit again."
+	},
+	"attachmentsNotKept": {
+		"message": "stopped, and its attachments were not kept"
+	},
+	"modelNoImages": {
+		"message": "This model can't read images; choose another model, or remove the images."
+	},
+	"imagesOverCount": {
+		"message": "This chat already sends $1 images with each request; this message would make $2, more than pi allows ($3). Start a new chat, or send fewer images."
+	},
+	"imagesOverSize": {
+		"message": "This chat's images already take $1 MB of each request; this message would make $2 MB, more than pi allows ($3 MB). Start a new chat, or send fewer images."
+	},
+	"attachedFile": {
+		"message": "File"
+	},
+	"showImage": {
+		"message": "Show $1 full size"
+	}
+}

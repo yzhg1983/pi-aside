@@ -1,0 +1,62 @@
+{
+	"manifest_version": 3,
+	"name": "pi-aside",
+	"version": "0.1.0",
+	"description": "__MSG_manifestDescription__",
+	"default_locale": "en",
+	"homepage_url": "https://github.com/yzhg1983/pi-aside",
+	"minimum_chrome_version": "140",
+	"incognito": "not_allowed",
+	"background": { "service_worker": "background.js", "type": "module" },
+	"icons": {
+		"16": "icons/icon-16.png",
+		"32": "icons/icon-32.png",
+		"48": "icons/icon-48.png",
+		"128": "icons/icon-128.png"
+	},
+	"action": {
+		"default_title": "__MSG_openPi__",
+		"default_icon": { "16": "icons/icon-16.png", "32": "icons/icon-32.png" }
+	},
+	"permissions": [
+		"sidePanel",
+		"contextMenus",
+		"scripting",
+		"activeTab",
+		"tabGroups",
+		"storage",
+		"alarms",
+		"declarativeNetRequestWithHostAccess",
+		"userScripts",
+		"unlimitedStorage"
+	],
+	"optional_host_permissions": [
+		"https://openrouter.ai/*",
+		"https://api.openai.com/*",
+		"https://api.anthropic.com/*",
+		"https://api.deepseek.com/*",
+		"https://auth.openai.com/*",
+		"http://127.0.0.1:1455/*",
+		"https://*/*",
+		"http://*/*",
+		"<all_urls>"
+	],
+	"web_accessible_resources": [{ "resources": ["chatgpt-callback.html"], "matches": ["https://auth.openai.com/*"] }],
+	"content_security_policy": {
+		"extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' blob:; media-src 'self'; font-src 'self'; frame-src 'self'"
+	},
+	"commands": {
+		"ask-selection": {
+			"suggested_key": { "default": "Ctrl+Shift+Y", "mac": "Command+Shift+Y" },
+			"description": "__MSG_commandAsk__"
+		},
+		"add-selection": {
+			"suggested_key": { "default": "Ctrl+Shift+K", "mac": "Command+Shift+K" },
+			"description": "__MSG_commandAdd__"
+		},
+		"open-panel": {
+			"suggested_key": { "default": "Ctrl+Shift+U", "mac": "Command+Shift+U" },
+			"description": "__MSG_commandPanel__"
+		}
+	}
+}

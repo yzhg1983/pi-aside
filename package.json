@@ -1,0 +1,46 @@
+{
+	"name": "pi-aside",
+	"version": "0.1.0",
+	"private": true,
+	"license": "MIT",
+	"type": "module",
+	"description": "Unofficial Chrome side-panel AI agent, built on pi-durable",
+	"author": "Michael Yu",
+	"homepage": "https://github.com/yzhg1983/pi-aside#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yzhg1983/pi-aside.git"
+	},
+	"bugs": "https://github.com/yzhg1983/pi-aside/issues",
+	"scripts": {
+		"build": "node build.mjs",
+		"check": "biome check --write . && tsc --noEmit",
+		"icons": "node scripts/icons.mjs",
+		"screenshots": "node scripts/screenshots.mjs",
+		"test": "vitest --run",
+		"test:diagrams": "node test/e2e/diagrams.mjs",
+		"test:screenshots": "node test/e2e/screenshots.mjs",
+		"test:slash": "node test/e2e/slash.mjs",
+		"test:edit": "node test/e2e/edit.mjs",
+		"test:attachments": "node test/e2e/attachments.mjs",
+		"test:page-tools": "node test/e2e/page-tools.mjs",
+		"test:selection": "node test/e2e/selection.mjs",
+		"test:localization": "node test/e2e/localization.mjs",
+		"test:storage": "node test/e2e/storage.mjs",
+		"test:wake": "node test/e2e/wake.mjs"
+	},
+	"dependencies": {
+		"@earendil-works/chord": "1.4.0",
+		"@earendil-works/pi-ai": "1.4.0",
+		"@earendil-works/pi-durable": "1.4.0",
+		"pele": "1.12.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.6.3",
+		"@types/chrome": "0.3.6",
+		"esbuild": "0.28.2",
+		"playwright-core": "1.64.1",
+		"typescript": "7.0.2",
+		"vitest": "5.0.5"
+	}
+}

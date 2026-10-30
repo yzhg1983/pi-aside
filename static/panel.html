@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>pi</title>
+		<link rel="stylesheet" href="panel.css" />
+		<script type="module" src="panel.js"></script>
+	</head>
+	<body class="panel">
+		<!-- Icons, used as <svg><use href="#i-name"/></svg>. Inline, so nothing loads. -->
+		<svg hidden aria-hidden="true">
+			<symbol id="i-new" viewBox="0 0 24 24">
+				<path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+				<path d="M18.4 2.6a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4Z" />
+			</symbol>
+			<symbol id="i-history" viewBox="0 0 24 24">
+				<path d="M3 12a9 9 0 1 0 2.64-6.36L3 8" />
+				<path d="M3 3v5h5" />
+				<path d="M12 7v5l3 2" />
+			</symbol>
+			<symbol id="i-settings" viewBox="0 0 24 24">
+				<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1" />
+				<circle cx="15" cy="6" r="2" />
+				<circle cx="9" cy="12" r="2" />
+				<circle cx="17" cy="18" r="2" />
+			</symbol>
+			<symbol id="i-back" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></symbol>
+			<symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+			<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" /></symbol>
+			<symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7" /></symbol>
+			<symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></symbol>
+			<symbol id="i-page" viewBox="0 0 24 24">
+				<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z" />
+				<path d="M14 3v6h6M8 13h8M8 17h5" />
+			</symbol>
+			<symbol id="i-copy" viewBox="0 0 24 24">
+				<rect x="9" y="9" width="12" height="12" rx="2" />
+				<path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" />
+			</symbol>
+			<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+			<symbol id="i-edit" viewBox="0 0 24 24">
+				<path d="M12 20h9" />
+				<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+			</symbol>
+			<symbol id="i-think" viewBox="0 0 24 24">
+				<path d="M9 18h6M10 22h4" />
+				<path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z" />
+			</symbol>
+			<symbol id="i-more" viewBox="0 0 24 24">
+				<circle cx="5" cy="12" r="1.2" />
+				<circle cx="12" cy="12" r="1.2" />
+				<circle cx="19" cy="12" r="1.2" />
+			</symbol>
+			<symbol id="i-info" viewBox="0 0 24 24">
+				<circle cx="12" cy="12" r="9" />
+				<path d="M12 11v5M12 8h.01" />
+			</symbol>
+			<symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" /></symbol>
+			<symbol id="i-clip" viewBox="0 0 24 24">
+				<path d="m21.4 11.1-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5" />
+			</symbol>
+			<symbol id="i-file" viewBox="0 0 24 24">
+				<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+				<path d="M14 3v6h6" />
+			</symbol>
+			<symbol id="i-star" viewBox="0 0 24 24">
+				<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z" />
+			</symbol>
+			<symbol id="i-pin" viewBox="0 0 24 24">
+				<path d="M12 17v5M9 3h6M10 3v6l-4 5v3h12v-3l-4-5V3" />
+			</symbol>
+		</svg>
+
+		<header class="bar top">
+			<span class="grow"></span>
+			<button type="button" id="new-chat" class="icon-button" aria-label="New chat" data-i18n-aria-label="newChat" title="New chat" data-i18n-title="newChat">
+				<svg class="icon" aria-hidden="true"><use href="#i-new" /></svg>
+			</button>
+			<button type="button" id="open-history" class="icon-button" aria-label="History" data-i18n-aria-label="history" title="History" data-i18n-title="history" aria-pressed="false">
+				<svg class="icon" aria-hidden="true"><use href="#i-history" /></svg>
+			</button>
+			<button type="button" id="open-settings" class="icon-button" aria-label="Settings" data-i18n-aria-label="settings" title="Settings" data-i18n-title="settings" aria-pressed="false">
+				<svg class="icon" aria-hidden="true"><use href="#i-settings" /></svg>
+			</button>
+		</header>
+
+		<div id="reconnecting" class="banner" hidden data-i18n="reconnecting">Reconnecting...</div>
+		<div id="incompatible" class="banner" hidden>
+			<span data-i18n="extensionUpdated">The extension was updated.</span> <button type="button" id="reload-page" data-i18n="reloadPanel">Reload panel</button>
+		</div>
+		<div id="harness-error" class="banner error" hidden></div>
+		<div id="storage-full" class="banner error" role="alert" hidden data-i18n="storageFull">Chrome has no room left to save pi-aside's chats, so new messages and answers are not saved. Free up disk space, or delete all chats in Settings > Advanced > Data.</div>
+		<div id="notice" class="note-bar" hidden>
+			<span id="notice-text"></span>
+			<button type="button" id="dismiss-notice" class="icon-button small" aria-label="Dismiss" data-i18n-aria-label="dismiss" title="Dismiss" data-i18n-title="dismiss">
+				<svg class="icon" aria-hidden="true"><use href="#i-x" /></svg>
+			</button>
+		</div>
+
+
+		<section id="chat-view" class="view">
+			<!-- Shown while the chat's provider has no key, or pi may not reach it. panel.ts adds the key form. -->
+			<section id="setup" class="card setup" aria-labelledby="setup-title" hidden>
+				<h3 id="setup-title" data-i18n="providers">Providers</h3>
+				<div id="setup-key">
+					<fieldset id="setup-providers" class="segmented">
+						<legend class="visually-hidden" data-i18n="provider">Provider</legend>
+					</fieldset>
+				</div>
+				<div id="setup-plan" class="plan-offer" hidden>
+					<p>
+						<strong data-i18n="useChatGPTPlan">Use your ChatGPT plan</strong><br />
+						<span data-i18n="chatGPTPlanOffer">Complete eligible AI requests in this app with usage included in your ChatGPT plan or credits balance.</span>
+					</p>
+					<button type="button" id="setup-chatgpt" class="small-button" data-i18n="continueChatGPT">Continue with ChatGPT</button>
+				</div>
+				<div id="setup-allow">
+					<p id="setup-allow-text" data-i18n="keySavedChrome">The key is saved. Chrome asks once.</p>
+					<button type="button" id="setup-grant" class="primary small-button" data-i18n="allowAccess">Allow access</button>
+				</div>
+				<p id="setup-result" class="result" role="status"></p>
+			</section>
+
+			<div class="transcript-wrap">
+				<main id="transcript" aria-label="Chat" data-i18n-aria-label="chat"></main>
+				<button type="button" id="jump" class="jump" aria-label="Jump to latest" data-i18n-aria-label="jumpLatest" title="Jump to latest" data-i18n-title="jumpLatest" hidden>
+					<svg class="icon" aria-hidden="true"><use href="#i-down" /></svg>
+				</button>
+			</div>
+
+			<section id="drafts" aria-label="Drafts" data-i18n-aria-label="drafts"></section>
+
+			<footer>
+				<!-- The model picker opens above the message box. panel.ts fills the list. -->
+				<div id="model-popup" class="popup" role="dialog" aria-label="Choose a model" data-i18n-aria-label="chooseModel" hidden>
+					<input id="model-filter" type="text" class="filter" placeholder="Filter models" data-i18n-placeholder="filterModels" aria-label="Filter models" data-i18n-aria-label="filterModels" autocomplete="off" spellcheck="false" />
+					<div id="model-list" class="listbox" role="listbox" aria-label="Models" data-i18n-aria-label="models" tabindex="0"></div>
+					<p id="model-missing" class="note" hidden></p>
+					<p id="model-result" class="result" role="status"></p>
+				</div>
+				<!-- What the whole chat spent; each answer's own part is in its tooltip. -->
+				<p id="chat-usage" class="chat-usage" hidden></p>
+				<div class="composer-box">
+					<div id="chips" class="chips" hidden>
+						<span id="quote" class="attach" hidden>
+							<svg class="icon" aria-hidden="true"><use href="#i-page" /></svg>
+							<span id="quote-text"></span>
+							<button type="button" id="remove-quote" class="icon-button small" aria-label="Send as plain text" data-i18n-aria-label="sendPlainText" title="Send as plain text" data-i18n-title="sendPlainText">
+								<svg class="icon" aria-hidden="true"><use href="#i-x" /></svg>
+							</button>
+						</span>
+						<span id="page" class="attach" hidden>
+							<svg class="icon" aria-hidden="true"><use href="#i-page" /></svg>
+							<span id="page-text"></span>
+							<button type="button" id="allow-site" class="icon-button small" hidden>
+								<svg class="icon" aria-hidden="true"><use href="#i-pin" /></svg>
+							</button>
+							<button type="button" id="detach-page" class="icon-button small" aria-label="Don't attach" data-i18n-aria-label="dontAttach" title="Don't attach" data-i18n-title="dontAttach">
+								<svg class="icon" aria-hidden="true"><use href="#i-x" /></svg>
+							</button>
+						</span>
+					</div>
+					<!-- Images and text files the message carries (design 6.42); panel.ts fills it. -->
+					<div id="attachments" class="attachments" hidden></div>
+					<!-- Slash commands (design 6.33): the prompts whose name starts as typed after "/". -->
+					<div id="slash-menu" class="listbox slash-menu" role="listbox" aria-label="Prompts" data-i18n-aria-label="prompts" hidden></div>
+					<!-- Send shows with something to send, at the end of the text; its room is kept, so the text does not reflow. -->
+					<div class="composer-line">
+						<button type="button" id="attach" class="icon-button attach-files" aria-label="Attach images or text files" data-i18n-aria-label="attachFiles" title="Attach images or text files" data-i18n-title="attachFiles">
+							<svg class="icon" aria-hidden="true"><use href="#i-clip" /></svg>
+						</button>
+						<input type="file" id="attach-input" multiple hidden />
+						<textarea id="composer" rows="1" placeholder="Ask pi" data-i18n-placeholder="menuAsk" aria-label="Message" data-i18n-aria-label="message" title="Enter sends · Shift+Enter adds a line · / runs a prompt" data-i18n-title="composerKeys" dir="auto"></textarea>
+						<button type="button" id="send" class="round-button primary send" title="Send (Enter)" data-i18n-title="sendEnter" aria-label="Send" data-i18n-aria-label="send" disabled>
+							<svg class="icon" aria-hidden="true"><use href="#i-up" /></svg>
+						</button>
+					</div>
+					<!-- Stop is on the status line, which shows while an answer runs: it takes no room from the text. -->
+					<div class="status-row">
+						<p id="composer-status" class="status" hidden></p>
+						<button type="button" id="stop" class="stop" title="Stop (Esc)" data-i18n-title="stopEsc" aria-label="Stop" data-i18n-aria-label="stop" aria-keyshortcuts="Escape" hidden>
+							<svg class="icon filled" aria-hidden="true"><use href="#i-stop" /></svg><span data-i18n="stop">Stop</span>
+						</button>
+					</div>
+				</div>
+				<!-- The chat's model and thinking, and the account: about the chat, not the message, so under the box. -->
+				<div class="composer-under">
+					<button type="button" id="model" class="picker model" aria-haspopup="dialog" aria-expanded="false" aria-controls="model-popup">
+						<span id="model-name" data-i18n="connecting">Connecting...</span>
+						<span id="model-provider" class="via"></span>
+						<svg class="icon" aria-hidden="true"><use href="#i-chevron" /></svg>
+					</button>
+					<label id="thinking-picker" class="picker think">
+						<svg class="icon" aria-hidden="true"><use href="#i-think" /></svg>
+						<!-- The levels stay in English in every language (design 6.36). -->
+						<select id="thinking" aria-label="Thinking" data-i18n-aria-label="thinking">
+							<option value="off">Off</option>
+							<option value="low">Low</option>
+							<option value="medium">Medium</option>
+							<option value="high">High</option>
+							<option value="xhigh">Extra high</option>
+							<option value="max">Max</option>
+						</select>
+						<svg class="icon" aria-hidden="true"><use href="#i-chevron" /></svg>
+					</label>
+					<p id="plan-note" class="plan-note" hidden>
+						<span data-i18n="usingChatGPTPlan">Using ChatGPT plan</span> · <a id="plan-usage" href="https://chatgpt.com/settings/usage" target="_blank" rel="noopener noreferrer" data-i18n="manageUsage">Manage usage</a>
+					</p>
+				</div>
+			</footer>
+		</section>
+
+		<section id="history" class="view" hidden>
+			<div class="view-title">
+				<button type="button" id="close-history" class="icon-button" aria-label="Back to the chat" data-i18n-aria-label="backChat" title="Back (Esc)" data-i18n-title="backEsc">
+					<svg class="icon" aria-hidden="true"><use href="#i-back" /></svg>
+				</button>
+				<h2 data-i18n="history">History</h2>
+			</div>
+			<div class="view-body">
+				<input id="history-filter" type="text" class="filter" placeholder="Filter chats" data-i18n-placeholder="filterChats" aria-label="Filter chats" data-i18n-aria-label="filterChats" autocomplete="off" spellcheck="false" />
+				<p id="history-note" class="muted" hidden></p>
+				<div id="history-list"></div>
+			</div>
+		</section>
+
+		<section id="settings" class="view" hidden>
+			<div class="view-title">
+				<button type="button" id="close-settings" class="icon-button" aria-label="Back to the chat" data-i18n-aria-label="backChat" title="Back (Esc)" data-i18n-title="backEsc">
+					<svg class="icon" aria-hidden="true"><use href="#i-back" /></svg>
+				</button>
+				<h2 data-i18n="settings">Settings</h2>
+			</div>
+			<div class="view-body">
+				<section class="group" aria-labelledby="keys-title">
+					<h3 id="keys-title" data-i18n="providers">Providers</h3>
+					<ul id="keys" class="keys"></ul>
+					<p class="note" data-i18n="providersNote">An API key, or your ChatGPT plan for OpenAI. The model picker lists their models.</p>
+				</section>
+
+				<section class="group" aria-labelledby="answers-title">
+					<div class="section-head">
+						<h3 id="answers-title" data-i18n="answers">Answers</h3>
+						<span id="language-saved" class="result" role="status"></span>
+					</div>
+					<div class="setting">
+						<label for="language" data-i18n="answerLanguage">Answer language</label>
+						<select id="language" aria-describedby="language-note">
+							<option value="auto" data-i18n="languageAuto">Auto (Chrome language)</option>
+							<option value="English" data-i18n="languageEnglish">English</option>
+							<option value="Chinese" data-i18n="languageChinese">Chinese</option>
+						</select>
+					</div>
+					<p id="language-note" class="note" data-i18n="answerLanguageNote">Controls answers and the translation target only. Auto follows Chrome; the interface always follows Chrome.</p>
+				</section>
+
+				<section class="group" aria-labelledby="sending-title">
+					<div class="section-head">
+						<h3 id="sending-title" data-i18n="sendingSection">Sending</h3>
+						<span id="sending-saved" class="result" role="status"></span>
+					</div>
+					<div class="setting">
+						<span id="ask-label" data-i18n="menuAsk">Ask pi</span>
+						<fieldset class="segmented" aria-labelledby="ask-label" aria-describedby="ask-note">
+							<label title="Send it with the default prompt" data-i18n-title="sendDefaultPrompt"><input type="radio" name="selection-action" value="send" /><span data-i18n="sendAtOnce">Send at once</span></label>
+							<label title="Put it in the message box to edit first" data-i18n-title="composeFirstTip"><input type="radio" name="selection-action" value="compose" /><span data-i18n="editFirst">Edit first</span></label>
+						</fieldset>
+					</div>
+					<p id="ask-note" class="note" data-i18n="selectionNote">
+						Ask pi uses the prompt starred under Prompts. "Add to message" always puts only the selected text in the
+						message box.
+					</p>
+					<div class="setting">
+						<span id="busy-label" data-i18n="whilePiWorks">While pi works</span>
+						<fieldset class="segmented" aria-labelledby="busy-label" aria-describedby="busy-note">
+							<label title="Enter adds the message to the task pi is doing, after its current step" data-i18n-title="joinTaskTip"><input type="radio" name="enter-while-busy" value="steer" /><span data-i18n="joinTask">Join the task</span></label>
+							<label title="Enter sends the message when pi has answered" data-i18n-title="afterAnswerTip"><input type="radio" name="enter-while-busy" value="followUp" /><span data-i18n="afterAnswer">Wait</span></label>
+						</fieldset>
+					</div>
+					<p id="busy-note" class="note" data-i18n="whilePiWorksNote">What Enter does with a message while pi works. Alt+Enter sends it the other way.</p>
+				</section>
+
+				<section class="group" aria-labelledby="prompts-title">
+					<div class="section-head">
+						<h3 id="prompts-title" data-i18n="prompts">Prompts</h3>
+						<span id="prompts-saved" class="result" role="status"></span>
+					</div>
+					<p class="note" data-i18n="promptsNote">The pi menu's items, in this order. The star marks the one Ask pi uses. A prompt switched off stays here, out of the menu and the / list.</p>
+					<ul id="prompts" class="prompts"></ul>
+					<div id="prompts-actions" class="row">
+						<button type="button" id="add-prompt" class="small-button" data-i18n="addPrompt">Add prompt</button>
+						<span class="grow"></span>
+						<button type="button" id="reset-prompts" class="link" data-i18n="resetPrompts">Reset to built-in prompts</button>
+					</div>
+					<div id="reset-confirm" class="confirm" hidden>
+						<p><span data-i18n="resetQuestion">Use the built-in prompts again?</span> <span data-i18n="resetWarning">Your changes and the prompts you added are deleted.</span></p>
+						<div class="row">
+							<button type="button" id="confirm-reset" class="small-button danger" data-i18n="reset">Reset</button>
+							<button type="button" id="cancel-reset" class="small-button" data-i18n="cancel">Cancel</button>
+						</div>
+					</div>
+					<p id="prompts-result" class="result" role="status"></p>
+				</section>
+
+				<section class="group" aria-labelledby="tools-title">
+					<div class="section-head">
+						<h3 id="tools-title" data-i18n="tools">Tools</h3>
+						<span id="tools-saved" class="result" role="status"></span>
+					</div>
+					<p class="note" data-i18n="toolsScope">For every chat and every site.</p>
+					<div class="tool">
+						<div class="setting">
+							<div class="tool-text">
+								<span id="tool-read-title" data-i18n="readPage">Read page</span>
+								<span class="note" data-i18n="readPageNote">Reads the text of the page.</span>
+							</div>
+							<fieldset class="segmented" aria-labelledby="tool-read-title">
+								<label><input type="radio" name="tool-read" value="off" /><span data-i18n="off">Off</span></label>
+								<label><input type="radio" name="tool-read" value="on" /><span data-i18n="on">On</span></label>
+							</fieldset>
+						</div>
+					</div>
+					<div class="tool">
+						<div class="setting">
+							<div class="tool-text">
+								<span id="tool-observe-title" data-i18n="observePage">Observe page</span>
+								<span class="note" data-i18n="observePageNote">Lists the links, buttons, fields, and headings on the page.</span>
+							</div>
+							<fieldset class="segmented" aria-labelledby="tool-observe-title">
+								<label><input type="radio" name="tool-observe" value="off" /><span data-i18n="off">Off</span></label>
+								<label><input type="radio" name="tool-observe" value="on" /><span data-i18n="on">On</span></label>
+							</fieldset>
+						</div>
+					</div>
+					<div class="tool">
+						<div class="setting">
+							<div class="tool-text">
+								<span id="tool-act-title" data-i18n="actPage">Act on page</span>
+								<span class="note" data-i18n="actPageNote">Clicks, types, scrolls, and goes to pages of the same site; follows links to other sites you allow.</span>
+							</div>
+							<fieldset class="segmented" aria-labelledby="tool-act-title" aria-describedby="tool-act-note">
+								<label><input type="radio" name="tool-act" value="off" /><span data-i18n="off">Off</span></label>
+								<label><input type="radio" name="tool-act" value="ask" /><span data-i18n="ask">Ask</span></label>
+								<label><input type="radio" name="tool-act" value="on" /><span data-i18n="on">On</span></label>
+							</fieldset>
+						</div>
+						<p id="tool-act-note" class="note modes">
+							<b data-i18n="ask">Ask</b><span data-i18n="actAskNote">: pi asks once per answer for each site.</span><br /><b data-i18n="on">On</b><span data-i18n="actOnNote">: pi may click and type without asking, also on buttons such as Submit or Delete.</span>
+						</p>
+					</div>
+					<div id="tool-script" class="tool">
+						<div class="setting">
+							<div class="tool-text">
+								<span id="tool-script-title" data-i18n="runScript">Run script</span>
+								<span class="note" data-i18n="runScriptNote">Runs JavaScript that pi writes, on the page.</span>
+							</div>
+							<fieldset class="segmented" aria-labelledby="tool-script-title" aria-describedby="tool-script-note">
+								<label><input type="radio" name="tool-script" value="off" /><span data-i18n="off">Off</span></label>
+								<label><input type="radio" name="tool-script" value="ask" /><span data-i18n="ask">Ask</span></label>
+								<label><input type="radio" name="tool-script" value="on" /><span data-i18n="on">On</span></label>
+							</fieldset>
+						</div>
+						<p id="tool-script-note" class="warning" data-i18n="scriptWarning">
+							A script runs as you on the site, with your login: it could read and change anything you can there, and
+							send what it reads to other sites. Ask: pi shows each script first; "For this answer" or "For this
+							chat" lets the next ones on that site run without asking until the answer, or the chat, ends (a new chat,
+							Chrome closing, or a change here). On: scripts run without asking. Stop does not end a script that is
+							already running.
+						</p>
+						<div id="user-scripts-row" class="needs">
+							<span id="user-scripts" class="note" data-i18n="needsUserScripts">Needs Chrome's "Allow User Scripts" for pi</span>
+							<button type="button" id="open-details" class="small-button" data-i18n="openDetails">Open pi's Chrome details page</button>
+						</div>
+					</div>
+					<div class="tool">
+						<div class="setting">
+							<div class="tool-text">
+								<span id="tool-screenshot-title" data-i18n="screenshotPage">Screenshot page</span>
+								<span class="note" data-i18n="screenshotPageNote">Captures what the tab shows, as an image.</span>
+							</div>
+							<fieldset class="segmented" aria-labelledby="tool-screenshot-title" aria-describedby="tool-screenshot-note">
+								<label><input type="radio" name="tool-screenshot" value="off" /><span data-i18n="off">Off</span></label>
+								<label><input type="radio" name="tool-screenshot" value="on" /><span data-i18n="on">On</span></label>
+							</fieldset>
+						</div>
+						<p id="tool-screenshot-note" class="note" data-i18n="screenshotWarning">
+							The image shows what is on screen, also what you typed into fields, and goes to the model's provider. pi
+							may scroll the page first, also with Act on page Off. Works after you open pi on the site with its toolbar
+							button, menu, or shortcut, or on any site when Chrome allows pi on all sites (Settings > Advanced > Sites).
+						</p>
+					</div>
+					<div class="tool">
+						<div class="setting">
+							<label for="calls-per-answer" data-i18n="callsPerAnswer">Page tool calls per answer</label>
+							<input id="calls-per-answer" type="number" min="5" max="200" step="1" aria-describedby="calls-note" />
+						</div>
+						<p id="calls-note" class="note" data-i18n="callsNote">5 to 200, for all page tools together.</p>
+					</div>
+				</section>
+
+				<details class="group advanced">
+					<summary><span data-i18n="advanced">Advanced</span> <span class="muted" data-i18n="advancedSections">Sites · Shortcuts · Diagnostics</span></summary>
+					<section aria-labelledby="sites-title">
+						<div class="section-head">
+							<h4 id="sites-title" data-i18n="sites">Sites</h4>
+							<span id="sites-result" class="result" role="status"></span>
+						</div>
+						<p class="note" data-i18n="sitesNote">
+							pi uses these sites without asking, also when a link takes the tab there. On other sites, only the page
+							you open pi on; when pi needs another site, it asks you first.
+						</p>
+						<ul id="sites" class="sites"></ul>
+						<button type="button" id="allow-all-sites" class="small-button" hidden data-i18n="allowAllSites">Allow all sites</button>
+						<div id="sites-providers" hidden>
+							<p class="note" data-i18n="sitesProvidersNote">
+								pi also reads these without a click: it has access to them for your providers. Chrome's details page for
+								pi lists them under Site access.
+							</p>
+							<ul id="sites-held" class="sites held"></ul>
+						</div>
+					</section>
+
+					<section aria-labelledby="shortcuts-title">
+						<h4 id="shortcuts-title" data-i18n="shortcuts">Shortcuts</h4>
+						<ul id="shortcuts" class="shortcuts"></ul>
+						<button type="button" id="edit-shortcuts" class="link" data-i18n="changeShortcuts">Change shortcuts</button>
+					</section>
+
+					<section aria-labelledby="diagnostics-title">
+						<h4 id="diagnostics-title" data-i18n="diagnostics">Diagnostics</h4>
+						<p class="note" data-i18n="diagnosticsNote">The extension's status, test probes, and log, for reporting a problem.</p>
+						<button type="button" id="open-diagnostics" class="link" data-i18n="openDiagnostics">Open diagnostics</button>
+					</section>
+
+					<section aria-labelledby="data-title">
+						<div class="section-head">
+							<h4 id="data-title" data-i18n="data">Data</h4>
+							<span id="delete-result" class="result" role="status"></span>
+						</div>
+						<p class="note" data-i18n="chatDataNote">Chats keep what pi read from pages, and what the page tools did and returned.</p>
+						<button type="button" id="delete-chats" class="small-button danger" data-i18n="deleteAllChatsOffer">Delete all chats…</button>
+						<div id="delete-confirm" class="confirm" hidden>
+							<p>
+								<span data-i18n="deleteAllChatsQuestion">Delete all chats?</span>
+								<span data-i18n="deleteAllChatsWarning">This deletes all chats and what pi read from pages. Your settings, keys, and sign-in stay. It can't be
+									undone.</span>
+							</p>
+							<div class="row">
+								<button type="button" id="confirm-delete" class="small-button danger" data-i18n="deleteAllChats">Delete all chats</button>
+								<button type="button" id="cancel-delete" class="small-button" data-i18n="cancel">Cancel</button>
+							</div>
+						</div>
+					</section>
+				</details>
+			</div>
+		</section>
+
+		<dialog id="viewer" class="viewer" aria-label="Screenshot" data-i18n-aria-label="screenshot">
+			<img id="viewer-image" alt="Screenshot, full size" data-i18n-alt="screenshotFull" />
+		</dialog>
+
+		<div id="announcer" class="visually-hidden" role="status"></div>
+	</body>
+</html>
