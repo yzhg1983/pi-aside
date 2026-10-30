@@ -373,7 +373,7 @@ try {
 	// biome-ignore lint/performance/useDomNodeTextContent: Preserve the rendered attached-page heading assertion.
 	assert.equal(await panel.locator(".empty h3").innerText(), "Give pi a task on this page.");
 	assert.equal(await panel.locator(".empty p").isVisible(), false);
-	assert.equal(await panel.locator("#composer").getAttribute("placeholder"), "");
+	assert.equal(await panel.locator("#composer").getAttribute("placeholder"), "Ask pi");
 	check("attached empty state is task-first, with no entry-point instructions", true);
 	check(
 		"a new chat has no usage or context line",

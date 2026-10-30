@@ -376,6 +376,7 @@ function render(next: PanelState): void {
 	renderTranscript(next);
 	renderDrafts(next);
 	renderComposer();
+	if (previous === undefined) focusIdleComposer();
 	for (const row of keyRows) row.update(next);
 	if (previous === undefined || settingsChanged(previous.settings, next.settings)) syncSettings(next.settings);
 	// The "Current" tag follows the chat's model; the list, the providers with a key and the plan's models.
@@ -417,6 +418,21 @@ function gestureArrived(previous: PanelState, next: PanelState): boolean {
 		next.drafts.some((draft) => !previous.drafts.some((old) => old.id === draft.id))
 	);
 }
+
+let pointing = false;
+window.addEventListener("pointerdown", () => (pointing = true), { capture: true });
+for (const type of ["pointerup", "pointercancel"]) window.addEventListener(type, () => (pointing = false));
+
+/**
+ * Opening the panel, by the toolbar button or a shortcut, puts the caret in the message box. Not while the panel shows
+ * setup, History or Settings, another control has focus, or a click is what gave the panel focus.
+ */
+function focusIdleComposer(): void {
+	if (view !== "chat" || !ui.setup.hidden || pointing || ui.composer.readOnly) return;
+	if (document.activeElement !== null && document.activeElement !== document.body) return;
+	ui.composer.focus();
+}
+window.addEventListener("focus", focusIdleComposer);
 
 // Screen readers hear changes, not every streamed batch.
 
@@ -2183,7 +2199,7 @@ function renderComposer(): void {
 		ui.allowSite.title = t("alwaysAllowSiteTip", [label]);
 	}
 	ui.chips.hidden = ui.quote.hidden && ui.page.hidden;
-	ui.composer.placeholder = page !== null || selection !== null ? "" : t("menuAsk");
+	ui.composer.placeholder = t("menuAsk");
 	ui.stop.hidden = chat?.busy !== true;
 	const hasText = ui.composer.value.trim() !== "" || attachments.length > 0;
 	const setup = state === undefined ? null : missing(state);
