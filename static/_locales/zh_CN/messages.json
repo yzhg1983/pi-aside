@@ -597,7 +597,7 @@
 		"message": "总结页面"
 	},
 	"askPage": {
-		"message": "给 pi 布置此页面的任务。"
+		"message": "在这个页面上给 pi 布置任务。"
 	},
 	"askHint": {
 		"message": "输入问题以开始。"
