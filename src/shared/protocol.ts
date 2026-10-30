@@ -9,7 +9,7 @@
 
 import type { Preset } from "./presets.ts";
 
-export const PROTOCOL_VERSION = 40;
+export const PROTOCOL_VERSION = 41;
 export const PANEL_PORT = "panel";
 export const MAX_UNACKED = 4;
 
@@ -500,6 +500,8 @@ export type ChatEntry = {
 	attachments?: AttachmentInfo[];
 	/** Of a tool's line: an action on a page or a script ran, which Edit does not undo (design 6.34). */
 	acted?: true;
+	/** Of a script's line: `detail` is its code, which the panel folds with the step (design 6.23). */
+	code?: true;
 };
 
 /** An input admitted while the chat is busy, and whether it joins the running task or waits for its answer. */
@@ -523,9 +525,10 @@ export type ChatView = {
 	usage: Usage | null;
 	/**
 	 * While the chat runs: when its run started, as the worker first saw it, and the tool results of its turn so far,
-	 * for the live answer's line (design 6.21); null otherwise.
+	 * for the live answer's line (design 6.21); and the ID of its first entry, from which its steps stay open (design
+	 * 6.23). Null otherwise.
 	 */
-	progress: { startedAt: number; tools: number } | null;
+	progress: { startedAt: number; tools: number; from: number } | null;
 	/** Current context, not cumulative spend; unknown after compaction until a new model response. */
 	context: { tokens: number | null; auto: boolean };
 	/** The chat this one was edited from, while History lists it (design 6.34); null otherwise. */

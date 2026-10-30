@@ -120,7 +120,7 @@ export function projectChat(
 		busy,
 		queued: queuedInputs(inbox),
 		retry: !busy && lastInput !== undefined && !answered ? lastInput : null,
-		progress: busy ? { startedAt: runStartedAt, tools: runTools(view.entries, live.run?.inputs.length ?? 1) } : null,
+		progress: busy ? runProgress(view.entries, live.run?.inputs.length || 1, runStartedAt) : null,
 		context: contextUsage(view.entries),
 		editedFrom: null,
 		usage:
@@ -131,11 +131,15 @@ export function projectChat(
 }
 
 /**
- * The tool results of the running run, which has `inputs` inputs: since its first one, the `inputs`-th input entry from
- * the end. A steer joins the run as one more input (design 6.39), so the tools before it still count. Without the
- * first input in view (a compaction since), from the start of the view.
+ * The running run, which has `inputs` inputs: it starts at its first one, the `inputs`-th input entry from the end. A
+ * steer joins the run as one more input (design 6.39), so the tools before it still count. Without the first input in
+ * view (a compaction since), from the start of the view.
  */
-function runTools(entries: readonly EntryRecord[], inputs: number): number {
+function runProgress(
+	entries: readonly EntryRecord[],
+	inputs: number,
+	startedAt: number,
+): NonNullable<ChatView["progress"]> {
 	let start = -1;
 	for (let at = entries.length - 1, seen = 0; at >= 0; at--) {
 		if (INPUT_KINDS.has(entries[at]!.kind) && ++seen === inputs) {
@@ -143,7 +147,12 @@ function runTools(entries: readonly EntryRecord[], inputs: number): number {
 			break;
 		}
 	}
-	return entries.slice(start + 1).filter((entry) => entry.model?.[0]?.role === "toolResult").length;
+	const run = entries.slice(start + 1);
+	return {
+		startedAt,
+		tools: run.filter((entry) => entry.model?.[0]?.role === "toolResult").length,
+		from: Number(entries[Math.max(start, 0)]?.id ?? 0),
+	};
 }
 
 /** Latest measured request plus estimated trailing messages; a head marker invalidates earlier usage. */
@@ -507,6 +516,7 @@ function toolNotice(
 			text: summary ?? t("toolFailed", [result.toolName]),
 			error: text,
 			detail: code,
+			...(code === null ? {} : { code: true as const }),
 			// A script that threw may have changed the page before it did.
 			...(result.toolName === "run_script" ? { acted: true as const } : {}),
 		};
@@ -538,7 +548,14 @@ function toolNotice(
 		return { ...base, role: "notice", text: summary ?? t("actedOnPage"), detail: done, acted: true };
 	}
 	if (result.toolName === "run_script")
-		return { ...base, role: "notice", text: summary ?? t("ranScript"), detail: code, acted: true };
+		return {
+			...base,
+			role: "notice",
+			text: summary ?? t("ranScript"),
+			detail: code,
+			acted: true,
+			...(code === null ? {} : { code: true as const }),
+		};
 	if (result.toolName === "screenshot_page") {
 		// The image stays out of the chat's state, which goes to the panel with each change: the panel asks for it.
 		const image = result.content.some((block) => block.type === "image");

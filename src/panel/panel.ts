@@ -991,6 +991,19 @@ const tailBox = node("div", "");
 const stream = node("div", "stream", originBox, entriesBox, tailBox);
 ui.transcript.append(stream);
 
+// Steps fold (design 6.23): a script's code or a screenshot hides under its step's line, which is the button. Steps are
+// open while their turn runs and fold when it ends; a step the user opened or folded keeps that.
+
+type Fold = { notice: HTMLElement; toggle: HTMLButtonElement; body: HTMLElement };
+/** The steps with something to fold, by entry ID. */
+const folds = new Map<number, Fold>();
+/** By entry ID: the user opened (true) or folded the step. */
+const chosen = new Map<number, boolean>();
+/** The entries of the running task, from its first input; none while the chat is idle. */
+let running = new Set<number>();
+/** The element that opened the image viewer, while it is open: focus goes back to it. */
+let viewerOpener: Element | null = null;
+
 // A link in an answer to a time in the tab's own page (`…&t=754s`) moves the tab's video there; the worker checks the
 // page, and when it is another one, or has no media, the link opens in a new tab as any other (design 6.38).
 ui.transcript.addEventListener("click", (event) => {
@@ -1077,8 +1090,10 @@ new ResizeObserver(() => {
 	if (view === "chat" && pinned) setScroll(ui.transcript.scrollHeight);
 }).observe(stream);
 
+/** After `pinned` changed: the jump button, and the steps that waited for the user to be back at the end. */
 function renderJump(): void {
 	ui.jump.hidden = pinned;
+	if (pinned) applyFolds();
 }
 
 ui.jump.addEventListener("click", () => {
@@ -1097,14 +1112,31 @@ function renderTranscript(next: PanelState): void {
 		editor = undefined;
 		dropImages();
 		diagrams.drop();
+		folds.clear();
+		chosen.clear();
 		pinned = true;
 		renderJump();
 	}
+	const from = chat.progress?.from;
+	running = new Set(from === undefined ? [] : chat.entries.flatMap((entry) => (entry.id >= from ? [entry.id] : [])));
 	let kept = 0;
 	while (kept < rendered.length && kept < chat.entries.length && sameEntry(rendered[kept]!, chat.entries[kept]!))
 		kept += 1;
+	// A step with focus that is drawn again keeps it, on its line; with focus in what folds, it stays open as if the
+	// user opened it.
+	const focused = [...folds].find(([, fold]) => fold.notice.contains(focusHolder()));
+	const inBody = focused?.[1].body.contains(focusHolder()) ?? false;
 	while (entriesBox.childNodes.length > kept) entriesBox.lastChild?.remove();
+	if (focused !== undefined && !focused[1].notice.isConnected && inBody) chosen.set(focused[0], true);
 	for (const entry of chat.entries.slice(kept)) entriesBox.append(entryNode(entry));
+	for (const [id, fold] of folds) if (!fold.notice.isConnected) folds.delete(id);
+	if (focused !== undefined && !focused[1].notice.isConnected) {
+		const line = folds.get(focused[0])?.toggle;
+		// Under the open viewer, nothing else takes focus: the line gets it when the viewer closes.
+		if (ui.viewer.open) viewerOpener = line ?? null;
+		else line?.focus({ preventScroll: true });
+	}
+	applyFolds();
 	rendered = chat.entries;
 	renderEditButtons(next);
 	syncChildren(originBox, chat.editedFrom === null ? [] : [originNode(chat.editedFrom)]);
@@ -1155,9 +1187,13 @@ function entryNode(entry: ChatEntry): HTMLElement {
 		const text = node("span", entry.step ? "step-text" : "", entry.text);
 		if (entry.step) text.title = entry.text;
 		const notice = node("div", entry.step ? "msg notice step" : "msg notice", text);
-		if (entry.detail !== null) notice.append(node("span", "detail", entry.detail));
+		const detail = entry.detail === null ? [] : [node("span", "detail", entry.detail)];
+		// What folds: a script's code and a screenshot. What an action did stays, beside the model's summary of it.
+		const bulky = [...(entry.code === true ? detail : []), ...(entry.image ? [shotNode(entry.id)] : [])];
+		if (entry.code !== true) notice.append(...detail);
 		if (entry.error) notice.append(reasonNode(entry.error));
-		if (entry.image) notice.append(shotNode(entry.id));
+		if (entry.step && bulky.length > 0) foldNode(entry.id, notice, text, bulky);
+		else notice.append(...bulky);
 		return notice;
 	}
 	// What the model said before a tool call joins the step log; its answer comes later.
@@ -1205,6 +1241,66 @@ function dropImages(): void {
 	images = new Map();
 	if (ui.viewer.open) ui.viewer.close();
 }
+
+/** Puts `parts` under a step's line, which becomes the button that folds them. */
+function foldNode(id: number, notice: HTMLElement, text: HTMLElement, parts: HTMLElement[]): void {
+	const body = node("div", "fold-body", ...parts);
+	body.id = `fold-${id}`;
+	const toggle = node("button", "step-toggle");
+	toggle.type = "button";
+	toggle.setAttribute("aria-controls", body.id);
+	toggle.append(text);
+	notice.prepend(toggle);
+	notice.append(body);
+	const fold = { notice, toggle, body };
+	toggle.addEventListener("click", () => {
+		const open = notice.classList.contains("folded");
+		chosen.set(id, open);
+		setFold(fold, open);
+	});
+	setFold(fold, foldOpen(id, folds.get(id)));
+	folds.set(id, fold);
+}
+
+/**
+ * Whether a step shows what folds under it: as the user chose, else while its turn runs. An open step stays open while
+ * the user reads above the end of the chat, or has focus in it, so nothing moves under them; it folds when they are
+ * back at the end. `shown`: the step as shown now, perhaps by a node drawn again.
+ */
+function foldOpen(id: number, shown: Fold | undefined): boolean {
+	if (chosen.get(id) ?? running.has(id)) return true;
+	return (
+		shown !== undefined &&
+		!shown.notice.classList.contains("folded") &&
+		(!pinned || shown.body.contains(focusHolder()))
+	);
+}
+
+/** Where focus is, or goes back to from the image viewer. */
+function focusHolder(): Element | null {
+	return viewerOpener ?? document.activeElement;
+}
+
+function setFold(fold: Fold, open: boolean): void {
+	fold.body.hidden = !open;
+	fold.notice.classList.toggle("folded", !open);
+	fold.toggle.setAttribute("aria-expanded", String(open));
+}
+
+function applyFolds(): void {
+	for (const [id, fold] of folds) setFold(fold, foldOpen(id, fold));
+}
+
+// Focus left a step that waited for it, and the viewer gave it back: fold what waited, once focus has moved.
+for (const [target, type] of [
+	[entriesBox, "focusout"],
+	[ui.viewer, "close"],
+] as const)
+	target.addEventListener(type, () =>
+		setTimeout(() => {
+			if (pinned) applyFolds();
+		}),
+	);
 
 function shotNode(entryId: number, index = 0, label = t("screenshot")): HTMLElement {
 	const image = node("img", "");
@@ -1289,8 +1385,20 @@ function showViewer(src: string, label: string): void {
 	ui.viewer.setAttribute("aria-label", label);
 	ui.viewerImage.alt = t("viewerFullSize", [label]);
 	ui.viewerImage.src = src;
+	viewerOpener = document.activeElement;
 	ui.viewer.showModal();
 }
+
+ui.viewer.addEventListener("close", () => {
+	// The dialog gave focus back to its opener, unless the panel drew that step again: then to the new step's line.
+	if (
+		viewerOpener?.isConnected &&
+		!viewerOpener.contains(document.activeElement) &&
+		viewerOpener instanceof HTMLElement
+	)
+		viewerOpener.focus({ preventScroll: true });
+	viewerOpener = null;
+});
 
 // A click anywhere closes it. Esc closes it here, so that the panel's Esc does not also stop the answer.
 ui.viewer.addEventListener("click", () => ui.viewer.close());

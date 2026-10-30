@@ -8,9 +8,10 @@
 // tab is; the Ask card's Allow and Deny. run_script: not offered while Chrome's Allow User Scripts switch is
 // off; the switch turned on on pi's details page; the card's Run and Deny; a lone expression, a body with await and
 // logs, pi's world kept between calls and the page's objects not seen, a throw, a page whose CSP allows no script, and
-// Off. wait_on_page: a playing video's position, a text that shows and one hidden that never counts, a reload that
-// ends a wait, and a wait that Chrome's stop of the worker cut off, which waits again for its first run's medium and
-// deadline. No request leaves the machine.
+// Off; a script's step folds its code when its turn ends, but not under a user reading above. wait_on_page: a playing
+// video's position, a text that shows and one hidden that never counts, a reload that ends a wait, and a wait that
+// Chrome's stop of the worker cut off, which waits again for its first run's medium and deadline. No request leaves
+// the machine.
 import { execFileSync } from "node:child_process";
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { createServer as createHttp } from "node:http";
@@ -675,6 +676,103 @@ try {
 	got = await turn("Deny", [run("window.seen.push('script'); return 1;")], answerCard("Deny"));
 	check("Deny runs nothing", /denied/i.test(got.at(-1)?.text ?? "") && !(await seen()).includes("script"), got.at(-1));
 
+	// Folding (design 6.23): a script's step shows its code while its turn runs and folds to its line when the turn
+	// ends; the line is the button, by mouse and by key, and a step the user opened stays open. What an action did is
+	// not folded.
+	const step = (summary) => panel.locator(".msg.step", { hasText: summary });
+	const isOpen = async (summary) =>
+		(await step(summary).locator(".step-toggle").getAttribute("aria-expanded")) === "true" &&
+		(await step(summary).locator(".fold-body").isVisible());
+	let whileRunning;
+	await turn(
+		"Fold",
+		[
+			call("run_script", { code: "'first'", summary: "Fold one" }),
+			call("run_script", { code: "'second'", summary: "Fold two" }),
+		],
+		async () => {
+			await answerCard("Run")();
+			await panel.locator(".ask pre", { hasText: "second" }).waitFor({ timeout: 20_000 });
+			whileRunning = await isOpen("Fold one");
+			await answerCard("Run")();
+		},
+	);
+	check("a script's step shows its code while its turn runs", whileRunning === true);
+	const folded = async () => !(await isOpen("Fold one")) && !(await isOpen("Fold two"));
+	await poll(folded, "the turn's steps folded", 5_000).catch(() => {});
+	check(
+		"the turn's end folds its steps to their lines, earlier turns' too",
+		(await folded()) &&
+			(await step("Fold one").locator(".step-text").isVisible()) &&
+			(await panel.locator(".msg.step.folded").count()) >= 4,
+	);
+	check(
+		"what an action did stays under its line",
+		(await panel.locator(".msg.step > .detail").count()) > 0 &&
+			(await panel.locator(".msg.step:has(> .step-toggle) > .detail").count()) === 0,
+	);
+	const foldLine = step("Fold one").locator(".step-toggle");
+	await foldLine.click();
+	const clicked = await isOpen("Fold one");
+	await foldLine.press("Enter");
+	const pressed = await isOpen("Fold one");
+	await foldLine.press(" ");
+	check("its line opens and folds it, by click and by key", clicked && !pressed && (await isOpen("Fold one")));
+	// A turn that ends while the user reads above the end of the chat does not fold what they saw open; back at the
+	// end, it folds. (The last step may come with the answer, drawn folded at once.) The card's button is clicked in the
+	// page: Playwright's click would scroll to it.
+	let scrolled;
+	await turn(
+		"Fold while reading",
+		[
+			call("run_script", { code: "'third'", summary: "Fold three" }),
+			call("run_script", { code: "'fourth'", summary: "Fold four" }),
+		],
+		async () => {
+			await answerCard("Run")();
+			await panel.locator(".ask pre", { hasText: "fourth" }).waitFor({ timeout: 20_000 });
+			await panel.hover("#transcript");
+			await panel.mouse.wheel(0, -4000);
+			scrolled = await poll(() => panel.locator("#jump").isVisible(), "scrolled up").catch(() => false);
+			await panel
+				.locator(".ask")
+				.getByRole("button", { name: "Run", exact: true })
+				.evaluate((button) => button.click());
+		},
+	);
+	await sleep(300);
+	const kept = await isOpen("Fold three");
+	await panel.evaluate(() => document.getElementById("jump").click());
+	await poll(async () => !(await isOpen("Fold three")), "folded at the end", 5_000).catch(() => {});
+	check(
+		"a turn that ends while the user reads above stays open, and folds when they are back at the end",
+		scrolled && kept && !(await isOpen("Fold three")) && !(await isOpen("Fold four")),
+		{ scrolled, kept },
+	);
+	// Stop during a task's tools puts its stats on its note, before its results: the next task must not take those
+	// steps for its own and open them.
+	script = [
+		{ text: "Two scripts.", calls: [["run_script", { code: "'fifth'", summary: "Fold five" }]] },
+		call("run_script", { code: "'sixth'", summary: "Fold six" }),
+	];
+	await panel.fill("#composer", "Stop in tools");
+	await panel.press("#composer", "Enter");
+	await answerCard("Run")();
+	await panel.locator(".ask pre", { hasText: "sixth" }).waitFor({ timeout: 20_000 });
+	await panel.locator("#stop").click();
+	await poll(async () => (await panel.locator("#stop").isHidden()) && !(await isOpen("Fold five")), "stopped");
+	let afterStop;
+	await turn("After Stop", [call("run_script", { code: "'seventh'", summary: "Fold seven" })], async () => {
+		await panel.locator(".ask pre", { hasText: "seventh" }).waitFor({ timeout: 20_000 });
+		afterStop = { five: await isOpen("Fold five"), six: await isOpen("Fold six") };
+		await answerCard("Run")();
+	});
+	check(
+		"a task stopped in its tools keeps its steps folded while the next one runs",
+		afterStop?.five === false && afterStop?.six === false,
+		afterStop,
+	);
+
 	// Stop on the card: the note before the call ends the turn, and its time and tools show without reopening the chat
 	// (design 6.21), though its entry is already in the panel.
 	script = [{ text: "Checking the page first.", calls: [["run_script", { code: "1", summary: "Check" }]] }];
@@ -709,6 +807,7 @@ try {
 		value.ok === true && value.value === 2 && JSON.stringify(value.logs).includes("counting"),
 		got.at(-1),
 	);
+	check("a step the user opened stays open after later turns", await isOpen("Fold one"));
 	got = await turn("World", [run("globalThis.kept = 7; return typeof window.pageSecret"), run("kept")]);
 	check("pi's world sees the DOM, not the page's objects", parse(got[0]?.text).value === "undefined", got[0]);
 	check("pi's world keeps its globals between scripts", parse(got[1]?.text).value === 7, got[1]);

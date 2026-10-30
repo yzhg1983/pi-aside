@@ -1700,6 +1700,36 @@ body.callback h1 {
 	border-color: var(--bad);
 }
 
+/* A step with a script's code or a screenshot under its line: the line is the button that folds them, and the ring is
+   filled while they are folded (design 6.23). */
+.step-toggle {
+	display: block;
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
+.step-toggle:hover {
+	color: var(--fg);
+}
+
+.msg.step:not(:has(> .reason)):has(> .step-toggle:hover)::after {
+	border-color: var(--fg);
+}
+
+.msg.step.folded::after {
+	background: var(--muted);
+}
+
+.msg.step.folded:has(> .reason)::after {
+	background: var(--bad);
+}
+
 .step-text {
 	display: -webkit-box;
 	-webkit-box-orient: vertical;

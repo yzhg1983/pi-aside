@@ -201,6 +201,8 @@ it("steers that join a run keep the run's start and its tool count (design 6.39)
 	);
 	await vi.waitFor(() => expect(one.chat.progress?.tools).toBe(2));
 	expect(one.chat.progress?.startedAt).toBe(started);
+	// The run still starts at its first input: its steps stay open (design 6.23).
+	expect(one.chat.progress?.from).toBe(one.chat.entries.find((entry) => entry.text === "task")?.id);
 	last.resolve();
 	await vi.waitFor(() => expect(one.chat.progress).toBeNull());
 	// The answer's line counts the whole run, the rounds before both steers too.
@@ -209,15 +211,19 @@ it("steers that join a run keep the run's start and its tool count (design 6.39)
 	expect(answer?.usage?.output).toBe(one.chat.entries.reduce((total, entry) => total + (entry.usage?.output ?? 0), 0));
 });
 
-it("a message sent after Stop in a run's tools starts its own answer's line", async () => {
+it("a message sent after Stop in a run's tools starts its own answer's line, and its own run", async () => {
 	const { faux, start } = setup();
+	const next = Promise.withResolvers<void>();
 	faux.setResponses([
 		fauxAssistantMessage([{ type: "toolCall", id: "c1", name: "missing_tool", arguments: {} }], {
 			stopReason: "toolUse",
 		}),
 		hang,
 		// Made when asked, so pi-ai times it and the answer has a line.
-		async () => fauxAssistantMessage("next"),
+		async () => {
+			await next.promise;
+			return fauxAssistantMessage("next");
+		},
 	]);
 	const { tab } = await start();
 	const one = tab(1);
@@ -227,6 +233,11 @@ it("a message sent after Stop in a run's tools starts its own answer's line", as
 	await one.abort();
 	await vi.waitFor(() => expect(one.chat.busy).toBe(false));
 	await one.send({ requestId: "r2", content: "again", whenBusy: "steer" });
+	// The new run starts at its input, not at the stopped run's last note: the stopped run's steps stay folded (6.23).
+	await vi.waitFor(() =>
+		expect(one.chat.progress?.from).toBe(one.chat.entries.find((entry) => entry.text === "again")?.id),
+	);
+	next.resolve();
 	await vi.waitFor(() => expect(one.chat.entries.at(-1)?.text).toBe("next"));
 	expect(one.chat.entries.at(-1)?.stats?.tools).toEqual([]);
 });

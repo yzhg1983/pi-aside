@@ -293,6 +293,35 @@ it("shows an action as its summary with what pi did, and an observe by its page 
 	]);
 });
 
+it("marks a script's code, which the panel folds, but not what an action did (design 6.23)", () => {
+	const script = (id: number, isError: boolean, text: string, details?: unknown) =>
+		toolResult(id, isError, text, details, "run_script");
+	const chat = projectChat(
+		view([
+			script(1, false, "{}", { summary: "Count rows", code: "rows.length" }),
+			script(2, true, "{}", { summary: "Count rows", code: "rows.length", error: "rows is not defined" }),
+			script(3, true, "The user denied this script"),
+			toolResult(4, false, "{}", { summary: "Open it", done: "Clicked Open" }, "act_on_page"),
+		]),
+	);
+	expect(chat.entries).toEqual([
+		{ ...step, id: 1, role: "notice", text: "Count rows", detail: "rows.length", acted: true, code: true },
+		{
+			...step,
+			id: 2,
+			role: "notice",
+			text: "Count rows",
+			detail: "rows.length",
+			error: "rows is not defined",
+			acted: true,
+			code: true,
+		},
+		{ ...step, id: 3, role: "notice", text: "run_script failed", error: "The user denied this script", acted: true },
+		{ ...step, id: 4, role: "notice", text: "Open it", detail: "Clicked Open", acted: true },
+	]);
+	expect(chat.entries.slice(2).map((entry) => "code" in entry)).toEqual([false, false]);
+});
+
 it("says a navigation in the interface language, and keeps what the model read after it", () => {
 	const zh = { "Went to $1": "已前往 $1", "Reloaded the page": "已重新加载页面" } as Record<string, string>;
 	vi.stubGlobal("chrome", {
@@ -675,7 +704,7 @@ it("a steer joins its run's turn, a burst of steers too, and a send after them s
 	expect(stats([...run, steer(6, "next", 2), assistant(7, "stop")], 7)).toBeNull();
 });
 
-it("gives a running chat its run's start and its turn's tools so far, and an idle one none", () => {
+it("gives a running chat its run's start, first entry, and turn's tools so far, and an idle one none", () => {
 	const entries = [
 		user(1, "q"),
 		assistant(2, "stop"),
@@ -684,7 +713,7 @@ it("gives a running chat its run's start and its turn's tools so far, and an idl
 		toolResult(5, false, "{}"),
 		toolCall(6),
 	];
-	expect(projectChat(view(entries, busy), undefined, 1234).progress).toEqual({ startedAt: 1234, tools: 1 });
+	expect(projectChat(view(entries, busy), undefined, 1234).progress).toEqual({ startedAt: 1234, tools: 1, from: 3 });
 	expect(projectChat(view(entries), undefined, 1234).progress).toBeNull();
 });
 

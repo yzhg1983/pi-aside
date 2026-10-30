@@ -1,8 +1,9 @@
 // screenshot_page end to end (design 6.26): a scripted fake model calls screenshot_page, and the run checks the
 // results, the images the provider got, and their pixels. Without a grant; after a toolbar click (Chrome 147, CDP
 // Extensions.triggerAction); a same-origin navigation; another origin; a background tab; crops in view, below the fold,
-// in a scrolled list, and cut by the view; 150% zoom; pinch zoom; a noisy page; the quota; the tab watch across a
-// navigation away and back from the back/forward cache; Settings. No request leaves the machine.
+// in a scrolled list, and cut by the view; 150% zoom; pinch zoom; a thumbnail's fold with focus in it, its viewer, and
+// Stop, also under the viewer (design 6.23); a noisy page; the quota; the tab watch across a navigation away and back from the back/forward
+// cache; Settings. No request leaves the machine.
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -70,11 +71,13 @@ const check = (name, ok, detail = "") => {
 	);
 	if (!ok) process.exitCode = 1;
 };
-// The model follows `script`: each request takes the next step, `{calls: [[name, args], ...]}` or a function of the
+// The model follows `script`: each request takes the next step, `{text?, calls: [[name, args], ...]}` or a function of the
 // results so far that returns one; then it answers `final`. It records each tool result, the tools offered, and the
 // images of each request.
 let script = [];
 let final = "Done.";
+/** While set, the next request waits for it: the turn goes on, as a slow model's would. */
+let gate = null;
 const results = [];
 let offered = [];
 let requestImages = [];
@@ -93,7 +96,8 @@ const provider = createServer(
 		req.on("data", (data) => {
 			body += data;
 		});
-		req.on("end", () => {
+		req.on("end", async () => {
+			await gate;
 			const request = JSON.parse(body);
 			const { messages } = request;
 			offered = (request.tools ?? []).map((tool) => tool.function.name);
@@ -137,7 +141,7 @@ const provider = createServer(
 					type: "function",
 					function: { name, arguments: JSON.stringify(args ?? {}) },
 				}));
-				res.write(chunk({ role: "assistant", tool_calls }, null));
+				res.write(chunk({ role: "assistant", ...(step.text ? { content: step.text } : {}), tool_calls }, null));
 				res.write(chunk({}, "tool_calls"));
 			}
 			res.end("data: [DONE]\n\n");
@@ -928,6 +932,97 @@ try {
 		got,
 	);
 	await page.send("Emulation.setPageScaleFactor", { pageScaleFactor: 1 });
+
+	// Folding (design 6.23): a thumbnail with focus, or whose viewer is open, stays open when its turn ends and folds
+	// when focus leaves; a step that the panel draws again, as Stop does, keeps its focus and stays open.
+	let release;
+	/** `step`, after which the next request waits until `release()`. */
+	const held = (step) => () => {
+		gate = new Promise((resolve) => {
+			release = () => {
+				gate = null;
+				resolve();
+			};
+		});
+		return step;
+	};
+	const thumbs = panel.locator(".msg.step .fold-body > .shot");
+	const thumbSteps = panel.locator(".msg.step:has(> .fold-body > .shot)");
+	/** The step of the turn's thumbnail, once its image is in. */
+	const newThumb = async (shown) => {
+		await poll(async () => (await thumbs.count()) > shown && (await thumbs.nth(shown).isVisible()), "thumbnail");
+		return thumbSteps.nth(shown);
+	};
+	const bodyOpen = (step) => step.locator(".fold-body").isVisible();
+	let shown = await thumbs.count();
+	let thumbStep;
+	await turn(panel, "Focus a thumbnail", [held(shot())], async () => {
+		thumbStep = await newThumb(shown);
+		await thumbStep.locator(".shot").focus();
+		release();
+	});
+	const focusKept = await bodyOpen(thumbStep);
+	await panel.focus("#composer");
+	await poll(async () => !(await bodyOpen(thumbStep)), "folded after focus left", 5_000).catch(() => {});
+	check(
+		"a thumbnail with focus stays open as its turn ends, and folds when focus leaves",
+		focusKept && !(await bodyOpen(thumbStep)),
+	);
+	shown = await thumbs.count();
+	await turn(panel, "View a thumbnail", [held(shot())], async () => {
+		thumbStep = await newThumb(shown);
+		await thumbStep.locator(".shot").click();
+		await panel.locator("#viewer[open]").waitFor();
+		release();
+	});
+	const viewerOpen = await bodyOpen(thumbStep);
+	await panel.keyboard.press("Escape");
+	const back = await thumbStep.locator(".shot").evaluate((button) => document.activeElement === button);
+	await panel.focus("#composer");
+	await poll(async () => !(await bodyOpen(thumbStep)), "folded after the viewer", 5_000).catch(() => {});
+	check(
+		"a thumbnail whose viewer is open stays open, and gets focus back when it closes",
+		viewerOpen && back && !(await bodyOpen(thumbStep)),
+		{ viewerOpen, back },
+	);
+	// Stop puts the turn's stats on its note, shown the screenshot: the panel draws the step again.
+	shown = await thumbs.count();
+	script = [held({ text: "Looking first.", calls: [["screenshot_page", {}]] })];
+	await panel.fill("#composer", "Stop with focus");
+	await panel.press("#composer", "Enter");
+	thumbStep = await newThumb(shown);
+	await thumbStep.locator(".shot").focus();
+	await panel.keyboard.press("Escape");
+	await poll(() => panel.locator("#stop").isHidden(), "stopped");
+	release();
+	await panel.locator(".msg.step-note", { hasText: "Looking first." }).locator(".answer-stats").waitFor();
+	const redrawn = thumbSteps.nth(shown);
+	check(
+		"a step drawn again with focus in its thumbnail stays open, with focus on its line",
+		(await bodyOpen(redrawn)) &&
+			(await redrawn.locator(".step-toggle").evaluate((button) => document.activeElement === button)),
+	);
+
+	// The same with the step's viewer open: Stop from elsewhere (the button is under the modal viewer) draws the step
+	// again, and closing the viewer gives focus to the new step's line.
+	shown = await thumbs.count();
+	script = [held({ text: "Looking again.", calls: [["screenshot_page", {}]] })];
+	await panel.fill("#composer", "Stop under the viewer");
+	await panel.press("#composer", "Enter");
+	thumbStep = await newThumb(shown);
+	await thumbStep.locator(".shot").click();
+	await panel.locator("#viewer[open]").waitFor();
+	await panel.evaluate(() => document.getElementById("stop").click());
+	await poll(() => panel.locator("#stop").isHidden(), "stopped under the viewer");
+	release();
+	await panel.locator(".msg.step-note", { hasText: "Looking again." }).locator(".answer-stats").waitFor();
+	await panel.keyboard.press("Escape");
+	const underViewer = thumbSteps.nth(shown);
+	check(
+		"a step drawn again under its open viewer stays open, and its line gets focus when the viewer closes",
+		(await bodyOpen(underViewer)) &&
+			(await underViewer.locator(".step-toggle").evaluate((button) => document.activeElement === button)),
+	);
 
 	// A noisy page needs the smaller encodings.
 	await web.goto(`${A}/noise`);
