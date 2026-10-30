@@ -597,10 +597,7 @@
 		"message": "Summarize page"
 	},
 	"askPage": {
-		"message": "What would you like pi to do on this page?"
-	},
-	"askPageHint": {
-		"message": "Ask a question about the page or selected text."
+		"message": "Give pi a task on this page."
 	},
 	"askHint": {
 		"message": "Type a question to get started."

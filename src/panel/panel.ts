@@ -1871,8 +1871,9 @@ function updateEmpty(): void {
 	const page = attachedPage();
 	const title = page !== null ? t("askPage") : t("menuAsk");
 	if (emptyTitle.textContent !== title) emptyTitle.textContent = title;
-	const type = page !== null ? t("askPageHint") : t("askHint");
+	const type = page !== null ? "" : t("askHint");
 	if (emptyType.textContent !== type) emptyType.textContent = type;
+	emptyType.hidden = type === "";
 	suggestions.hidden = !(
 		state !== undefined &&
 		ui.setup.hidden &&
@@ -2182,7 +2183,7 @@ function renderComposer(): void {
 		ui.allowSite.title = t("alwaysAllowSiteTip", [label]);
 	}
 	ui.chips.hidden = ui.quote.hidden && ui.page.hidden;
-	ui.composer.placeholder = page !== null || selection !== null ? t("askPage") : t("menuAsk");
+	ui.composer.placeholder = page !== null || selection !== null ? "" : t("menuAsk");
 	ui.stop.hidden = chat?.busy !== true;
 	const hasText = ui.composer.value.trim() !== "" || attachments.length > 0;
 	const setup = state === undefined ? null : missing(state);

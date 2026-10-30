@@ -597,10 +597,7 @@
 		"message": "总结页面"
 	},
 	"askPage": {
-		"message": "想让 pi 在此页面做些什么？"
-	},
-	"askPageHint": {
-		"message": "询问页面或选中文本。"
+		"message": "在这个页面上给 pi 布置任务。"
 	},
 	"askHint": {
 		"message": "输入问题以开始。"
