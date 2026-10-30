@@ -371,9 +371,9 @@ try {
 	const summary = panel.getByRole("button", { name: "Summarize page", exact: true });
 	await summary.waitFor({ state: "visible" });
 	// biome-ignore lint/performance/useDomNodeTextContent: Preserve the rendered attached-page heading assertion.
-	assert.equal(await panel.locator(".empty h3").innerText(), "What would you like pi to do on this page?");
-	// biome-ignore lint/performance/useDomNodeTextContent: Preserve the rendered attached-page hint assertion.
-	assert.equal(await panel.locator(".empty p").innerText(), "Ask a question about the page or selected text.");
+	assert.equal(await panel.locator(".empty h3").innerText(), "Give pi a task on this page.");
+	assert.equal(await panel.locator(".empty p").isVisible(), false);
+	assert.equal(await panel.locator("#composer").getAttribute("placeholder"), "");
 	check("attached empty state is task-first, with no entry-point instructions", true);
 	check(
 		"a new chat has no usage or context line",
