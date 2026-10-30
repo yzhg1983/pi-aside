@@ -1,8 +1,9 @@
 // Screenshots of pi-aside for the README and the store, 1280 x 800: a headline over the production panel beside a live
-// page, in a plain browser window. Five scenes on real sites, in English and, for the store's Chinese listing, in
+// page, in a plain browser window. Six scenes on real sites, in English and, for the store's Chinese listing, in
 // Chinese: one script that counts a Wikipedia table by decade and marks rows on the page, which pi charts; a screenshot of an
 // error, which pi finds among Vite's issues; a selected paragraph of MDN explained with a diagram; a chart of Our World
-// in Data read from a screenshot; and the card that asks before pi acts on GitHub.
+// in Data read from a screenshot; the card that asks before pi acts on GitHub; and the README's saved prompt "Translate
+// in page", which puts a translation under each selected paragraph of a French Wikipedia article.
 // Chrome's side panel is browser UI that automation cannot capture, so the panel runs as a tab and the two are put side
 // by side. The pages are loaded live from their sites, in a fresh profile without a login. The model's turns come from
 // pi-ai's in-process faux provider; the page tools and scripts run for real, and the answers take their facts from the
@@ -55,6 +56,19 @@ const QUOTE = "Stored HTTP responses have two states: fresh and stale.";
 const CHART = "https://ourworldindata.org/grapher/share-electricity-renewables";
 const COUNTRIES = ["DEU", "CHN", "USA", "IND"];
 const ISSUES = "https://github.com/vitejs/vite/issues";
+const AURORE = "https://fr.wikipedia.org/wiki/Aurore_polaire";
+// The lead's two paragraphs, as the translations were written for them: found by how they start, and compared whole,
+// without spacing or citation marks, so any edit to them stops the run.
+const LEAD = [
+	{
+		start: "L’aurore polaire, également appelée",
+		text: "L’aurore polaire, également appelée « aurore boréale » dans l'hémisphère nord et « aurore australe » dans l'hémisphère sud, est un phénomène lumineux atmosphérique caractérisé par des voiles extrêmement colorés dans le ciel nocturne, le vert étant prédominant aux latitudes proches des pôles.",
+	},
+	{
+		start: "Provoquées par l'interaction entre les particules",
+		text: "Provoquées par l'interaction entre les particules chargées du vent solaire et la haute atmosphère, les aurores se produisent principalement dans les régions proches des pôles magnétiques, dans une zone annulaire justement appelée « zone aurorale » (entre 65 et 75° de latitude).",
+	},
+];
 // Access to all sites, as after Settings > Advanced > Sites > Allow all sites: Chrome lets pi capture a tab with it, or after a
 // click on pi's toolbar button, which automation cannot make.
 manifest.host_permissions = ["<all_urls>"];
@@ -126,6 +140,10 @@ const TEXT = {
 			explain: [["Ask about ", "what you read", ""], "Clear answers, with a table or a diagram when it helps."],
 			chart: [["Read ", "charts", ", too"], "When the answer is in a picture, pi takes a screenshot."],
 			control: [["You decide ", "when it acts", ""], "pi clicks or types on a site only after you allow it."],
+			translate: [
+				["Translate ", "in place", ""],
+				"A saved prompt: each translation goes right under its paragraph.",
+			],
 		},
 		table: {
 			ask: "When did these come out? Chart them by decade, and highlight the ones from the 2020s.",
@@ -161,6 +179,18 @@ const TEXT = {
 			labels: ["labels", "Filter by labels"],
 			summary: "Open the label filter",
 		},
+		// The README's prompt, as the user adds it.
+		translate: {
+			name: "Translate in page",
+			template:
+				"Translate the text below into {{language}}, then embed the translation back into the original page, paragraph by paragraph: each translated paragraph right below its original. Keep the original text.\n\nStyle each translation as a plain paragraph in the page's own typography: no border, vertical line, quote formatting, background color, or other decoration.\n\n{{selection}}",
+			summary: "Put each translation under its paragraph",
+			lines: [
+				"The polar aurora, also called the “aurora borealis” in the northern hemisphere and the “aurora australis” in the southern hemisphere, is a luminous atmospheric phenomenon: extremely colourful veils across the night sky, with green dominant at latitudes near the poles.",
+				"Caused by the interaction between charged particles of the solar wind and the upper atmosphere, auroras occur mainly in regions near the magnetic poles, in a ring-shaped band aptly called the “auroral zone” (between 65° and 75° of latitude).",
+			],
+			answer: "Done: both paragraphs are translated into English, each right under its original.",
+		},
 	},
 	zh_CN: {
 		heads: {
@@ -169,6 +199,7 @@ const TEXT = {
 			explain: [["读到哪，", "问到哪", ""], "回答清楚，需要时配上表格或图。"],
 			chart: [["", "图表", "也能读"], "答案在图里时，pi 会截图细看。"],
 			control: [["动手之前，", "先问你", ""], "pi 在网站上点击或输入之前，先征得你的同意。"],
+			translate: [["", "页面内", "翻译"], "常用提示词：每段译文紧跟在对应原文的下方。"],
 		},
 		table: {
 			ask: "这些电影是哪年上映的？按年代画张图，并把 2020 年代的标出来。",
@@ -204,6 +235,17 @@ const TEXT = {
 			labels: ["labels", "Filter by labels"],
 			summary: "打开标签筛选",
 		},
+		translate: {
+			name: "页面内翻译",
+			template:
+				"把下面的内容译成中文，再逐段放回原网页：每段译文紧跟在对应的原文段落下方，保留原文。\n\n译文使用网页正文的普通段落样式，不要加左边框、竖线、引用样式、背景色或其他装饰。\n\n{{selection}}",
+			summary: "把每段译文放到原文下方",
+			lines: [
+				"极光在北半球称为“北极光”，在南半球称为“南极光”，是一种大气发光现象：夜空中出现色彩极为艳丽的光幕，在靠近两极的纬度上以绿色为主。",
+				"极光由太阳风中的带电粒子与高层大气相互作用产生，主要出现在磁极附近，分布在一个环形地带里，这个地带也因此被称为“极光带”（纬度 65° 至 75° 之间）。",
+			],
+			answer: "完成：两段都已译成中文，每段译文紧跟在原文下方。",
+		},
 	},
 };
 
@@ -214,6 +256,7 @@ writeFileSync(
 import ${JSON.stringify(join(repo, "src/background/main.ts"))};
 import { models } from ${JSON.stringify(join(repo, "src/background/models.ts"))};
 import { saveSettings } from ${JSON.stringify(join(repo, "src/background/settings.ts"))};
+import { PRESETS } from ${JSON.stringify(join(repo, "src/shared/presets.ts"))};
 import { fauxProvider, fauxAssistantMessage, fauxText, fauxToolCall } from "@earendil-works/pi-ai/providers/faux";
 const faux = fauxProvider({
 	provider: "openrouter",
@@ -251,7 +294,7 @@ const turn = ({ text, tool, args, label, later, pause = 0 }) => {
 		return message(text, tool, label === undefined ? args : { ...args, ref: refOf(context, label) });
 	};
 };
-globalThis.__piShots = { saveSettings, release: null, context: null, play: (turns) => faux.setResponses(turns.map(turn)) };
+globalThis.__piShots = { saveSettings, PRESETS, release: null, context: null, play: (turns) => faux.setResponses(turns.map(turn)) };
 `,
 );
 const common = {
@@ -272,7 +315,7 @@ await build({
 			name: "screenshot-main-hooks",
 			setup(builder) {
 				builder.onLoad({ filter: /\/background\/main\.ts$/ }, ({ path }) => ({
-					contents: `${readFileSync(path, "utf8")}\nglobalThis.__piShotsMain = { begin };`,
+					contents: `${readFileSync(path, "utf8")}\nglobalThis.__piShotsMain = { begin, askSelection };`,
 					loader: "ts",
 					resolveDir: join(repo, "src/background"),
 				}));
@@ -435,11 +478,15 @@ const tabOf = (worker, url) =>
 
 /**
  * Sends `text` from the panel, answering each card with its first button while `answer` holds, until `done` holds.
- * `later`: gives the text of a turn that waits for it, once pi has asked for that turn.
+ * `later`: gives the text of a turn that waits for it, once pi has asked for that turn. `start`: sends the input
+ * another way, such as from a menu, in place of `text`.
  */
-async function send(chrome, panel, text, done, name, { answer = () => true, later } = {}) {
-	await panel.locator("#composer").fill(text);
-	await panel.locator("#send").click();
+async function send(chrome, panel, text, done, name, { answer = () => true, later, start } = {}) {
+	if (start) await start();
+	else {
+		await panel.locator("#composer").fill(text);
+		await panel.locator("#send").click();
+	}
 	let released = later === undefined;
 	await poll(
 		async () => {
@@ -663,6 +710,91 @@ async function shots(locale, lang, prefix) {
 			{ answer: () => false },
 		);
 		await save(control.page, control.panel, { head: text.heads.control, file: `${prefix}control.png` });
+	}
+
+	if (scene("translate")) {
+		// Translate: the README's saved prompt, from the menu for the selected lead of a French article; one script puts
+		// each translation under its paragraph, as the prompt asks.
+		const { name, template, summary, lines, answer } = text.translate;
+		await chrome.worker.evaluate(
+			({ name, template }) =>
+				globalThis.__piShots.saveSettings({
+					prompts: [...globalThis.__piShots.PRESETS, { id: "translate-in-page", name, template }],
+				}),
+			{ name, template },
+		);
+		/** The lead below the contents button that floats at the top left; with `select`, the lead selected. Gives the selection's text. */
+		const show = (page, select) =>
+			page.evaluate(
+				({ lead, select }) => {
+					const paragraphs = [...document.querySelectorAll("#mw-content-text p")];
+					const plain = (text) =>
+						text
+							.replace(/\[\d+\]/g, "")
+							.replace(/\s+/g, " ")
+							.trim();
+					const [first, last] = lead.map(({ start, text }) => {
+						const found = paragraphs.find((p) => p.textContent.trim().startsWith(start));
+						if (found === undefined || plain(found.textContent) !== plain(text))
+							throw Error(`The article's lead has changed: ${found?.textContent ?? start}`);
+						return found;
+					});
+					scrollTo(0, first.getBoundingClientRect().top + scrollY - 64);
+					getSelection().removeAllRanges();
+					if (!select) return "";
+					const range = document.createRange();
+					range.setStartBefore(first);
+					range.setEndAfter(last);
+					getSelection().addRange(range);
+					return getSelection().toString();
+				},
+				{ lead: LEAD, select },
+			);
+		const translate = await open(chrome, AURORE, (page) => show(page, true));
+		const code = `const translations = ${JSON.stringify(
+			LEAD.map(({ start }, i) => [start, lines[i]]),
+			null,
+			2,
+		)};
+const paragraphs = [...document.querySelectorAll("#mw-content-text p")];
+let placed = 0;
+for (const [start, translation] of translations) {
+  const original = paragraphs.find((p) => p.textContent.trim().startsWith(start));
+  if (!original) continue;
+  const p = document.createElement("p");
+  p.textContent = translation;
+  original.after(p);
+  placed++;
+}
+return { placed };`;
+		await play([{ tool: "run_script", args: { code, summary } }, { later: true }]);
+		await send(chrome, translate.panel, "", finished(translate.panel, ".msg.assistant p"), "the translation", {
+			// As a right-click on the selection, then the prompt in pi's menu.
+			start: async () => {
+				const selectionText = await show(translate.page, true);
+				await chrome.worker.evaluate(
+					async ({ tabId, selectionText }) => {
+						const tab = await chrome.tabs.get(tabId);
+						const gesture = { frameId: 0, url: tab.url, top: tab.url, selectionText, editable: false };
+						const started = globalThis.__piShotsMain.begin("context-menu", tab, gesture);
+						await globalThis.__piShotsMain.askSelection(
+							"context-menu",
+							started,
+							crypto.randomUUID(),
+							"translate-in-page",
+						);
+					},
+					{ tabId: translate.tabId, selectionText },
+				);
+			},
+			later: async () => {
+				const ran = await lastResult(chrome);
+				if (!ran.ok || ran.value.placed !== LEAD.length) throw Error(`The script placed: ${JSON.stringify(ran)}`);
+				return answer;
+			},
+		});
+		await show(translate.page, false);
+		await save(translate.page, translate.panel, { head: text.heads.translate, file: `${prefix}translate.png` });
 	}
 }
 
