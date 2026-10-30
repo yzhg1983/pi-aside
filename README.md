@@ -47,8 +47,17 @@ requests go straight from your browser to your provider.
 
 ## Examples
 
-Select text and right-click **Ask pi**, or press `Ctrl+Shift+Y` (`Cmd+Shift+Y` on a Mac), and ask about it. Or open pi
-on any page and hand it a task, like the films table in the [animation above](#why-pi-aside).
+### How to start
+
+Open pi on the page you want help with. On a Mac, use `Cmd` instead of `Ctrl`
+([change shortcuts](docs/guide.md#shortcuts)).
+
+| To | Do this |
+| --- | --- |
+| Ask about the page, or give pi a task | Click pi-aside's toolbar button or press `Ctrl+Shift+U`, then type. |
+| Ask about selected text | Right-click it and choose **Ask pi**, or press `Ctrl+Shift+Y`. pi answers with your starred prompt: **Explain**, unless you change it. |
+| Ask your own question about selected text | Right-click it and choose **Add to message**, or press `Ctrl+Shift+K`, then type your question. |
+| Use a prompt | Right-click the page or selected text and choose one, such as **Summarize**, or type `/` in the message box. |
 
 <sub>The screenshots below show the real extension and its page tools on live sites. The model's replies in them are
 scripted: results and timing vary by model.</sub>
@@ -183,7 +192,7 @@ settings, keys, and chats are kept.
 1. Click pi-aside's toolbar button, or press `Ctrl+Shift+U` (`Cmd+Shift+U` on a Mac).
 2. Pick a provider, paste an API key, and Save; allow access when Chrome asks. For a ChatGPT plan, choose OpenAI, then
    **Continue with ChatGPT**.
-3. Select text and right-click **Ask pi**, or type a task in the message box.
+3. Type a question or a task in the message box, and send it. For other ways, see [How to start](#how-to-start).
 4. Optional, for scripts: turn on **Allow User Scripts** on pi-aside's Chrome details page (Settings > Tools links to
    it).
 
