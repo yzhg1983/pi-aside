@@ -45,7 +45,36 @@ requests go straight from your browser to your provider.
 - **Your model, no middleman.** Four providers besides ChatGPT, a different model per message if you like, and each
   chat's cost shown as it grows. Open source (MIT), no analytics.
 
-## Examples
+## Install
+
+pi-aside is at version 0.1, an early release. It needs Chrome 140 or later.
+
+**From a release:** download `pi-aside-<version>.zip` from
+[Releases](https://github.com/yzhg1983/pi-aside/releases) and unzip it into a new folder. Open `chrome://extensions`,
+turn on Developer mode, click **Load unpacked**, and choose that folder. To update, unzip the new version into the same
+folder, replacing its files, and press the reload icon on pi-aside's card. Keep the folder where it is: Chrome treats a
+folder in another place as another extension, without your settings, keys, and chats.
+
+**From source** (Node.js 22.19+):
+
+```sh
+git clone https://github.com/yzhg1983/pi-aside
+cd pi-aside
+npm ci --ignore-scripts   # dependencies, without install scripts
+npm run build             # writes dist/
+```
+
+Load the `dist/` folder as above. To update, pull, build again, and press the reload icon on pi-aside's card;
+settings, keys, and chats are kept.
+
+## Quick start
+
+1. Click pi-aside's toolbar button, or press `Ctrl+Shift+U` (`Cmd+Shift+U` on a Mac).
+2. Pick a provider, paste an API key, and Save; allow access when Chrome asks. For a ChatGPT plan, choose OpenAI, then
+   **Continue with ChatGPT**.
+3. Type a question or a task in the message box, and send it. For other ways, see [How to start](#how-to-start).
+4. Optional, for scripts: turn on **Allow User Scripts** on pi-aside's Chrome details page (Settings > Tools links to
+   it).
 
 ### How to start
 
@@ -59,6 +88,8 @@ Open pi on the page you want help with. On a Mac, use `Cmd` instead of `Ctrl`
 | Ask your own question about selected text | Right-click it and choose **Add to message**, or press `Ctrl+Shift+K`, then type your question. |
 | Use a prompt | Right-click the page or selected text and choose one, such as **Summarize**, or type `/` in the message box. |
 
+## Examples
+
 <sub>The screenshots below show the real extension and its page tools on live sites. The model's replies in them are
 scripted: results and timing vary by model.</sub>
 
@@ -69,19 +100,14 @@ and draws what passes between the browser, the cache, and the server.
 
 ![pi-aside beside MDN's HTTP caching guide: a question about a selected paragraph, answered with a diagram](docs/images/explain.png)
 
-### Read a chart
-
-*"Which of these raised its share of renewables the most since 2010?"* On a chart from Our World in Data, pi takes a
-screenshot, reads the lines, and gives each country's change.
-
-![pi-aside beside a chart of Our World in Data: it took a screenshot and compared the countries' share of renewables](docs/images/chart.png)
-
 ### More to try
 
 - *"What are the 5 most popular stories of the past 24 hours?"* On Hacker News, pi writes one script that reads three
   pages and ranks the stories.
 - *"Compare the three laptops in this tab group: price, weight, battery, and ports."* pi reads each tab and makes a
   table.
+- *"Which of these countries increased its renewable electricity share most since 2010?"* pi takes a screenshot of
+  the chart and compares the changes.
 - *"Fill in this form from the details below, and stop before you submit."* pi types into each field and leaves the
   last click to you.
 - *"I get this since upgrading to Vite 3. Is it a known issue? How do I fix it?"* With a screenshot of the error
@@ -164,37 +190,6 @@ Answer in {{language}}.
 ```
 
 </details>
-
-## Install
-
-pi-aside is at version 0.1, an early release. It needs Chrome 140 or later.
-
-**From a release:** download `pi-aside-<version>.zip` from
-[Releases](https://github.com/yzhg1983/pi-aside/releases) and unzip it into a new folder. Open `chrome://extensions`,
-turn on Developer mode, click **Load unpacked**, and choose that folder. To update, unzip the new version into the same
-folder, replacing its files, and press the reload icon on pi-aside's card. Keep the folder where it is: Chrome treats a
-folder in another place as another extension, without your settings, keys, and chats.
-
-**From source** (Node.js 22.19+):
-
-```sh
-git clone https://github.com/yzhg1983/pi-aside
-cd pi-aside
-npm ci --ignore-scripts   # dependencies, without install scripts
-npm run build             # writes dist/
-```
-
-Load the `dist/` folder as above. To update, pull, build again, and press the reload icon on pi-aside's card;
-settings, keys, and chats are kept.
-
-## Quick start
-
-1. Click pi-aside's toolbar button, or press `Ctrl+Shift+U` (`Cmd+Shift+U` on a Mac).
-2. Pick a provider, paste an API key, and Save; allow access when Chrome asks. For a ChatGPT plan, choose OpenAI, then
-   **Continue with ChatGPT**.
-3. Type a question or a task in the message box, and send it. For other ways, see [How to start](#how-to-start).
-4. Optional, for scripts: turn on **Allow User Scripts** on pi-aside's Chrome details page (Settings > Tools links to
-   it).
 
 ## You stay in control
 
