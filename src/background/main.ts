@@ -204,6 +204,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 	);
 });
 
+// "open-panel" does what the toolbar button does: `begin()` opens the panel and attaches the page.
 chrome.commands.onCommand.addListener((command, tab) => {
 	if (tab?.id === undefined) return;
 	const started = begin("command", tab, { frameId: 0, url: tab.url, top: tab.url });
