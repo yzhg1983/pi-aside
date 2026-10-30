@@ -201,8 +201,6 @@ settings, keys, and chats are kept.
 Settings > Tools turns each tool (read, observe, act, run script, screenshot) Off or On; acting and running scripts
 can also Ask. Out of the box, acting on a page and running scripts ask first.
 
-![pi-aside beside GitHub's issue list: the card that asks before pi acts on github.com](docs/images/control.png)
-
 **Enforced by pi-aside, whatever the model says:**
 
 - In Ask, pi needs your OK once per site in each answer before it acts, and shows every script in full before it runs.
