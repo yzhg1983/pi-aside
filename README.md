@@ -95,15 +95,20 @@ scripted: results and timing vary by model.</sub>
 
 ### Explain a selection
 
-*"Explain this simply, with a diagram."* With a paragraph of MDN's HTTP caching guide selected, pi answers in two lines
-and draws what passes between the browser, the cache, and the server.
+*"Explain this simply, with a diagram."* With a paragraph of MDN's HTTP caching guide selected, pi turns fresh and
+stale into a flowchart.
 
-![pi-aside beside MDN's HTTP caching guide: a question about a selected paragraph, answered with a diagram](docs/images/explain.png)
+![pi-aside beside MDN's HTTP caching guide: a question about a selected paragraph, answered with a flowchart of when a stored response is used, checked with the server, or replaced](docs/images/explain.png)
+
+### Rank a page with a script
+
+*"Which 5 stories on this page have the most comments? Highlight them."* On Hacker News's front page, pi runs one
+script that reads every story, ranks them by comments, and marks the top 5 on the page.
+
+![pi-aside beside Hacker News: one script ranked the front page's stories by comments, highlighted the top 5 on the page, and listed them in a table](docs/images/rank.png)
 
 ### More to try
 
-- *"What are the 5 most popular stories of the past 24 hours?"* On Hacker News, pi writes one script that reads three
-  pages and ranks the stories.
 - *"Compare the three laptops in this tab group: price, weight, battery, and ports."* pi reads each tab and makes a
   table.
 - *"Which of these countries increased its renewable electricity share most since 2010?"* pi takes a screenshot of
@@ -125,7 +130,7 @@ Translation extensions usually send a page to a translation service piece by pie
 back translated three different ways. With this prompt, the model reads the whole page and translates it as one text,
 then a script puts each translated paragraph under its original on the page.
 
-![pi-aside beside the French Wikipedia article on auroras: the saved prompt Translate in page put an English translation under each selected paragraph](docs/images/translate.png)
+![pi-aside beside the Chinese Wikipedia article on auroras: the saved prompt Translate in page put an English translation right under the selected paragraph](docs/images/translate.png)
 
 Add it as "Translate in page", then right-click any article and choose **Translate in page**. `{{selection}}` is the
 whole page when nothing is selected; select a few paragraphs first to translate only those. `{{language}}` is your

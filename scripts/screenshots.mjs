@@ -1,9 +1,11 @@
 // Screenshots of pi-aside for the README and the store, 1280 x 800: a headline over the production panel beside a live
-// page, in a plain browser window. Six scenes on real sites, in English and, for the store's Chinese listing, in
+// page, in a plain browser window. Seven scenes on real sites, in English and, for the store's Chinese listing, in
 // Chinese: one script that counts a Wikipedia table by decade and marks rows on the page, which pi charts; a screenshot of an
-// error, which pi finds among Vite's issues; a selected paragraph of MDN explained with a diagram; a chart of Our World
-// in Data read from a screenshot; the card that asks before pi acts on GitHub; and the README's saved prompt "Translate
-// in page", which puts a translation under each selected paragraph of a French Wikipedia article.
+// error, which pi finds among Vite's issues; a selected paragraph of MDN explained with a flowchart; one script that
+// ranks Hacker News's front page by comments and marks the top 5; a chart of Our World in Data read from a screenshot;
+// the card that asks before pi acts on GitHub; and the README's saved prompt "Translate in page", which puts a
+// translation under each selected paragraph of a Wikipedia article: Chinese for the English image, French for the
+// Chinese one, so the translation stands out from the original.
 // Chrome's side panel is browser UI that automation cannot capture, so the panel runs as a tab and the two are put side
 // by side. The pages are loaded live from their sites, in a fresh profile without a login. The model's turns come from
 // pi-ai's in-process faux provider; the page tools and scripts run for real, and the answers take their facts from the
@@ -56,10 +58,19 @@ const QUOTE = "Stored HTTP responses have two states: fresh and stale.";
 const CHART = "https://ourworldindata.org/grapher/share-electricity-renewables";
 const COUNTRIES = ["DEU", "CHN", "USA", "IND"];
 const ISSUES = "https://github.com/vitejs/vite/issues";
+const HN = "https://news.ycombinator.com/";
+// The articles' leads, as the translations were written for them: each paragraph found by how it starts, and compared
+// whole, without spacing or citation marks, so any edit to them stops the run. Chinese takes more room in English: one
+// paragraph and its translation fill the page.
+const AURORA = "https://zh.wikipedia.org/zh-cn/%E6%9E%81%E5%85%89";
+const AURORA_LEAD = [
+	{
+		start: "极光，是一种等离子体现象",
+		text: "极光，是一种等离子体现象，主要发生在具有磁场的行星上的高纬度区域，而在地球上的极光带即是经度上距离地磁极10°至20°，纬度宽约3°至6°的区域。当磁暴发生时，在较低的纬度也会出现极光。",
+	},
+];
 const AURORE = "https://fr.wikipedia.org/wiki/Aurore_polaire";
-// The lead's two paragraphs, as the translations were written for them: found by how they start, and compared whole,
-// without spacing or citation marks, so any edit to them stops the run.
-const LEAD = [
+const AURORE_LEAD = [
 	{
 		start: "L’aurore polaire, également appelée",
 		text: "L’aurore polaire, également appelée « aurore boréale » dans l'hémisphère nord et « aurore australe » dans l'hémisphère sud, est un phénomène lumineux atmosphérique caractérisé par des voiles extrêmement colorés dans le ciel nocturne, le vert étant prédominant aux latitudes proches des pôles.",
@@ -101,6 +112,44 @@ for (const row of table.rows) {
 }
 return { total, recent, decades };`;
 
+// --- Hacker News: the front page ranked by comments, the top 5 marked on the page --------------------------------------
+
+const rankCode = `const stories = [];
+for (const row of document
+  .querySelectorAll("tr.athing")) {
+  const sub = row.nextElementSibling;
+  const score = sub.querySelector(".score");
+  // Job ads have no points or comments.
+  if (!score) continue;
+  // The story's own link that gives the count:
+  // "12 comments", or "discuss" when none yet.
+  const count = [...sub.querySelectorAll(
+    \`a[href="item?id=\${row.id}"]\`)]
+    .map((a) => a.textContent
+      .replace(/\\s+/g, " ").trim())
+    .find((text) =>
+      /^(\\d+ comments?|discuss)$/.test(text));
+  if (count === undefined)
+    throw Error("No comment count: " + row.id);
+  stories.push({
+    row,
+    id: row.id,
+    title: row.querySelector(".titleline > a")
+      .textContent,
+    points: parseInt(score.textContent),
+    comments: count === "discuss" ? 0
+      : parseInt(count),
+  });
+}
+stories.sort((a, b) => b.comments - a.comments);
+const top = stories.slice(0, 5);
+for (const { row } of top)
+  row.style.background = "#ffe08a";
+return {
+  stories: stories.length,
+  top: top.map(({ row, ...story }) => story),
+};`;
+
 // --- What the user types and what the scripted model does ------------------------------------------------------------
 
 const read = (args = {}) => ({ tool: "read_page", args });
@@ -138,6 +187,7 @@ const TEXT = {
 			table: [["From a table ", "to a chart", ""], "Counts the whole table and highlights matching rows."],
 			issue: [["Show pi ", "the error", ""], "Attach an error screenshot. pi searches and reads matching issues."],
 			explain: [["Ask about ", "what you read", ""], "Clear answers, with a table or a diagram when it helps."],
+			rank: [["One script, ", "the whole page", ""], "It reads every story, ranks them, and marks the top 5."],
 			chart: [["Read ", "charts", ", too"], "When the answer is in a picture, pi takes a screenshot."],
 			control: [["You decide ", "when it acts", ""], "pi clicks or types on a site only after you allow it."],
 			translate: [
@@ -163,10 +213,15 @@ const TEXT = {
 		explain: {
 			ask: "Explain this simply, with a diagram.",
 			answer: [
-				"- **Fresh** (under `max-age`): used as is.",
-				"- **Stale**: rechecked; **304** if unchanged.",
-				'```mermaid\nsequenceDiagram\n  participant Browser\n  participant Cache\n  participant Server\n  Cache->>Server: If-None-Match: "v7"\n  Server-->>Cache: 304 Not Modified\n  Cache-->>Browser: style.css, fresh again\n```',
+				"**Fresh** until older than `max-age`; then **stale**:",
+				"```mermaid\nflowchart TD\n  A{{Still fresh?}} -->|Yes| B[Use it, no request]\n  A -->|No, stale| C[Ask the server]\n  C -->|304 Not Modified| D[Reuse it]\n  C -->|200 OK| E[Use the new copy]\n  classDef fresh fill:#dcf3e4,stroke:#2f9e5b,color:#14361f\n  classDef stale fill:#fdebd3,stroke:#d9822b,color:#4a2a05\n  classDef fetched fill:#e1e9fd,stroke:#3158d8,color:#14224d\n  class B,D fresh\n  class C stale\n  class E fetched\n```",
 			].join("\n\n"),
+		},
+		rank: {
+			ask: "Which 5 stories on this page have the most comments? Highlight them.",
+			summary: "Rank the stories by comments; mark the top 5",
+			head: "| Story | Points | Comments |\n| --- | --: | --: |",
+			answer: (stories) => `The most discussed of **${stories}**, marked on the page:`,
 		},
 		chart: {
 			ask: "Which of these raised its share of renewables the most since 2010?",
@@ -185,11 +240,15 @@ const TEXT = {
 			template:
 				"Translate the text below into {{language}}, then embed the translation back into the original page, paragraph by paragraph: each translated paragraph right below its original. Keep the original text.\n\nStyle each translation as a plain paragraph in the page's own typography: no border, vertical line, quote formatting, background color, or other decoration.\n\n{{selection}}",
 			summary: "Put each translation under its paragraph",
+			url: AURORA,
+			lead: AURORA_LEAD,
+			// Above the paragraph: the article's tab bar shows whole, and the contents button that floats at the top
+			// left stays clear of the first word.
+			above: 70,
 			lines: [
-				"The polar aurora, also called the “aurora borealis” in the northern hemisphere and the “aurora australis” in the southern hemisphere, is a luminous atmospheric phenomenon: extremely colourful veils across the night sky, with green dominant at latitudes near the poles.",
-				"Caused by the interaction between charged particles of the solar wind and the upper atmosphere, auroras occur mainly in regions near the magnetic poles, in a ring-shaped band aptly called the “auroral zone” (between 65° and 75° of latitude).",
+				"An aurora is a plasma phenomenon that occurs mainly at high latitudes on planets with a magnetic field. On Earth, the auroral zone lies 10° to 20° from the geomagnetic poles and is about 3° to 6° of latitude wide. During magnetic storms, auroras also appear at lower latitudes.",
 			],
-			answer: "Done: both paragraphs are translated into English, each right under its original.",
+			answer: "Done: the paragraph is translated into English, right under its original.",
 		},
 	},
 	zh_CN: {
@@ -197,6 +256,7 @@ const TEXT = {
 			table: [["从表格", "到图表", ""], "读完整张表，按年代统计，并标出符合条件的行。"],
 			issue: [["把报错", "截图", "交给 pi"], "拖入报错截图，pi 搜索相关 issue，核对修复说明。"],
 			explain: [["读到哪，", "问到哪", ""], "回答清楚，需要时配上表格或图。"],
+			rank: [["一段脚本，", "读完整页", ""], "读取每条新闻，排好顺序，并在页面上标出前 5 条。"],
 			chart: [["", "图表", "也能读"], "答案在图里时，pi 会截图细看。"],
 			control: [["动手之前，", "先问你", ""], "pi 在网站上点击或输入之前，先征得你的同意。"],
 			translate: [["", "页面内", "翻译"], "常用提示词：每段译文紧跟在对应原文的下方。"],
@@ -219,10 +279,15 @@ const TEXT = {
 		explain: {
 			ask: "用中文简单解释这段话，并画一张图。",
 			answer: [
-				"- **新鲜**（未超过 `max-age`）：直接使用。",
-				"- **过期**：先问服务器，没变就回 **304**。",
-				'```mermaid\nsequenceDiagram\n  participant B as 浏览器\n  participant C as 缓存\n  participant S as 服务器\n  C->>S: If-None-Match: "v7"\n  S-->>C: 304 Not Modified\n  C-->>B: style.css，重新变新鲜\n```',
+				"超过 `max-age` 前是**新鲜**的，之后就**过期**了：",
+				"```mermaid\nflowchart TD\n  A{{还新鲜吗？}} -->|是| B[直接用，不发请求]\n  A -->|否，已过期| C[问服务器]\n  C -->|304 Not Modified| D[继续用旧副本]\n  C -->|200 OK| E[换用新副本]\n  classDef fresh fill:#dcf3e4,stroke:#2f9e5b,color:#14361f\n  classDef stale fill:#fdebd3,stroke:#d9822b,color:#4a2a05\n  classDef fetched fill:#e1e9fd,stroke:#3158d8,color:#14224d\n  class B,D fresh\n  class C stale\n  class E fetched\n```",
 			].join("\n\n"),
+		},
+		rank: {
+			ask: "这一页里评论最多的 5 条新闻是哪些？在页面上标出来。",
+			summary: "按评论数给新闻排序，标出前 5 条",
+			head: "| 新闻 | 点数 | 评论 |\n| --- | --: | --: |",
+			answer: (stories) => `**${stories}** 条里讨论最多的 5 条，已在页面上标出：`,
 		},
 		chart: {
 			ask: "2010 年以来，这几个国家里谁的可再生能源占比涨得最多？",
@@ -240,6 +305,10 @@ const TEXT = {
 			template:
 				"把下面的内容译成中文，再逐段放回原网页：每段译文紧跟在对应的原文段落下方，保留原文。\n\n译文使用网页正文的普通段落样式，不要加左边框、竖线、引用样式、背景色或其他装饰。\n\n{{selection}}",
 			summary: "把每段译文放到原文下方",
+			url: AURORE,
+			lead: AURORE_LEAD,
+			// Above the paragraph: the contents button that floats at the top left stays clear of its first word.
+			above: 64,
 			lines: [
 				"极光在北半球称为“北极光”，在南半球称为“南极光”，是一种大气发光现象：夜空中出现色彩极为艳丽的光幕，在靠近两极的纬度上以绿色为主。",
 				"极光由太阳风中的带电粒子与高层大气相互作用产生，主要出现在磁极附近，分布在一个环形地带里，这个地带也因此被称为“极光带”（纬度 65° 至 75° 之间）。",
@@ -566,9 +635,10 @@ async function renewables() {
 }
 
 const SCENES = process.env.SCENES?.split(",");
+let hnOpened = 0;
 const scene = (name) => SCENES === undefined || SCENES.includes(name);
 
-/** The five shots in `locale`'s interface, written as `<prefix><scene>.png`. */
+/** The shots in `locale`'s interface, written as `<prefix><scene>.png`. */
 async function shots(locale, lang, prefix) {
 	const text = TEXT[locale];
 	const chrome = await launch(localized(locale), `profile-${locale}`, lang);
@@ -661,6 +731,34 @@ async function shots(locale, lang, prefix) {
 		await save(explain.page, explain.panel, { head: text.heads.explain, file: `${prefix}explain.png` });
 	}
 
+	if (scene("rank")) {
+		// Rank: one script reads every story on Hacker News's front page, ranks them by comments, and marks the top 5;
+		// the table is what the script returned. The page is loaded once: no other page of the site is requested.
+		// Hacker News asks for 30 s between automated requests: the other language's run opened it too.
+		await sleep(Math.max(0, hnOpened + 30_000 - Date.now()));
+		hnOpened = Date.now();
+		const rank = await open(chrome, HN);
+		await play([{ tool: "run_script", args: { code: rankCode, summary: text.rank.summary } }, { later: true }]);
+		await send(chrome, rank.panel, text.rank.ask, finished(rank.panel, ".msg.assistant table"), "the stories", {
+			later: async () => {
+				const ran = await lastResult(chrome);
+				if (!ran.ok) throw Error(`The script failed: ${ran.error.message}`);
+				const { stories, top } = ran.value;
+				const counts = top.flatMap(({ points, comments }) => [points, comments]);
+				if (stories < 20 || top.length !== 5 || !counts.every(Number.isInteger))
+					throw Error(
+						`Unexpected result: ${JSON.stringify(ran.value)}\n${await rank.page.evaluate(() => document.body.textContent.slice(0, 500))}`,
+					);
+				const cut = (title) => (title.length > 26 ? `${title.slice(0, 25).trimEnd()}…` : title);
+				const cell = (title) => cut(title).replace(/[|\\*_`[\]<>]/g, (c) => `\\${c}`);
+				const rows = top.map((story) => `| ${cell(story.title)} | ${story.points} | ${story.comments} |`);
+				return [text.rank.answer(stories), "", text.rank.head, ...rows].join("\n");
+			},
+		});
+		await rank.page.evaluate(() => scrollTo(0, 0));
+		await save(rank.page, rank.panel, { head: text.heads.rank, file: `${prefix}rank.png` });
+	}
+
 	if (scene("chart")) {
 		// Chart: pi takes a screenshot of the chart and reads the trend off it; the chart's data gives the numbers, rounded
 		// as one reads them off a line.
@@ -713,9 +811,9 @@ async function shots(locale, lang, prefix) {
 	}
 
 	if (scene("translate")) {
-		// Translate: the README's saved prompt, from the menu for the selected lead of a French article; one script puts
-		// each translation under its paragraph, as the prompt asks.
-		const { name, template, summary, lines, answer } = text.translate;
+		// Translate: the README's saved prompt, from the menu for the selected lead of an article; one script puts each
+		// translation under its paragraph, as the prompt asks.
+		const { name, template, summary, url, lead, above, lines, answer } = text.translate;
 		await chrome.worker.evaluate(
 			({ name, template }) =>
 				globalThis.__piShots.saveSettings({
@@ -723,23 +821,24 @@ async function shots(locale, lang, prefix) {
 				}),
 			{ name, template },
 		);
-		/** The lead below the contents button that floats at the top left; with `select`, the lead selected. Gives the selection's text. */
+		/** The lead, `above` px below the top; with `select`, the lead selected. Gives the selection's text. */
 		const show = (page, select) =>
 			page.evaluate(
-				({ lead, select }) => {
+				({ lead, above, select }) => {
 					const paragraphs = [...document.querySelectorAll("#mw-content-text p")];
 					const plain = (text) =>
 						text
 							.replace(/\[\d+\]/g, "")
 							.replace(/\s+/g, " ")
 							.trim();
-					const [first, last] = lead.map(({ start, text }) => {
+					const matched = lead.map(({ start, text }) => {
 						const found = paragraphs.find((p) => p.textContent.trim().startsWith(start));
 						if (found === undefined || plain(found.textContent) !== plain(text))
 							throw Error(`The article's lead has changed: ${found?.textContent ?? start}`);
 						return found;
 					});
-					scrollTo(0, first.getBoundingClientRect().top + scrollY - 64);
+					const [first, last] = [matched[0], matched.at(-1)];
+					scrollTo(0, first.getBoundingClientRect().top + scrollY - above);
 					getSelection().removeAllRanges();
 					if (!select) return "";
 					const range = document.createRange();
@@ -748,11 +847,11 @@ async function shots(locale, lang, prefix) {
 					getSelection().addRange(range);
 					return getSelection().toString();
 				},
-				{ lead: LEAD, select },
+				{ lead, above, select },
 			);
-		const translate = await open(chrome, AURORE, (page) => show(page, true));
+		const translate = await open(chrome, url, (page) => show(page, true));
 		const code = `const translations = ${JSON.stringify(
-			LEAD.map(({ start }, i) => [start, lines[i]]),
+			lead.map(({ start }, i) => [start, lines[i]]),
 			null,
 			2,
 		)};
@@ -789,7 +888,7 @@ return { placed };`;
 			},
 			later: async () => {
 				const ran = await lastResult(chrome);
-				if (!ran.ok || ran.value.placed !== LEAD.length) throw Error(`The script placed: ${JSON.stringify(ran)}`);
+				if (!ran.ok || ran.value.placed !== lead.length) throw Error(`The script placed: ${JSON.stringify(ran)}`);
 				return answer;
 			},
 		});
