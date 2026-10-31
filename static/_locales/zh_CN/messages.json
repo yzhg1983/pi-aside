@@ -1208,6 +1208,33 @@
 	"toolFailed": {
 		"message": "$1 执行失败"
 	},
+	"waitOnPage": {
+		"message": "等待页面"
+	},
+	"listTabs": {
+		"message": "列出标签页"
+	},
+	"stepStopped": {
+		"message": "$1：已停止"
+	},
+	"stepInterrupted": {
+		"message": "$1：已中断"
+	},
+	"stepNotStarted": {
+		"message": "$1：未开始"
+	},
+	"reasonStopped": {
+		"message": "这一步还没完成就停止了。"
+	},
+	"reasonStoppedActed": {
+		"message": "这一步还没完成就停止了。页面可能已经被改动。"
+	},
+	"reasonInterrupted": {
+		"message": "被重启中断，可能已执行了一部分。"
+	},
+	"reasonNotStarted": {
+		"message": "未开始：任务因重启而结束。"
+	},
 	"actedOnPage": {
 		"message": "已操作页面"
 	},

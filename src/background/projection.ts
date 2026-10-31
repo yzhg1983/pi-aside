@@ -452,15 +452,73 @@ function projectEntry(
 			return { ...base, role: "notice", text: t("newContextNotice") };
 		default:
 			return message?.role === "toolResult"
-				? toolNotice({ ...base, step: true }, message, sources.get(message.toolCallId))
+				? toolNotice({ ...base, step: true }, message, sources.get(message.toolCallId), endOf(entry.data))
 				: undefined;
 	}
 }
 
 /**
+ * How pi-durable ended a tool call that did not finish, from the result entry's diagnostics: stopped while it ran or
+ * before it started (`aborted`), cut by a restart while it ran (`interrupted`), or not started before a restart ended its
+ * task (`abandoned`). Null for a call that finished, failed on its own, or was blocked.
+ */
+type Ended = "aborted" | "interrupted" | "abandoned";
+
+function endOf(data: JsonValue | undefined): Ended | null {
+	const diagnostics = typeof data === "object" && data !== null && !Array.isArray(data) ? data.diagnostics : undefined;
+	if (!Array.isArray(diagnostics)) return null;
+	for (const diagnostic of diagnostics) {
+		if (typeof diagnostic !== "object" || diagnostic === null || Array.isArray(diagnostic)) continue;
+		const { severity, code } = diagnostic;
+		if (severity === "error" && (code === "aborted" || code === "interrupted" || code === "abandoned")) return code;
+	}
+	return null;
+}
+
+/** The tools by their names in Settings, for a step without the model's summary; another tool keeps its own name. */
+const TOOL_LABELS: Readonly<Record<string, () => string>> = {
+	read_page: () => t("readPage"),
+	observe_page: () => t("observePage"),
+	act_on_page: () => t("actPage"),
+	run_script: () => t("runScript"),
+	screenshot_page: () => t("screenshotPage"),
+	wait_on_page: () => t("waitOnPage"),
+	list_tabs: () => t("listTabs"),
+};
+
+/**
+ * A tool call pi-durable ended: its line, and why, in the interface language; the model got pi-durable's own text. A
+ * stopped action or script may have changed the page already: Stop does not undo it.
+ */
+function endedNotice(
+	base: Parameters<typeof toolNotice>[0],
+	result: ToolResultMessage,
+	summary: string | null,
+	code: string | null,
+	ended: Ended,
+): ChatEntry {
+	const label = TOOL_LABELS[result.toolName]?.() ?? result.toolName;
+	const acted = result.toolName === "act_on_page" || result.toolName === "run_script";
+	const [line, reason] =
+		ended === "aborted"
+			? [t("stepStopped", [label]), acted ? t("reasonStoppedActed") : t("reasonStopped")]
+			: ended === "interrupted"
+				? [t("stepInterrupted", [label]), t("reasonInterrupted")]
+				: [t("stepNotStarted", [label]), t("reasonNotStarted")];
+	return {
+		...base,
+		role: "notice",
+		text: summary ?? line,
+		error: reason,
+		detail: code,
+		...(acted && ended !== "abandoned" ? { acted: true as const } : {}),
+	};
+}
+
+/**
  * A tool's line: an action's summary, from the model, with what pi did under it (design 6.23), so a misleading summary
  * sits next to the real action; a read or an observe names the page. `source`: the call's arguments, for a result
- * without details.
+ * without details. `ended`: how pi-durable ended a call that did not finish.
  */
 function toolNotice(
 	base: Pick<
@@ -469,6 +527,7 @@ function toolNotice(
 	>,
 	result: ToolResultMessage,
 	source: Record<string, unknown> | undefined,
+	ended: Ended | null,
 ): ChatEntry {
 	const details = result.details as
 		| {
@@ -504,6 +563,7 @@ function toolNotice(
 			: result.toolName === "run_script" && typeof source?.code === "string"
 				? codePreview(source.code)
 				: null;
+	if (result.isError && ended !== null) return endedNotice(base, result, summary, code, ended);
 	if (result.isError) {
 		// A script that threw: its error rather than the whole result.
 		const text =

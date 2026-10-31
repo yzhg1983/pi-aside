@@ -233,7 +233,10 @@ it("Stop ends a wait at once", async () => {
 	await vi.waitFor(() => expect(calls.media.length).toBeGreaterThan(2));
 	await tab.abort();
 	await idle();
-	expect(tab.chat.entries.at(-1)).toMatchObject({ role: "notice", error: expect.stringMatching(/aborted/) });
+	expect(tab.chat.entries.at(-1)).toMatchObject({
+		role: "notice",
+		error: expect.stringMatching(/^Stopped before this step finished\./),
+	});
 	const checks = calls.media.length;
 	await new Promise((resolve) => setTimeout(resolve, 30));
 	expect(calls.media.length).toBe(checks);

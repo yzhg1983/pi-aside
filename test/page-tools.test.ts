@@ -862,7 +862,10 @@ it("Stop ends a page lookup that hangs after an action, and the tab is free agai
 	await vi.waitFor(() => expect(calls.act).toHaveLength(1));
 	await tab.abort();
 	await idle();
-	expect(tab.chat.entries.at(-1)).toMatchObject({ role: "notice", error: expect.stringMatching(/aborted/) });
+	expect(tab.chat.entries.at(-1)).toMatchObject({
+		role: "notice",
+		error: expect.stringMatching(/^Stopped before this step finished\./),
+	});
 	restore();
 	faux.setResponses([step(call(ACT_ON_PAGE, { action: "scroll", direction: "up" })), answer()]);
 	await other.send(withPage("r2", "Scroll", page));
@@ -913,7 +916,10 @@ it("one chat acts on a tab at a time; Stop ends the wait, and the tab is free ag
 
 	await tab.abort();
 	await idle();
-	expect(tab.chat.entries.at(-1)).toMatchObject({ role: "notice", error: expect.stringMatching(/aborted/) });
+	expect(tab.chat.entries.at(-1)).toMatchObject({
+		role: "notice",
+		error: expect.stringMatching(/^Stopped before this step finished\./),
+	});
 	held.resolve(null);
 	actWith(undefined);
 	faux.setResponses([step(call(ACT_ON_PAGE, { action: "scroll", direction: "up" })), answer()]);
@@ -1917,7 +1923,7 @@ it("a script holds the tab and drops the run's snapshots; Stop ends the wait, no
 		role: "notice",
 		text: "Do the work",
 		detail: "await work()",
-		error: expect.stringMatching(/aborted/),
+		error: expect.stringMatching(/^Stopped before this step finished\./),
 	});
 	scriptWith(undefined);
 	faux.setResponses([step(call(RUN_SCRIPT, { code: "1" })), answer()]);
@@ -2436,7 +2442,10 @@ it("captures take turns 500 ms apart across chats; Chrome's quota error retries 
 	await vi.waitFor(() => expect(queued).toHaveBeenCalledTimes(2));
 	await other.abort();
 	await idle(other);
-	expect(other.chat.entries.at(-1)).toMatchObject({ role: "notice", error: expect.stringMatching(/aborted/) });
+	expect(other.chat.entries.at(-1)).toMatchObject({
+		role: "notice",
+		error: expect.stringMatching(/^Stopped before this step finished\./),
+	});
 	held.resolve();
 	await idle();
 	expect(calls.capture).toEqual([1]);
@@ -2593,7 +2602,10 @@ it("encoding ends at the page timeout and on Stop; an image that comes late is d
 	await encoding.promise;
 	await slow.tab.abort();
 	await slow.idle();
-	expect(slow.tab.chat.entries.at(-1)).toMatchObject({ role: "notice", error: expect.stringMatching(/aborted/) });
+	expect(slow.tab.chat.entries.at(-1)).toMatchObject({
+		role: "notice",
+		error: expect.stringMatching(/^Stopped before this step finished\./),
+	});
 	held.resolve(IMAGE);
 	await Promise.resolve();
 	expect(images).toEqual([]);
@@ -2685,7 +2697,10 @@ it("a scroll is checked like an action: the tab in front, Off, Stop, one chat at
 	await tab.abort();
 	placed.resolve();
 	await idle();
-	expect(tab.chat.entries.at(-1)).toMatchObject({ role: "notice", error: expect.stringMatching(/aborted/) });
+	expect(tab.chat.entries.at(-1)).toMatchObject({
+		role: "notice",
+		error: expect.stringMatching(/^Stopped before this step finished\./),
+	});
 	deps.access.tabState = tabState;
 	expect(calls.scroll).toEqual([]);
 	expect(calls.capture).toEqual([]);

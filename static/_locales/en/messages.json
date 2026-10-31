@@ -1208,6 +1208,33 @@
 	"toolFailed": {
 		"message": "$1 failed"
 	},
+	"waitOnPage": {
+		"message": "Wait on page"
+	},
+	"listTabs": {
+		"message": "List tabs"
+	},
+	"stepStopped": {
+		"message": "$1: stopped"
+	},
+	"stepInterrupted": {
+		"message": "$1: interrupted"
+	},
+	"stepNotStarted": {
+		"message": "$1: not started"
+	},
+	"reasonStopped": {
+		"message": "Stopped before this step finished."
+	},
+	"reasonStoppedActed": {
+		"message": "Stopped before this step finished. Page changes may already have been made."
+	},
+	"reasonInterrupted": {
+		"message": "Interrupted by a restart; it may have partly run."
+	},
+	"reasonNotStarted": {
+		"message": "Not started: the task ended with a restart."
+	},
 	"actedOnPage": {
 		"message": "Acted on the page"
 	},

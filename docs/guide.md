@@ -55,8 +55,10 @@ nothing happening, on a crash, or during an update, and everything in its memory
    opening the panel, starts it again.
 4. **The task carries on from its last saved step.** A request to the model that was in flight is sent again, and the
    provider bills it again. A click or a script that was in flight is not repeated blindly: the model is told it may or
-   may not have happened, and to check the page before trying again. Steps marked safe to replay in the table above, and
-   listing tabs, simply run again.
+   may not have happened, and to check the page before trying again; in the chat, that step says it was interrupted
+   and may have partly run. Steps marked safe to replay in the table above, and listing tabs, simply run again. A step
+   that Stop cut short says so too, and a click or a script adds that the page may already have changed: Stop does
+   not undo it.
 5. **Limits.** If the same task's worker stops a second time, pi stops it and shows "Interrupted" with Retry, so a page
    that keeps crashing pi cannot cause endless paid requests. After a browser restart, an unfinished task is not
    resumed: it shows "Interrupted", and nothing is sent.

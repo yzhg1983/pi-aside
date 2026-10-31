@@ -321,6 +321,70 @@ it("puts a script's code and what an action did in detail (design 6.23)", () => 
 	expect(chat.entries.slice(2).map((entry) => "code" in entry)).toEqual([false, false]);
 });
 
+it("says in plain words how a stop or a restart ended a step; the model's text and other failures stay as they are", () => {
+	// As pi-durable writes them: no output, its text for the model, and the code in the entry's data.
+	const ended = (id: number, toolName: string, code: string, message: string, details?: unknown): Entry => ({
+		...toolResult(id, true, `<harness>\n[error] ${message}\n</harness>`, details, toolName),
+		data: { diagnostics: [{ severity: "error", code, message }] },
+	});
+	const chat = projectChat(
+		view([
+			ended(1, "wait_on_page", "aborted", "Tool wait_on_page was aborted"),
+			ended(2, "act_on_page", "aborted", "Tool act_on_page was aborted", { summary: "Open the map" }),
+			ended(
+				3,
+				"run_script",
+				"interrupted",
+				"Tool run_script was interrupted by a restart and may have partially run",
+				{
+					summary: "Count rows",
+					code: "rows.length",
+				},
+			),
+			ended(4, "read_page", "abandoned", "Tool read_page was not started: its caller ended with a restart"),
+			ended(5, "web_search", "aborted", "Tool web_search was aborted"),
+			// Blocked by pi's own hook: not an ending, so its text stays.
+			ended(6, "run_script", "blocked", "Tool call blocked: The user denied this script"),
+		]),
+	);
+	expect(chat.entries).toEqual([
+		{ ...step, id: 1, role: "notice", text: "Wait on page: stopped", error: "Stopped before this step finished." },
+		{
+			...step,
+			id: 2,
+			role: "notice",
+			text: "Open the map",
+			error: "Stopped before this step finished. Page changes may already have been made.",
+			acted: true,
+		},
+		{
+			...step,
+			id: 3,
+			role: "notice",
+			text: "Count rows",
+			detail: "rows.length",
+			error: "Interrupted by a restart; it may have partly run.",
+			acted: true,
+		},
+		{
+			...step,
+			id: 4,
+			role: "notice",
+			text: "Read page: not started",
+			error: "Not started: the task ended with a restart.",
+		},
+		{ ...step, id: 5, role: "notice", text: "web_search: stopped", error: "Stopped before this step finished." },
+		{
+			...step,
+			id: 6,
+			role: "notice",
+			text: "run_script failed",
+			error: "<harness>\n[error] Tool call blocked: The user denied this script\n</harness>",
+			acted: true,
+		},
+	]);
+});
+
 it("says a navigation in the interface language, and keeps what the model read after it", () => {
 	const zh = { "Went to $1": "已前往 $1", "Reloaded the page": "已重新加载页面" } as Record<string, string>;
 	vi.stubGlobal("chrome", {
