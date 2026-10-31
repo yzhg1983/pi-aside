@@ -551,6 +551,12 @@
 	"actWarning": {
 		"message": "It may click and type there by itself, also on buttons such as Submit or Delete."
 	},
+	"actForChat": {
+		"message": "Allow for this chat"
+	},
+	"actForChatTip": {
+		"message": "Let pi act on $1 in this chat's later answers too, without asking, until a new chat or Chrome closes. Scripts still ask."
+	},
 	"onAllSites": {
 		"message": "On all sites"
 	},

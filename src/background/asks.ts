@@ -1,7 +1,8 @@
 // The Ask cards of the page tools, and what their answers allow (design 6.23, 6.28), in worker memory: a worker restart
-// while a card waits shows the card again. An Allow to act lasts for one answer; a Run is for one tool task, and "For
-// this answer" adds the site's next scripts in that answer, "For this chat" those in the chat's later answers too; a
-// site card grants nothing here: Chrome holds that grant.
+// while a card waits shows the card again. An Allow to act lasts for one answer, and "For this chat" adds the chat's
+// later answers on that site; a Run is for one tool task, and "For this answer" adds the site's next scripts in that
+// answer, "For this chat" those in the chat's later answers too; a site card grants nothing here: Chrome holds that
+// grant.
 
 import type { AskCard } from "../shared/protocol.ts";
 
@@ -18,12 +19,16 @@ export type AskRequest = { conversationId: number; run: number } & (
 	| { kind: "script"; origin: string; taskId: string; documentId: string; code: string; summary: string | null }
 );
 
-/** How long a script card's Run lasts: this script, the rest of the answer, or the chat (design 6.23). */
+/**
+ * How long a card's Allow lasts (design 6.23). A script card: this script, the rest of the answer, or the chat. An act
+ * card: the answer, or the chat ("once" and "answer" are the same there).
+ */
 export type RunScope = "once" | "answer" | "chat";
 
 /**
- * Where "For this chat" is kept: the worker stops when idle, and with it its memory, so a chat's allowance must outlive
- * it. `chrome.storage.session` keeps it until Chrome closes (`session.ts`); tests keep it in memory.
+ * Where "For this chat" is kept, as `${kind} ${conversationId} ${origin}` keys: the worker stops when idle, and with it
+ * its memory, so a chat's allowance must outlive it. `chrome.storage.session` keeps it until Chrome closes
+ * (`session.ts`); tests keep it in memory.
  */
 export type ChatGrantStore = { get(): Promise<string[]>; set(keys: string[]): Promise<void> };
 
@@ -52,7 +57,10 @@ export class Asks {
 	readonly #grants = new Set<string>();
 	/** `${conversationId} ${run} ${origin}`: scripts allowed. Apart from acting: an Allow to act never runs a script. */
 	readonly #scripts = new Set<string>();
-	/** `${conversationId} ${origin}`: scripts allowed in every answer of the chat, with those stored merged in. */
+	/**
+	 * `act ${conversationId} ${origin}` or `script ${conversationId} ${origin}`: acting or scripts allowed in every answer
+	 * of the chat, with those stored merged in. The two kinds stay apart, as in an answer.
+	 */
 	readonly #chats = new Set<string>();
 	#loaded: Promise<void> | undefined;
 	readonly #store: ChatGrantStore;
@@ -85,16 +93,26 @@ export class Asks {
 			.catch(() => {});
 	}
 
-	/** Whether the user allowed acting on `origin` in this run of the chat (design 6.23). */
+	/** Reads the stored chat allowances, once per worker: `granted()` sees them after it. */
+	ready(): Promise<void> {
+		return this.#load();
+	}
+
+	/**
+	 * Whether the user allowed acting on `origin` for the rest of this run of the chat, or for the chat (design 6.23).
+	 * Synchronous, for the check right before an action is sent; the hook before it called `ready()`.
+	 */
 	granted(conversationId: number, run: number, origin: string): boolean {
-		return this.#grants.has(`${conversationId} ${run} ${origin}`);
+		return (
+			this.#grants.has(`${conversationId} ${run} ${origin}`) || this.#chats.has(`act ${conversationId} ${origin}`)
+		);
 	}
 
 	/** Whether the user allowed scripts on `origin` for the rest of this run of the chat, or for the chat (design 6.23). */
 	async scriptsGranted(conversationId: number, run: number, origin: string): Promise<boolean> {
 		if (this.#scripts.has(`${conversationId} ${run} ${origin}`)) return true;
 		await this.#load();
-		return this.#chats.has(`${conversationId} ${origin}`);
+		return this.#chats.has(`script ${conversationId} ${origin}`);
 	}
 
 	/**
@@ -187,9 +205,9 @@ export class Asks {
 
 	/**
 	 * The user's answer; false when the card is gone. Allow covers acting on an act card's origin for the rest of the
-	 * run, and lets a script card's call run its code in the card's document; `scope` "answer" also lets the site's later
-	 * scripts in the run go without a card, and "chat" those in the chat's later runs. A site card's Allow grants nothing
-	 * here: Chrome's access, which the panel requested, is the grant.
+	 * run, and `scope` "chat" in the chat's later runs too. On a script card it lets the call run its code in the card's
+	 * document; `scope` "answer" also lets the site's later scripts in the run go without a card, and "chat" those in the
+	 * chat's later runs. A site card's Allow grants nothing here: Chrome's access, which the panel requested, is the grant.
 	 */
 	answer(id: string, allow: boolean, scope: RunScope = "once"): boolean {
 		const waiting = this.#waiting.get(id);
@@ -201,10 +219,10 @@ export class Asks {
 			else if (request.kind === "script") {
 				this.#run(request, signal);
 				if (scope === "answer") this.#scripts.add(`${request.conversationId} ${request.run} ${request.origin}`);
-				if (scope === "chat") {
-					this.#chats.add(`${request.conversationId} ${request.origin}`);
-					this.#saveChats();
-				}
+			}
+			if (request.kind !== "site" && scope === "chat") {
+				this.#chats.add(`${request.kind} ${request.conversationId} ${request.origin}`);
+				this.#saveChats();
 			}
 		}
 		waiting.settle(allow ? "allow" : "deny");
@@ -219,15 +237,18 @@ export class Asks {
 	}
 
 	/**
-	 * The modes changed: every waiting card goes, and its call reads them again. A chat's script allowance goes too: it
-	 * was given under the modes that were.
+	 * The modes changed: every waiting card goes, and its call reads them again. A chat's allowances go too: they were
+	 * given under the modes that were.
 	 */
 	recheck(): void {
 		this.#version++;
 		for (const waiting of [...this.#waiting.values()]) waiting.settle("recheck");
+		// At once in memory, so an action checked after this does not use them; the stored ones once read.
+		const had = this.#chats.size > 0;
+		this.#chats.clear();
 		void this.#load()
 			.then(() => {
-				if (this.#chats.size === 0) return;
+				if (!had && this.#chats.size === 0) return;
 				this.#chats.clear();
 				return this.#store.set([]);
 			})

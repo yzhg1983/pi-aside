@@ -1993,7 +1993,10 @@ to start a new chat.`;
 							if (answer === "allow") return undefined;
 							continue;
 						}
-						// An Allow of acting on the origin lasts for the answer.
+						// An Allow of acting on the origin lasts for the answer, or with "For this chat" for the chat.
+						await deps.asks.ready();
+						// A change of the modes while the allowances loaded took back "For this chat": read them again.
+						if (deps.asks.version !== version) continue;
 						if (deps.asks.granted(conversationId, run, top.origin)) return undefined;
 						const answer = await deps.asks.ask(
 							{ kind: "act", conversationId, run, origin: top.origin },

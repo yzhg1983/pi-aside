@@ -191,7 +191,7 @@ it("holds the storage lock through Harness closure, releases failed opens, and h
 		const order: string[] = [];
 		const set = chrome.storage.session.set as unknown as Mock<(value: Record<string, unknown>) => Promise<void>>;
 		const drop = vi.spyOn(IndexedDbStorage, "delete").mockImplementation(async () => {
-			const scriptsCleared = set.mock.calls.some(([value]) => JSON.stringify(value) === '{"chatScripts":[]}');
+			const scriptsCleared = set.mock.calls.some(([value]) => JSON.stringify(value) === '{"chatGrants":[]}');
 			order.push(`delete held=${fixture.state.held} tabs=${tabs.get(10) ?? "cleared"} scripts=${scriptsCleared}`);
 		});
 		openHarness.mockImplementation(async () => {
@@ -213,7 +213,7 @@ it("holds the storage lock through Harness closure, releases failed opens, and h
 		// entry left over would reach another chat.
 		drop.mockClear();
 		const save = set.getMockImplementation()!;
-		for (const failing of ["tabs", "chatScripts"]) {
+		for (const failing of ["tabs", "chatGrants"]) {
 			await tabs.update((entries) => entries.set(10, { ...bound }));
 			set.mockImplementation(async (value) => {
 				if (failing in value) throw Error(`${failing} not saved`);

@@ -6,7 +6,10 @@ the rest.
 ## How the agent works
 
 pi gives the model tools for the tab you are on. The model looks at the page, acts, checks what happened, and repeats
-until it can answer. Settings > Tools turns each tool Off or On; Act on page and Run script can also Ask:
+until it can answer. Settings > Tools turns each tool Off or On; Act on page and Run script can also Ask, with a card in
+the chat. Allow lets pi act on that site until the answer ends; **Allow for this chat** also covers the chat's later
+answers there, until a new chat or Chrome closes. A script card shows the code, with Run, **For this answer**, and
+**For this chat**:
 
 | Tool | What it does | Default | Safe to replay |
 | --- | --- | --- | --- |

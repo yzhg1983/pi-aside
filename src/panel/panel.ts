@@ -1893,6 +1893,7 @@ function askNode(card: AskCard): HTMLElement {
 		];
 	} else if (card.kind === "act") {
 		button(t("allow"), "allow", true);
+		button(t("actForChat"), "chat").title = t("actForChatTip", [hostOf(card.origin)]);
 		button(t("deny"), "deny");
 		question = [node("p", "", t("actQuestion", [card.origin]), node("span", "", t("actWarning")))];
 	} else {

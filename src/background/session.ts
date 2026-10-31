@@ -74,14 +74,14 @@ export const activeWork = new ActiveWork(changed);
 /** Chrome refused a write because the extension's storage is full (design 8). */
 export const storageFull = new StorageFull(chrome.storage.session, changed);
 /** The Ask cards of act_on_page, and the Allows of running answers. */
-/** "For this chat" script allowances: `chrome.storage.session` outlives the worker and empties when Chrome closes. */
-const CHAT_SCRIPTS_KEY = "chatScripts";
+/** "For this chat" allowances: `chrome.storage.session` outlives the worker and empties when Chrome closes. */
+const CHAT_GRANTS_KEY = "chatGrants";
 export const asks = new Asks(changed, {
 	async get() {
-		const stored = (await chrome.storage.session.get(CHAT_SCRIPTS_KEY))[CHAT_SCRIPTS_KEY];
+		const stored = (await chrome.storage.session.get(CHAT_GRANTS_KEY))[CHAT_GRANTS_KEY];
 		return Array.isArray(stored) ? stored.filter((key): key is string => typeof key === "string") : [];
 	},
-	set: (keys) => chrome.storage.session.set({ [CHAT_SCRIPTS_KEY]: keys }),
+	set: (keys) => chrome.storage.session.set({ [CHAT_GRANTS_KEY]: keys }),
 });
 
 /** The Harness the page tools read the transcript from, set as soon as it is open. */

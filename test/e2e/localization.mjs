@@ -989,6 +989,46 @@ async function scriptCards() {
 				answer: reply,
 			});
 		}
+		// The act card: Allow for this chat names the site in its tooltip, and each button sends its reply.
+		for (const [key, reply] of [
+			["allow", "allow"],
+			["actForChat", "chat"],
+			["deny", "deny"],
+		]) {
+			const askId = `locale-script-act-${reply}`;
+			await panel.evaluate(
+				(askId) =>
+					document
+						.querySelector("#locale-script-fixture")
+						.replaceChildren(
+							globalThis.__localeCard.node({ id: askId, kind: "act", origin: "https://fixture.invalid" }),
+						),
+				askId,
+			);
+			const card = panel.locator("#locale-script-fixture .ask");
+			if (reply === "allow") {
+				await sweep("an act card");
+				equal(
+					`${code}: actForChatTip`,
+					await card.getByRole("button", { name: message("actForChat"), exact: true }).getAttribute("title"),
+					message("actForChatTip", ["fixture.invalid"]),
+				);
+			}
+			await card.getByRole("button", { name: message(key), exact: true }).click();
+			await poll(
+				() => panel.evaluate((askId) => globalThis.__localeCard.replies.some((cmd) => cmd.askId === askId), askId),
+				"act reply wiring",
+			);
+			equal(
+				`${code}: act ${key} sends ${reply}`,
+				await panel.evaluate(() => globalThis.__localeCard.replies.at(-1)),
+				{
+					type: "answer-ask",
+					askId,
+					answer: reply,
+				},
+			);
+		}
 	} finally {
 		await panel.evaluate(() => {
 			const hook = globalThis.__localeCard;

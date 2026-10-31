@@ -356,7 +356,9 @@ them. In On, the two sentences on approving and denying scripts are left out.
 ## The cards and the chat
 
 - Act on page in Ask: "Allow pi to act on <site> in this answer?", then "It may click and type there by itself, also
-  on buttons such as Submit or Delete.", with Allow and Deny. An Allow lasts for the answer.
+  on buttons such as Submit or Delete.", with Allow, Allow for this chat ("Let pi act on <site> in this chat's later
+  answers too, without asking, until a new chat or Chrome closes. Scripts still ask."), and Deny. An Allow lasts for
+  the answer.
 - Run script in Ask: "Run this script on <site>?", then "pi says: <summary>" when there is one, the code in full, and
   "Runs as you on <site>, with your login. It could change things there and send data to other sites." with Run and
   Deny. Under them, "Run, and the next ones without asking:" with For this answer ("Run this script, and pi's next

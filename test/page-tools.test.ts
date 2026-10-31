@@ -3663,6 +3663,47 @@ it('"For this chat" lasts for the chat\'s later answers, on that site only, unti
 	expect(calls.script).toEqual(["1", "2"]);
 });
 
+it('"Allow for this chat" lets pi act on the site in the chat\'s later answers, not scripts, until the modes change (design 6.23)', async () => {
+	const { tab, faux, tabs, calls, config, asks, step, call, answer, idle, cards } = await setup(scripts("ask", "ask"));
+	const scroll = () => step(call(ACT_ON_PAGE, { action: "scroll", direction: "down" }));
+	faux.setResponses([scroll(), answer()]);
+	await tab.send(withPage("r1", "One", attach(1, tabs.get(1)!)));
+	const first = await cards();
+	expect(first).toMatchObject({ kind: "act", origin: "https://a.test" });
+	asks.answer(first.id, true, "chat");
+	await idle();
+
+	// The next answer acts without a card; its script still asks.
+	faux.setResponses([scroll(), step(call(RUN_SCRIPT, { code: "1" })), answer()]);
+	await tab.send(withPage("r2", "Two", attach(1, tabs.get(1)!)));
+	const script = await cards();
+	expect(script).toMatchObject({ kind: "script", code: "1" });
+	expect(calls.act).toHaveLength(2);
+	asks.answer(script.id, false);
+	await idle();
+
+	// Another site in the same chat: a card.
+	tabs.set(1, doc("https://b.test/x"));
+	faux.setResponses([scroll(), answer()]);
+	await tab.send(withPage("r3", "Three", attach(1, tabs.get(1)!)));
+	const other = await cards();
+	expect(other).toMatchObject({ kind: "act", origin: "https://b.test" });
+	asks.answer(other.id, false);
+	await idle();
+
+	// A change of the modes ends it: back on the first site, a card again.
+	tabs.set(1, doc("https://a.test/1"));
+	config.current = scripts("ask", "ask");
+	asks.recheck();
+	faux.setResponses([scroll(), answer()]);
+	await tab.send(withPage("r4", "Four", attach(1, tabs.get(1)!)));
+	const after = await cards();
+	expect(after).toMatchObject({ kind: "act", origin: "https://a.test" });
+	asks.answer(after.id, false);
+	await idle();
+	expect(calls.act).toHaveLength(2);
+});
+
 it('a change of the modes while "For this chat" loads takes it back: the call shows a card (design 6.23)', async () => {
 	const { tab, faux, tabs, calls, asks, step, call, answer, idle, cards } = await setup(scripts("ask", "off"));
 	faux.setResponses([step(call(RUN_SCRIPT, { code: "1" })), answer()]);
@@ -3686,7 +3727,7 @@ it('a change of the modes while "For this chat" loads takes it back: the call sh
 	expect(calls.script).toEqual(["1"]);
 });
 
-it("a chat's script allowance outlives the worker through its store, and an act Allow never counts for scripts", async () => {
+it("a chat's allowances outlive the worker through its store, and an act Allow never counts for scripts", async () => {
 	const store = memoryGrants();
 	const first = new Asks(() => {}, store);
 	const request = {
@@ -3703,7 +3744,7 @@ it("a chat's script allowance outlives the worker through its store, and an act 
 	const card = first.cards(7)[0]!;
 	expect(first.answer(card.id, true, "chat")).toBe(true);
 	await expect(asked).resolves.toBe("allow");
-	await vi.waitFor(async () => expect(await store.get()).toEqual(["7 https://a.test"]));
+	await vi.waitFor(async () => expect(await store.get()).toEqual(["script 7 https://a.test"]));
 
 	// A new worker reads it back: a later answer of chat 7 on the site, not another chat or site.
 	const restarted = new Asks(() => {}, store);
@@ -3711,11 +3752,16 @@ it("a chat's script allowance outlives the worker through its store, and an act 
 	expect(await restarted.scriptsGranted(8, 5, "https://a.test")).toBe(false);
 	expect(await restarted.scriptsGranted(7, 5, "https://b.test")).toBe(false);
 
-	// An Allow to act on a site gives scripts nothing.
+	// An Allow to act on a site, also for the chat, gives scripts nothing; it is stored apart, and read back too.
 	const act = restarted.ask({ kind: "act", conversationId: 9, run: 1, origin: "https://a.test" }, undefined, 0);
-	restarted.answer(restarted.cards(9)[0]!.id, true);
+	restarted.answer(restarted.cards(9)[0]!.id, true, "chat");
 	await act;
 	expect(await restarted.scriptsGranted(9, 1, "https://a.test")).toBe(false);
+	await vi.waitFor(async () => expect(await store.get()).toContain("act 9 https://a.test"));
+	const again = new Asks(() => {}, store);
+	await again.ready();
+	expect(again.granted(9, 4, "https://a.test")).toBe(true);
+	expect(again.granted(7, 4, "https://a.test")).toBe(false);
 
 	// A change of the modes clears the store.
 	restarted.recheck();
