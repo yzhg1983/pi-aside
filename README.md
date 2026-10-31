@@ -171,8 +171,6 @@ Translation extensions usually send a page to a translation service piece by pie
 back translated three different ways. With this prompt, the model reads the whole page and translates it as one text,
 then a script puts each translated paragraph under its original on the page.
 
-![pi-aside beside the Chinese Wikipedia article on auroras: the saved prompt Translate in page put an English translation right under the selected paragraph](docs/images/translate.png)
-
 Add it as "Translate in page", then right-click any article and choose **Translate in page**. `{{selection}}` is the
 whole page when nothing is selected; select a few paragraphs first to translate only those. `{{language}}` is your
 answer language (Settings > Answers).
