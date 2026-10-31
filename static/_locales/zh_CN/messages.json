@@ -555,7 +555,7 @@
 		"message": "本次对话都允许"
 	},
 	"actForChatTip": {
-		"message": "在本次对话之后的回答中，pi 也可以直接在 $1 上操作，不再询问，直到新建对话或关闭 Chrome。脚本仍会询问。"
+		"message": "在本次对话的后续回答中，pi 也可以直接在 $1 上操作，不再询问，直到新建对话或关闭 Chrome。脚本仍会询问。"
 	},
 	"onAllSites": {
 		"message": "在所有网站"
