@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "pi-aside",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "__MSG_manifestDescription__",
 	"default_locale": "en",
 	"homepage_url": "https://github.com/yzhg1983/pi-aside",
