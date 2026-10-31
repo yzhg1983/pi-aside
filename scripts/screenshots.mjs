@@ -10,14 +10,22 @@
 // by side. The pages are loaded live from their sites, in a fresh profile without a login. The model's turns come from
 // pi-ai's in-process faux provider; the page tools and scripts run for real, and the answers take their facts from the
 // live pages and the chart's own data while the script runs. Tools are in Ask, the default: the script clicks Allow
-// as the user would, except in the last scene, which shows the card. No account, key, or paid request is used.
+// as the user would, except in the last scene, which shows the card. Without LIVE, no account, key, or paid request is
+// used.
 // The store shows screenshots at about 595 x 372: the headline is large, and the window runs off the bottom, without
 // the composer, so the panel can be drawn larger.
 // Run: CHROME="/path/to/chrome-for-testing" npm run screenshots   (writes docs/images/)
 // SCENES=table,issue takes only those scenes, and LOCALES=en only that language.
+// LIVE=1 takes the scenes that a real model runs (a diagram on Excalidraw, a summary of an essay, a JSFiddle app, the
+// saved prompt Translate in page, a question about a selection, a JupyterLite notebook, and a GitHub repository's
+// issues) with the test browser's own ChatGPT session: the first run prints a sign-in link for the owner's browser,
+// and ~/.cache/pi-aside-live keeps the session. RECORD=app also records that scene's run as an animated WebP.
 
-import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { createServer } from "node:http";
+import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import { fileURLToPath } from "node:url";
@@ -33,6 +41,10 @@ mkdirSync(ext);
 mkdirSync(out, { recursive: true });
 cpSync(join(repo, "static"), ext, { recursive: true });
 const manifest = JSON.parse(readFileSync(join(ext, "manifest.json"), "utf8"));
+/** Live: ~/.cache/pi-aside-live keeps the test browser's own ChatGPT session, not the owner's pi-aside's, whose refresh
+ * token it would replace. */
+const LIVE = process.env.LIVE === "1" ? join(homedir(), ".cache/pi-aside-live") : undefined;
+const SESSION = LIVE === undefined ? undefined : join(LIVE, "openai.json");
 
 // The image, in px: the headline above a window inset by INSET, from TOP to below the bottom edge; one row of window
 // chrome, then the page and the panel side by side. The panel gets 40% of the window and is drawn at ZOOM.
@@ -190,10 +202,31 @@ const TEXT = {
 			rank: [["One script, ", "the whole page", ""], "It reads every story, ranks them, and marks the top 5."],
 			chart: [["Read ", "charts", ", too"], "When the answer is in a picture, pi takes a screenshot."],
 			control: [["You decide ", "when it acts", ""], "pi clicks or types on a site only after you allow it."],
+			diagram: [["Draw on ", "a whiteboard", ""], "Ask for a diagram, and pi draws it right on Excalidraw."],
+			notebook: [["Analyze data in ", "a notebook", ""], "pi writes the code, runs it, and reads the chart."],
+			summary: [["Summarize ", "any page", ""], "The key points in seconds, then ask a follow-up."],
+			app: [["Build ", "a working app", ""], "pi writes the HTML, CSS, and JavaScript, and it runs right away."],
+			issues: [
+				["Dig into ", "a whole repo", ""],
+				"One script reads 100 issues, charts them, and marks the hottest.",
+			],
 			translate: [
 				["Translate ", "in place", ""],
 				"A saved prompt: each translation goes right under its paragraph.",
 			],
+		},
+		notebook: {
+			ask: "In a new Python notebook, load the Titanic passengers from https://raw.githubusercontent.com/mwaskom/seaborn-data/master/titanic.csv, plot the survival rate by class and sex, and tell me what stands out.",
+		},
+		summary: { ask: "Summarize this page in 5 key points." },
+		app: {
+			ask: "Build a Pomodoro timer here: start, pause, and reset, a progress ring, and a calm color theme. Then run it, and show the result large.",
+		},
+		issues: {
+			ask: "Which areas do the 100 newest open issues fall in? Chart them, and highlight the 5 most-discussed issues on this page.",
+		},
+		diagram: {
+			ask: "Draw a simple, colorful diagram of how a web request reaches the server: browser, CDN, load balancer, app server, cache, and database. Make it big and easy to read.",
 		},
 		table: {
 			ask: "When did these come out? Chart them by decade, and highlight the ones from the 2020s.",
@@ -259,7 +292,21 @@ const TEXT = {
 			rank: [["一段脚本，", "读完整页", ""], "读取每条新闻，排好顺序，并在页面上标出前 5 条。"],
 			chart: [["", "图表", "也能读"], "答案在图里时，pi 会截图细看。"],
 			control: [["动手之前，", "先问你", ""], "pi 在网站上点击或输入之前，先征得你的同意。"],
+			diagram: [["在白板上", "画图", ""], "让 pi 画一张架构图，它直接画在 Excalidraw 上。"],
+			notebook: [["在笔记本里", "分析数据", ""], "pi 写代码、运行，再解读图表。"],
+			summary: [["一键", "总结全文", ""], "几秒读懂要点，还能接着追问。"],
+			app: [["做出", "能用的小应用", ""], "pi 写好 HTML、CSS 和 JavaScript，马上就能运行。"],
+			issues: [["一眼看懂", "整个仓库", ""], "一段脚本读完 100 个 issue，画成图，再标出最热的几个。"],
 			translate: [["", "页面内", "翻译"], "常用提示词：每段译文紧跟在对应原文的下方。"],
+		},
+		notebook: {
+			ask: "新建一个 Python 笔记本，载入泰坦尼克号乘客数据 https://raw.githubusercontent.com/mwaskom/seaborn-data/master/titanic.csv ，按舱位等级和性别画出生还率，再告诉我有什么值得注意的。",
+		},
+		summary: { ask: "用 5 个要点总结这个页面。" },
+		app: { ask: "在这里做一个番茄钟：开始、暂停、重置，带进度圆环和柔和的配色，然后运行它，并把结果放大显示。" },
+		issues: { ask: "最新的 100 个未关闭 issue 分属哪些领域？画个图，并在这个页面上标出讨论最多的 5 个。" },
+		diagram: {
+			ask: "画一张简洁、彩色的图，说明网页请求是怎么到达服务器的：浏览器、CDN、负载均衡、应用服务器、缓存和数据库。画大一点，方便看清。",
 		},
 		table: {
 			ask: "这些电影是哪年上映的？按年代画张图，并把 2020 年代的标出来。",
@@ -319,9 +366,17 @@ const TEXT = {
 };
 
 const entry = join(dir, "entry.mjs");
+const liveEntry = `
+import ${JSON.stringify(join(repo, "src/background/main.ts"))};
+import { saveSettings } from ${JSON.stringify(join(repo, "src/background/settings.ts"))};
+import { PRESETS } from ${JSON.stringify(join(repo, "src/shared/presets.ts"))};
+globalThis.__piShots = { saveSettings, PRESETS };
+`;
 writeFileSync(
 	entry,
-	`
+	LIVE !== undefined
+		? liveEntry
+		: `
 import ${JSON.stringify(join(repo, "src/background/main.ts"))};
 import { models } from ${JSON.stringify(join(repo, "src/background/models.ts"))};
 import { saveSettings } from ${JSON.stringify(join(repo, "src/background/settings.ts"))};
@@ -394,7 +449,11 @@ await build({
 });
 await build({
 	...common,
-	entryPoints: { panel: "src/panel/panel.ts", "diagram-worker": "src/panel/diagram-worker.ts" },
+	entryPoints: {
+		panel: "src/panel/panel.ts",
+		"diagram-worker": "src/panel/diagram-worker.ts",
+		"chatgpt-callback": "src/callback/chatgpt-callback.ts",
+	},
 	outdir: ext,
 });
 
@@ -413,7 +472,62 @@ async function poll(test, name, ms = 30_000) {
  * headline's three parts, the middle one in the accent colour, and the subline. The chat is shown from its question, so
  * the image has the question and the answer together.
  */
-async function save(page, panel, { head: [[before, accent, after], subline], file }) {
+/**
+ * Records a live run for the README, page and panel side by side, as an animated WebP: a frame every 2 s, a frame
+ * that shows nothing new left out, so waits for the model take no time; the finished page is held at the end.
+ */
+function record({ page, panel }, file) {
+	const frames = join(dir, `frames-${file}`);
+	mkdirSync(frames);
+	let stopped = false;
+	let failure;
+	let last = "";
+	let count = 0;
+	const frame = async () => {
+		const [left, right] = [await page.screenshot(), await panel.screenshot()];
+		const key = createHash("sha1").update(left).update(right).digest("hex");
+		if (key === last) return;
+		last = key;
+		writeFileSync(join(frames, "page.png"), left);
+		writeFileSync(join(frames, "panel.png"), right);
+		// The page at 2x is VIEW.height * 2 tall; the panel, zoomed, is drawn to the same height.
+		execFileSync("ffmpeg", [
+			...["-loglevel", "error", "-i", join(frames, "page.png"), "-i", join(frames, "panel.png")],
+			...["-filter_complex", `[1]scale=-1:${VIEW.height * 2}[p];[0][p]hstack,scale=1280:-1`],
+			join(frames, `${String(count++).padStart(4, "0")}.png`),
+		]);
+	};
+	// A failed frame ends the recording; encode reports it, so a broken run is never written as an animation.
+	const done = (async () => {
+		while (!stopped) {
+			await frame();
+			await sleep(2000);
+		}
+	})().catch((error) => {
+		failure = error;
+	});
+	const stop = async () => {
+		stopped = true;
+		await done;
+	};
+	return {
+		stop,
+		/** Adds the finished page as the last frame and writes the animation. */
+		async encode() {
+			await stop();
+			if (failure) throw failure;
+			await frame();
+			const list = readdirSync(frames)
+				.filter((name) => /^\d{4}\.png$/.test(name))
+				.sort();
+			const args = list.flatMap((name, i) => ["-d", i === list.length - 1 ? "4000" : "150", join(frames, name)]);
+			execFileSync("img2webp", ["-loop", "0", "-lossy", "-q", "70", ...args, "-o", join(out, `${file}.webp`)]);
+			console.log(join(out, `${file}.webp`));
+		},
+	};
+}
+
+async function save(page, panel, { head: [[before, accent, after], subline], file, end = false }) {
 	await page.bringToFront();
 	// A tab brought to the front shows its old frame, or none, until Chrome paints it again.
 	await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -422,7 +536,7 @@ async function save(page, panel, { head: [[before, accent, after], subline], fil
 	await panel.bringToFront();
 	// By the wheel, as the user would: the chat follows its end until the user scrolls.
 	await panel.mouse.move(PANEL_VIEW.width / 2, 200);
-	await panel.mouse.wheel(0, -10_000);
+	await panel.mouse.wheel(0, end ? 10_000 : -10_000);
 	await panel.mouse.move(0, 0);
 	await sleep(500);
 	const chat = await panel.evaluate(() => {
@@ -431,7 +545,7 @@ async function save(page, panel, { head: [[before, accent, after], subline], fil
 		);
 		return { below: box.scrollHeight - box.clientHeight, bottom: box.getBoundingClientRect().bottom };
 	});
-	if (chat.below > 0)
+	if (chat.below > 0 && !end)
 		console.log(`${file}: the chat goes on ${chat.below} px below the panel; check that the answer shows.`);
 	const panelShot = await panel.screenshot({ clip: { x: 0, y: 0, width: PANEL_VIEW.width, height: chat.bottom } });
 
@@ -475,6 +589,7 @@ p{position:absolute;left:66px;top:108px;margin:0;font-size:23px;color:#4a5578}
  * Chrome's Allow User Scripts on for it; gives its worker and id.
  */
 async function launch(extension, profile, lang) {
+	if (LIVE !== undefined) return launchLive(extension, profile, lang);
 	const context = await chromium.launchPersistentContext(join(dir, profile), {
 		executablePath: process.env.CHROME,
 		headless: false,
@@ -492,21 +607,118 @@ async function launch(extension, profile, lang) {
 		],
 		env: { ...process.env, LANGUAGE: lang.replace("-", "_") },
 	});
+	return started(context);
+}
+
+/** Live: the test browser's own ChatGPT session, from SESSION, signed in once by `signIn()`. */
+async function launchLive(extension, profile, lang) {
+	const context = await chromium.launchPersistentContext(join(dir, profile), {
+		executablePath: process.env.CHROME,
+		headless: false,
+		deviceScaleFactor: 2,
+		colorScheme: "light",
+		locale: lang,
+		args: [
+			"--headless=new",
+			`--lang=${lang}`,
+			"--disable-background-networking",
+			"--disable-component-update",
+			"--disable-sync",
+			`--disable-extensions-except=${extension}`,
+			`--load-extension=${extension}`,
+		],
+		env: { ...process.env, LANGUAGE: lang.replace("-", "_") },
+	});
+	const live = await started(context);
+	if (!existsSync(SESSION)) await signIn(live);
+	const openai = JSON.parse(readFileSync(SESSION, "utf8"));
+	await live.worker.evaluate((openai) => chrome.storage.local.set({ credentials: { openai } }), openai);
+	return live;
+}
+
+/**
+ * Signs the test browser in, once. OpenAI's bot check refuses Chrome for Testing, so the owner opens the sign-in link in
+ * their own browser; its redirect to the loopback port reaches this script, which hands it to the test browser.
+ */
+async function signIn({ context, worker, id }) {
+	const panel = await context.newPage();
+	await panel.goto(`chrome-extension://${id}/panel.html`);
+	const opened = context.waitForEvent("page");
+	await panel.locator("#setup-chatgpt").click();
+	const auth = await opened;
+	const link = await poll(() => auth.url().startsWith("https://auth.openai.com/") && auth.url(), "the sign-in link");
+	await auth.close();
+	const query = new Promise((resolve) => {
+		const server = createServer((request, response) => {
+			const url = new URL(request.url ?? "/", "http://127.0.0.1:1455");
+			if (url.pathname !== "/auth/callback") return void response.writeHead(404).end();
+			response.writeHead(200, { "content-type": "text/plain; charset=utf-8" });
+			response.end("The test browser is signing in; you can close this tab.");
+			server.close();
+			resolve(url.search);
+		});
+		server.listen(1455, "127.0.0.1");
+	});
+	console.log(
+		`Open this link in your own Chrome within 10 minutes, signed in to ChatGPT, and allow pi-aside:\n${link}`,
+	);
+	const callback = await context.newPage();
+	// Where the worker's rule sends OpenAI's redirect, query kept; the rule redirects only for OpenAI's page.
+	await callback.goto(`chrome-extension://${id}/chatgpt-callback.html${await query}`);
+	await poll(
+		() =>
+			worker.evaluate(
+				async () => (await chrome.storage.local.get("credentials")).credentials?.openai?.type === "oauth",
+			),
+		"the sign-in",
+	).catch(async (error) => {
+		console.log(`The callback page, ${callback.url()}: ${await callback.locator("body").textContent()}`);
+		throw error;
+	});
+	await keepSession({ worker });
+	await callback.close();
+	await panel.close();
+	console.log("Signed in.");
+}
+
+/** Saves the session as a run left it: OpenAI replaces the refresh token at each refresh. */
+async function keepSession({ worker }) {
+	const { credentials } = await worker.evaluate(() => chrome.storage.local.get("credentials"));
+	mkdirSync(LIVE, { recursive: true });
+	if (credentials?.openai?.type === "oauth")
+		writeFileSync(SESSION, JSON.stringify(credentials.openai), { mode: 0o600 });
+}
+
+/** Sets up a started Chrome: the settings, and Allow User Scripts on; gives its worker and the extension's id. */
+async function started(context) {
 	contexts.push(context);
 	const worker = await poll(() => context.serviceWorkers().find((w) => w.url().endsWith("/background.js")), "worker");
 	await poll(() => worker.evaluate(() => Boolean(globalThis.__piShots)).catch(() => false), "hooks");
-	await worker.evaluate(async () => {
-		await chrome.storage.local.set({ credentials: { openrouter: { type: "api_key", key: "not-a-real-key" } } });
-		await globalThis.__piShots.saveSettings({
-			model: { provider: "openrouter", modelId: "anthropic/claude-haiku-4.5" },
-			tools: { read: "on", observe: "on", act: "ask", script: "ask", screenshot: "on" },
-		});
-	});
+	const tools = { read: "on", observe: "on", act: "ask", script: "ask", screenshot: "on" };
+	if (LIVE === undefined)
+		await worker.evaluate(async (tools) => {
+			await chrome.storage.local.set({ credentials: { openrouter: { type: "api_key", key: "not-a-real-key" } } });
+			await globalThis.__piShots.saveSettings({
+				model: { provider: "openrouter", modelId: "anthropic/claude-haiku-4.5" },
+				tools,
+			});
+		}, tools);
+	else
+		await worker.evaluate(
+			(tools) =>
+				globalThis.__piShots.saveSettings({
+					model: { provider: "openai", modelId: "gpt-6.1-sol" },
+					thinking: "high",
+					tools,
+				}),
+			tools,
+		);
 	const id = new URL(worker.url()).host;
 	// The user turns on Allow User Scripts on pi's details page.
 	const details = await context.newPage();
 	await details.goto(`chrome://extensions/?id=${id}`);
-	await details.locator("#allow-user-scripts").click();
+	const allow = details.locator("#allow-user-scripts");
+	if (!(await allow.evaluate((toggle) => toggle.checked))) await allow.click();
 	await poll(
 		() =>
 			worker.evaluate(() => {
@@ -536,7 +748,17 @@ async function open({ context, worker, id }, url, prepare) {
 		const started = globalThis.__piShotsMain.begin("action", tab, { frameId: 0, url: tab.url, top: tab.url });
 		await Promise.all([started.captured, started.resolved]);
 	}, tabId);
-	const panel = await context.newPage();
+	// Live, the panel has a window of its own, as beside the page: pi captures only the tab in front, and a recording
+	// captures both without switching tabs.
+	const panel =
+		LIVE === undefined
+			? await context.newPage()
+			: (
+					await Promise.all([
+						context.waitForEvent("page"),
+						worker.evaluate(() => chrome.windows.create({ url: "about:blank", focused: false })),
+					])
+				)[0];
 	await panel.setViewportSize(PANEL_VIEW);
 	await panel.goto(`chrome-extension://${id}/panel.html?tab=${tabId}`);
 	await panel.locator("#composer").waitFor({ state: "visible" });
@@ -550,7 +772,7 @@ const tabOf = (worker, url) =>
  * `later`: gives the text of a turn that waits for it, once pi has asked for that turn. `start`: sends the input
  * another way, such as from a menu, in place of `text`.
  */
-async function send(chrome, panel, text, done, name, { answer = () => true, later, start } = {}) {
+async function send(chrome, panel, text, done, name, { answer = () => true, later, start, ms = 120_000 } = {}) {
 	if (start) await start();
 	else {
 		await panel.locator("#composer").fill(text);
@@ -573,7 +795,7 @@ async function send(chrome, panel, text, done, name, { answer = () => true, late
 			return done();
 		},
 		name,
-		120_000,
+		ms,
 	);
 	await panel.mouse.move(0, 0);
 	await sleep(500);
@@ -636,13 +858,73 @@ async function renewables() {
 
 const SCENES = process.env.SCENES?.split(",");
 let hnOpened = 0;
-const scene = (name) => SCENES === undefined || SCENES.includes(name);
+/** The scenes that need a real model: only these run with LIVE=1, and only with it. */
+const LIVE_SCENES = ["diagram", "summary", "app", "translate", "explain", "notebook", "issues"];
+const scene = (name) =>
+	(LIVE !== undefined) === LIVE_SCENES.includes(name) && (SCENES === undefined || SCENES.includes(name));
 
 /** The shots in `locale`'s interface, written as `<prefix><scene>.png`. */
 async function shots(locale, lang, prefix) {
 	const text = TEXT[locale];
 	const chrome = await launch(localized(locale), `profile-${locale}`, lang);
 	const play = (turns) => chrome.worker.evaluate((turns) => globalThis.__piShots.play(turns), turns);
+	try {
+		await scenes(chrome, play, text, prefix);
+	} finally {
+		// A session that OpenAI rotated during a failed scene is kept too.
+		if (LIVE !== undefined) await keepSession(chrome);
+	}
+}
+
+/** The scenes of one language, in `chrome`. */
+async function scenes(chrome, play, text, prefix) {
+	/**
+	 * A live scene: the owner's ChatGPT session asks on `url`, the tools as the model chooses, and its cards are allowed
+	 * as the user would. The run is long: the image shows its end, and the headline says what was asked. `prepare`
+	 * readies the page before the ask; `show` readies the finished page for its picture (by default, it undoes a
+	 * sideways scroll that pi's steps can leave).
+	 */
+	const live = async (name, url, { prepare, show = () => window.scrollTo(0, window.scrollY) } = {}) => {
+		if (!scene(name)) return;
+		let recording;
+		// One scene that fails, as a live run can, leaves the others to run.
+		try {
+			const view = await open(chrome, url, prepare);
+			if (process.env.RECORD === name) recording = record(view, `${prefix}${name}`);
+			await send(chrome, view.panel, text[name].ask, finished(view.panel, ".msg.assistant:not(.step-note)"), name, {
+				ms: 15 * 60_000,
+			});
+			await view.page.evaluate(show);
+			await save(view.page, view.panel, { head: text.heads[name], file: `${prefix}${name}.png`, end: true });
+			await recording?.encode();
+		} catch (error) {
+			console.log(`${prefix}${name}.png: ${error.message}`);
+		} finally {
+			await recording?.stop();
+			await keepSession(chrome);
+		}
+	};
+	await live("diagram", "https://excalidraw.com/");
+	// pi can end the notebook scrolled to its notes, past the chart.
+	await live("notebook", "https://jupyter.org/try-jupyter/lab/", {
+		show: async () => {
+			// An open file browser leaves the chart small: close it, as its tab does.
+			document.querySelector(".jp-SideBar.jp-mod-left .lm-TabBar-tab.lm-mod-current")?.click();
+			await new Promise((resolve) => setTimeout(resolve, 500));
+			document.querySelector(".jp-OutputArea-output img")?.scrollIntoView({ block: "center" });
+		},
+	});
+	await live("summary", "https://paulgraham.com/greatwork.html");
+	// JSFiddle's ad covers the result, and blocking it stops the editors from loading: close it, as a user would, also
+	// after pi reloads the page.
+	await live("app", "https://jsfiddle.net/", {
+		prepare: async (page) => {
+			const close = () => setInterval(() => document.querySelector("#_stickybox_ .native-hide")?.click(), 500);
+			await page.addInitScript(close);
+			await page.evaluate(close);
+		},
+	});
+	await live("issues", "https://github.com/microsoft/vscode/issues");
 
 	// Table: one script reads a table of Wikipedia, counts its rows by decade, and marks the 2020s; the answer's numbers
 	// and chart are what the script returned.
@@ -720,15 +1002,16 @@ async function shots(locale, lang, prefix) {
 				getSelection().addRange(range);
 			}, QUOTE),
 		);
-		await play([{ text: text.explain.answer }]);
-		await send(
-			chrome,
-			explain.panel,
-			text.explain.ask,
-			finished(explain.panel, ".msg.assistant .diagram img"),
-			"the diagram",
-		);
-		await save(explain.page, explain.panel, { head: text.heads.explain, file: `${prefix}explain.png` });
+		if (LIVE === undefined) await play([{ text: text.explain.answer }]);
+		const done = LIVE === undefined ? ".msg.assistant .diagram img" : ".msg.assistant:not(.step-note)";
+		await send(chrome, explain.panel, text.explain.ask, finished(explain.panel, done), "the diagram", {
+			ms: 15 * 60_000,
+		});
+		await save(explain.page, explain.panel, {
+			head: text.heads.explain,
+			file: `${prefix}explain.png`,
+			end: LIVE !== undefined,
+		});
 	}
 
 	if (scene("rank")) {
@@ -866,8 +1149,10 @@ for (const [start, translation] of translations) {
   placed++;
 }
 return { placed };`;
-		await play([{ tool: "run_script", args: { code, summary } }, { later: true }]);
-		await send(chrome, translate.panel, "", finished(translate.panel, ".msg.assistant p"), "the translation", {
+		if (LIVE === undefined) await play([{ tool: "run_script", args: { code, summary } }, { later: true }]);
+		const done = LIVE === undefined ? ".msg.assistant p" : ".msg.assistant:not(.step-note)";
+		await send(chrome, translate.panel, "", finished(translate.panel, done), "the translation", {
+			ms: 15 * 60_000,
 			// As a right-click on the selection, then the prompt in pi's menu.
 			start: async () => {
 				const selectionText = await show(translate.page, true);
@@ -886,14 +1171,22 @@ return { placed };`;
 					{ tabId: translate.tabId, selectionText },
 				);
 			},
-			later: async () => {
-				const ran = await lastResult(chrome);
-				if (!ran.ok || ran.value.placed !== lead.length) throw Error(`The script placed: ${JSON.stringify(ran)}`);
-				return answer;
-			},
+			later:
+				LIVE !== undefined
+					? undefined
+					: async () => {
+							const ran = await lastResult(chrome);
+							if (!ran.ok || ran.value.placed !== lead.length)
+								throw Error(`The script placed: ${JSON.stringify(ran)}`);
+							return answer;
+						},
 		});
 		await show(translate.page, false);
-		await save(translate.page, translate.panel, { head: text.heads.translate, file: `${prefix}translate.png` });
+		await save(translate.page, translate.panel, {
+			head: text.heads.translate,
+			file: `${prefix}translate.png`,
+			end: LIVE !== undefined,
+		});
 	}
 }
 

@@ -65,19 +65,45 @@ npm run build             # 构建到 dist/
 
 ## 使用示例
 
-<sub>下面的截图展示的是真实的扩展和网页工具，页面为线上实时页面；其中模型的回复为预设内容，实际效果和耗时因模型而异。</sub>
+<sub>下面的截图和动画都是 GPT-6.1 Sol 通过 ChatGPT 套餐真实运行的结果，页面为线上实时页面。实际效果和耗时因模型和每次运行而异。</sub>
+
+### 总结网页
+
+*“用 5 个要点总结这个页面。”* 在 Paul Graham 的文章《How to Do Great Work》旁，pi 读完整页，很快给出要点，还能在同一个对话里接着追问。
+
+![pi-aside 在 Paul Graham 的文章 How to Do Great Work 旁：用 5 个要点总结全文，用时 25 秒](docs/images/zh-CN-summary.png)
+
+### 在白板上画图
+
+*“画一张简洁、彩色的图，说明网页请求是怎么到达服务器的：浏览器、CDN、负载均衡、应用服务器、缓存和数据库。”* 在 Excalidraw 上，pi 用脚本画图，截图检查效果，再把整张图放进视野。
+
+![pi-aside 在 Excalidraw 旁：一张彩色架构图，网页请求从浏览器经过 CDN、负载均衡、应用服务器，再到缓存和数据库](docs/images/zh-CN-diagram.png)
+
+### 做出能用的小应用
+
+*“在这里做一个番茄钟：开始、暂停、重置，带进度圆环和柔和的配色，然后运行它，并把结果放大显示。”* 在 JSFiddle 上，pi 把 HTML、CSS 和 JavaScript 写进编辑器，运行后把结果放大显示。
+
+![动画：pi-aside 在 JSFiddle 旁写出一个番茄钟，运行后放大显示](docs/images/zh-CN-app.webp)
+
+<sub>已加速播放。[完成后的静态截图](docs/images/zh-CN-app.png)。</sub>
+
+### 在笔记本里分析数据
+
+*“新建一个 Python 笔记本，载入泰坦尼克号乘客数据（一个 CSV 链接），按舱位等级和性别画出生还率，再告诉我有什么值得注意的。”* JupyterLite 直接在网页里运行 Python；pi 写好代码单元、运行、读图，说明数据呈现了什么，不妄下因果结论。
+
+![pi-aside 在 JupyterLite 笔记本旁：泰坦尼克号按舱位和性别的生还率，以及 pi 对全部 891 名乘客的分析](docs/images/zh-CN-notebook.png)
+
+### 一眼看懂整个仓库
+
+*“最新的 100 个未关闭 issue 分属哪些领域？画个图，并在这个页面上标出讨论最多的 5 个。”* 在 VS Code 的 issue 页面，一段脚本读完四页 issue；pi 把它们归入各个领域，在页面上画成图，并列出这 100 个里讨论最多的 5 个。
+
+![pi-aside 在 VS Code 的 GitHub issue 页面旁：最新 100 个未关闭 issue 按领域分布的图表，加在页面上，并列出其中讨论最多的 5 个](docs/images/zh-CN-issues.png)
 
 ### 解释选中的内容
 
-*“用中文简单解释这段话，并画一张图。”* 选中 MDN 的 HTTP 缓存指南里的一段，pi 把“新鲜”和“过期”画成一张判断流程图。
+*“用中文简单解释这段话，并画一张图。”* 选中 MDN 的 HTTP 缓存指南里的一段，pi 讲清楚存下的响应什么时候算“新鲜”、什么时候“过期”，需要时配上表格或图。
 
-![pi-aside 在 MDN 的 HTTP 缓存指南旁：针对选中的段落提问，回答是一张流程图，说明存下的响应何时直接使用、何时找服务器确认、何时换新](docs/images/zh-CN-explain.png)
-
-### 用脚本给页面排序
-
-*“这一页里评论最多的 5 条新闻是哪些？在页面上标出来。”* 在 Hacker News 首页，pi 运行一段脚本，读取每条新闻，按评论数排序，并在页面上标出前 5 条。
-
-![pi-aside 在 Hacker News 旁：一段脚本按评论数给首页新闻排序，在页面上标出前 5 条，并列成一张表](docs/images/zh-CN-rank.png)
+![pi-aside 在 MDN 的 HTTP 缓存指南旁：针对选中的段落提问，用大白话解释，并配了一张图](docs/images/zh-CN-explain.png)
 
 ### 还可以试试
 

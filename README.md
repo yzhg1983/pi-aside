@@ -90,22 +90,55 @@ Open pi on the page you want help with. On a Mac, use `Cmd` instead of `Ctrl`
 
 ## Examples
 
-<sub>The screenshots below show the real extension and its page tools on live sites. The model's replies in them are
-scripted: results and timing vary by model.</sub>
+<sub>The screenshots and the animation below are real runs of GPT-6.1 Sol through a ChatGPT plan, on live sites.
+Results and timing vary by model and run.</sub>
+
+### Summarize a page
+
+*"Summarize this page in 5 key points."* Beside Paul Graham's essay *How to Do Great Work*, pi reads the page and
+answers in seconds. Ask a follow-up in the same chat.
+
+![pi-aside beside Paul Graham's essay How to Do Great Work: a summary in 5 key points, made in 25 seconds](docs/images/summary.png)
+
+### Draw on a whiteboard
+
+*"Draw a simple, colorful diagram of how a web request reaches the server: browser, CDN, load balancer, app server,
+cache, and database."* On Excalidraw, pi draws with a script, checks the result with a screenshot, and fits it in
+view.
+
+![pi-aside beside Excalidraw: a colorful diagram of a web request going from the browser through a CDN, a load balancer, and an app server to a cache and a database](docs/images/diagram.png)
+
+### Build a working app
+
+*"Build a Pomodoro timer here: start, pause, and reset, a progress ring, and a calm color theme. Then run it, and show the result large."* On
+JSFiddle, pi writes the HTML, CSS, and JavaScript into the editors, runs the result, and tests its buttons.
+
+![An animation of pi-aside beside JSFiddle: pi writes a Pomodoro timer into the editors, runs it, and the timer starts counting down](docs/images/app.webp)
+
+<sub>Sped up. [The finished app as a still image](docs/images/app.png).</sub>
+
+### Analyze data in a notebook
+
+*"In a new Python notebook, load the Titanic passengers from (a CSV link), plot the survival rate by class and sex,
+and tell me what stands out."* On JupyterLite, which runs Python in the page, pi writes the cells, runs them, reads
+the chart, and reports what the data shows, without claiming causes.
+
+![pi-aside beside a JupyterLite notebook: a bar chart of Titanic survival rates by class and sex, and pi's findings for all 891 passengers](docs/images/notebook.png)
+
+### Dig into a whole repository
+
+*"Which areas do the 100 newest open issues fall in? Chart them, and highlight the 5 most-discussed issues on this
+page."* On VS Code's issues, one script reads four pages of issues. pi sorts them into areas, charts them on the page,
+and lists the most-discussed among these 100.
+
+![pi-aside beside VS Code's GitHub issues: a chart of the 100 newest open issues by area, added to the page, and the 5 most-discussed among them](docs/images/issues.png)
 
 ### Explain a selection
 
-*"Explain this simply, with a diagram."* With a paragraph of MDN's HTTP caching guide selected, pi turns fresh and
-stale into a flowchart.
+*"Explain this simply, with a diagram."* With a paragraph of MDN's HTTP caching guide selected, pi explains when a
+stored response is fresh or stale, with a table or a diagram when it helps.
 
-![pi-aside beside MDN's HTTP caching guide: a question about a selected paragraph, answered with a flowchart of when a stored response is used, checked with the server, or replaced](docs/images/explain.png)
-
-### Rank a page with a script
-
-*"Which 5 stories on this page have the most comments? Highlight them."* On Hacker News's front page, pi runs one
-script that reads every story, ranks them by comments, and marks the top 5 on the page.
-
-![pi-aside beside Hacker News: one script ranked the front page's stories by comments, highlighted the top 5 on the page, and listed them in a table](docs/images/rank.png)
+![pi-aside beside MDN's HTTP caching guide: a question about a selected paragraph, answered in plain words with a table of the Cache-Control settings](docs/images/explain.png)
 
 ### More to try
 
