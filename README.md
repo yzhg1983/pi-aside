@@ -90,30 +90,32 @@ Open pi on the page you want help with. On a Mac, use `Cmd` instead of `Ctrl`
 
 ## Examples
 
-<sub>The screenshots and the animation below are real runs of GPT-6.1 Sol through a ChatGPT plan, on live sites.
+<sub>The screenshots and animations below are real runs of GPT-6.1 Sol through a ChatGPT plan, on live sites.
 Results and timing vary by model and run.</sub>
 
 ### Summarize a page
 
-*"Summarize this page in 5 key points."* Beside Paul Graham's essay *How to Do Great Work*, pi reads the page and
-answers in seconds. Ask a follow-up in the same chat.
+*"Summarize this page in 5 short bullet points."* Beside Paul Graham's essay *How to Do Great Work*, pi reads the page
+and answers in seconds. Ask a follow-up in the same chat.
 
-![pi-aside beside Paul Graham's essay How to Do Great Work: a summary in 5 key points, made in 25 seconds](docs/images/summary.png)
+![pi-aside beside Paul Graham's essay How to Do Great Work: a summary in 5 short points, made in 18 seconds](docs/images/summary.png)
 
 ### Draw on a whiteboard
 
 *"Draw a simple, colorful diagram of how a web request reaches the server: browser, CDN, load balancer, app server,
-cache, and database."* On Excalidraw, pi draws with a script, checks the result with a screenshot, and fits it in
-view.
+cache, and database. Make it big and easy to read."* On Excalidraw, pi draws with a script, checks the result with a
+screenshot, and fits it in view.
 
-![pi-aside beside Excalidraw: a colorful diagram of a web request going from the browser through a CDN, a load balancer, and an app server to a cache and a database](docs/images/diagram.png)
+![An animation of pi-aside beside Excalidraw: pi draws a colorful diagram of a web request going from the browser through a CDN, a load balancer, and an app server to a cache and a database](docs/images/diagram.webp)
+
+<sub>Sped up. [The finished diagram as a still image](docs/images/diagram.png).</sub>
 
 ### Build a working app
 
 *"Build a Pomodoro timer here: start, pause, and reset, a progress ring, and a calm color theme. Then run it, and show the result large."* On
 JSFiddle, pi writes the HTML, CSS, and JavaScript into the editors, runs the result, and tests its buttons.
 
-![An animation of pi-aside beside JSFiddle: pi writes a Pomodoro timer into the editors, runs it, and the timer starts counting down](docs/images/app.webp)
+![An animation of pi-aside beside JSFiddle: pi writes a Pomodoro timer into the editors, runs it, and shows the timer large](docs/images/app.webp)
 
 <sub>Sped up. [The finished app as a still image](docs/images/app.png).</sub>
 
@@ -123,22 +125,28 @@ JSFiddle, pi writes the HTML, CSS, and JavaScript into the editors, runs the res
 and tell me what stands out."* On JupyterLite, which runs Python in the page, pi writes the cells, runs them, reads
 the chart, and reports what the data shows, without claiming causes.
 
-![pi-aside beside a JupyterLite notebook: a bar chart of Titanic survival rates by class and sex, and pi's findings for all 891 passengers](docs/images/notebook.png)
+![An animation of pi-aside beside a JupyterLite notebook: pi writes and runs the cells, and a bar chart of Titanic survival rates by class and sex appears with pi's findings](docs/images/notebook.webp)
+
+<sub>Sped up. [The finished notebook as a still image](docs/images/notebook.png).</sub>
 
 ### Dig into a whole repository
 
-*"Which areas do the 100 newest open issues fall in? Chart them, and highlight the 5 most-discussed issues on this
-page."* On VS Code's issues, one script reads four pages of issues. pi sorts them into areas, charts them on the page,
+*"Which areas do the 100 newest open issues fall in? Chart them on this page, and highlight the 5 most-discussed issues
+there."* On VS Code's issues, one script reads four pages of issues. pi sorts them into areas, charts them on the page,
 and lists the most-discussed among these 100.
 
-![pi-aside beside VS Code's GitHub issues: a chart of the 100 newest open issues by area, added to the page, and the 5 most-discussed among them](docs/images/issues.png)
+![An animation of pi-aside beside VS Code's GitHub issues: pi reads the 100 newest open issues, adds a chart of them by area to the page, and lists the 5 most-discussed](docs/images/issues.webp)
+
+<sub>Sped up. [The finished chart as a still image](docs/images/issues.png).</sub>
 
 ### Explain a selection
 
 *"Explain this simply, with a diagram."* With a paragraph of MDN's HTTP caching guide selected, pi explains when a
 stored response is fresh or stale, with a table or a diagram when it helps.
 
-![pi-aside beside MDN's HTTP caching guide: a question about a selected paragraph, answered in plain words with a table of the Cache-Control settings](docs/images/explain.png)
+![An animation of pi-aside beside MDN's HTTP caching guide: a question about a selected paragraph, answered in plain words with a diagram](docs/images/explain.webp)
+
+<sub>Sped up. [The answer as a still image](docs/images/explain.png).</sub>
 
 ### More to try
 

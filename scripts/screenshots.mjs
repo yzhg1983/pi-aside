@@ -19,7 +19,8 @@
 // LIVE=1 takes the scenes that a real model runs (a diagram on Excalidraw, a summary of an essay, a JSFiddle app, the
 // saved prompt Translate in page, a question about a selection, a JupyterLite notebook, and a GitHub repository's
 // issues) with the test browser's own ChatGPT session: the first run prints a sign-in link for the owner's browser,
-// and ~/.cache/pi-aside-live keeps the session. RECORD=app also records that scene's run as an animated WebP.
+// and ~/.cache/pi-aside-live keeps the session. RECORD=app,notebook also records those scenes' runs as
+// animated WebPs.
 
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -67,6 +68,18 @@ const ISSUE = 9200;
 const FIX = 9837;
 const MDN = "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching";
 const QUOTE = "Stored HTTP responses have two states: fresh and stale.";
+
+/** Selects MDN's paragraph that starts with QUOTE, in the middle of the page, for the question about it. */
+function selectQuote(page) {
+	return page.evaluate((quote) => {
+		const paragraph = [...document.querySelectorAll("main p")].find((p) => p.textContent.startsWith(quote));
+		paragraph.scrollIntoView({ block: "center", behavior: "instant" });
+		const range = document.createRange();
+		range.selectNodeContents(paragraph);
+		getSelection().removeAllRanges();
+		getSelection().addRange(range);
+	}, QUOTE);
+}
 const CHART = "https://ourworldindata.org/grapher/share-electricity-renewables";
 const COUNTRIES = ["DEU", "CHN", "USA", "IND"];
 const ISSUES = "https://github.com/vitejs/vite/issues";
@@ -218,12 +231,12 @@ const TEXT = {
 		notebook: {
 			ask: "In a new Python notebook, load the Titanic passengers from https://raw.githubusercontent.com/mwaskom/seaborn-data/master/titanic.csv, plot the survival rate by class and sex, and tell me what stands out.",
 		},
-		summary: { ask: "Summarize this page in 5 key points." },
+		summary: { ask: "Summarize this page in 5 short bullet points." },
 		app: {
 			ask: "Build a Pomodoro timer here: start, pause, and reset, a progress ring, and a calm color theme. Then run it, and show the result large.",
 		},
 		issues: {
-			ask: "Which areas do the 100 newest open issues fall in? Chart them, and highlight the 5 most-discussed issues on this page.",
+			ask: "Which areas do the 100 newest open issues fall in? Chart them on this page, and highlight the 5 most-discussed issues there.",
 		},
 		diagram: {
 			ask: "Draw a simple, colorful diagram of how a web request reaches the server: browser, CDN, load balancer, app server, cache, and database. Make it big and easy to read.",
@@ -302,7 +315,7 @@ const TEXT = {
 		notebook: {
 			ask: "新建一个 Python 笔记本，载入泰坦尼克号乘客数据 https://raw.githubusercontent.com/mwaskom/seaborn-data/master/titanic.csv ，按舱位等级和性别画出生还率，再告诉我有什么值得注意的。",
 		},
-		summary: { ask: "用 5 个要点总结这个页面。" },
+		summary: { ask: "用 5 个简短的要点总结这个页面。" },
 		app: { ask: "在这里做一个番茄钟：开始、暂停、重置，带进度圆环和柔和的配色，然后运行它，并把结果放大显示。" },
 		issues: { ask: "最新的 100 个未关闭 issue 分属哪些领域？画个图，并在这个页面上标出讨论最多的 5 个。" },
 		diagram: {
@@ -468,11 +481,6 @@ async function poll(test, name, ms = 30_000) {
 }
 
 /**
- * Puts a headline over a page and its panel in a plain browser window, and writes it to docs/images. `head`: the
- * headline's three parts, the middle one in the accent colour, and the subline. The chat is shown from its question, so
- * the image has the question and the answer together.
- */
-/**
  * Records a live run for the README, page and panel side by side, as an animated WebP: a frame every 2 s, a frame
  * that shows nothing new left out, so waits for the model take no time; the finished page is held at the end.
  */
@@ -484,6 +492,8 @@ function record({ page, panel }, file) {
 	let last = "";
 	let count = 0;
 	const frame = async () => {
+		// The animation opens on the question: nothing before it is sent, such as a site's ad not yet closed.
+		if ((await panel.locator(".msg.user").count()) === 0) return;
 		const [left, right] = [await page.screenshot(), await panel.screenshot()];
 		const key = createHash("sha1").update(left).update(right).digest("hex");
 		if (key === last) return;
@@ -527,6 +537,11 @@ function record({ page, panel }, file) {
 	};
 }
 
+/**
+ * Puts a headline over a page and its panel in a plain browser window, and writes it to docs/images. `head`: the
+ * headline's three parts, the middle one in the accent colour, and the subline. The chat is shown from its question, so
+ * the image has the question and the answer together; with `end`, a chat too long for that shows its end, the answer.
+ */
 async function save(page, panel, { head: [[before, accent, after], subline], file, end = false }) {
 	await page.bringToFront();
 	// A tab brought to the front shows its old frame, or none, until Chrome paints it again.
@@ -534,18 +549,25 @@ async function save(page, panel, { head: [[before, accent, after], subline], fil
 	await sleep(1000);
 	const pageShot = await page.screenshot();
 	await panel.bringToFront();
-	// By the wheel, as the user would: the chat follows its end until the user scrolls.
-	await panel.mouse.move(PANEL_VIEW.width / 2, 200);
-	await panel.mouse.wheel(0, end ? 10_000 : -10_000);
-	await panel.mouse.move(0, 0);
-	await sleep(500);
-	const chat = await panel.evaluate(() => {
-		const box = [...document.querySelectorAll("*")].find(
-			(each) => getComputedStyle(each).overflowY === "auto" && each.querySelector(".msg"),
-		);
-		return { below: box.scrollHeight - box.clientHeight, bottom: box.getBoundingClientRect().bottom };
-	});
-	if (chat.below > 0 && !end)
+	// By the wheel, as the user would: the chat follows its end until the user scrolls. The question shows at the top;
+	// with `end`, a chat too long for the panel shows its end, the answer, instead.
+	const wheel = async (by) => {
+		await panel.mouse.move(PANEL_VIEW.width / 2, 200);
+		await panel.mouse.wheel(0, by);
+		await panel.mouse.move(0, 0);
+		await sleep(500);
+	};
+	const measure = () =>
+		panel.evaluate(() => {
+			const box = [...document.querySelectorAll("*")].find(
+				(each) => getComputedStyle(each).overflowY === "auto" && each.querySelector(".msg"),
+			);
+			return { below: box.scrollHeight - box.clientHeight, bottom: box.getBoundingClientRect().bottom };
+		});
+	await wheel(-10_000);
+	const chat = await measure();
+	if (chat.below > 0 && end) await wheel(10_000);
+	else if (chat.below > 0)
 		console.log(`${file}: the chat goes on ${chat.below} px below the panel; check that the answer shows.`);
 	const panelShot = await panel.screenshot({ clip: { x: 0, y: 0, width: PANEL_VIEW.width, height: chat.bottom } });
 
@@ -739,7 +761,8 @@ async function started(context) {
 async function open({ context, worker, id }, url, prepare) {
 	const page = await context.newPage();
 	await page.setViewportSize(VIEW);
-	await page.goto(url, { waitUntil: "load" });
+	// Live sites can be slow: Wikipedia's images once took over 30 s.
+	await page.goto(url, { waitUntil: "load", timeout: 90_000 });
 	await sleep(1500);
 	if (prepare) await prepare(page);
 	const tabId = await tabOf(worker, page.url());
@@ -884,17 +907,21 @@ async function scenes(chrome, play, text, prefix) {
 	 * readies the page before the ask; `show` readies the finished page for its picture (by default, it undoes a
 	 * sideways scroll that pi's steps can leave).
 	 */
-	const live = async (name, url, { prepare, show = () => window.scrollTo(0, window.scrollY) } = {}) => {
+	const live = async (
+		name,
+		url,
+		{ prepare, show = (page) => page.evaluate(() => window.scrollTo(0, window.scrollY)) } = {},
+	) => {
 		if (!scene(name)) return;
 		let recording;
 		// One scene that fails, as a live run can, leaves the others to run.
 		try {
 			const view = await open(chrome, url, prepare);
-			if (process.env.RECORD === name) recording = record(view, `${prefix}${name}`);
+			if (process.env.RECORD?.split(",").includes(name)) recording = record(view, `${prefix}${name}`);
 			await send(chrome, view.panel, text[name].ask, finished(view.panel, ".msg.assistant:not(.step-note)"), name, {
 				ms: 15 * 60_000,
 			});
-			await view.page.evaluate(show);
+			await show(view.page);
 			await save(view.page, view.panel, { head: text.heads[name], file: `${prefix}${name}.png`, end: true });
 			await recording?.encode();
 		} catch (error) {
@@ -907,14 +934,18 @@ async function scenes(chrome, play, text, prefix) {
 	await live("diagram", "https://excalidraw.com/");
 	// pi can end the notebook scrolled to its notes, past the chart.
 	await live("notebook", "https://jupyter.org/try-jupyter/lab/", {
-		show: async () => {
-			// An open file browser leaves the chart small: close it, as its tab does.
-			document.querySelector(".jp-SideBar.jp-mod-left .lm-TabBar-tab.lm-mod-current")?.click();
-			await new Promise((resolve) => setTimeout(resolve, 500));
-			document.querySelector(".jp-OutputArea-output img")?.scrollIntoView({ block: "center" });
+		show: async (page) => {
+			// An open file browser leaves the chart small: close it with its tab, as the user would. Lumino's tab bar
+			// takes a real pointer, not a click() from the page.
+			const files = page.locator(".jp-SideBar.jp-mod-left .lm-TabBar-tab.lm-mod-current");
+			if ((await files.count()) > 0) await files.click();
+			await page.evaluate(() =>
+				document.querySelector(".jp-OutputArea-output img")?.scrollIntoView({ block: "center" }),
+			);
 		},
 	});
 	await live("summary", "https://paulgraham.com/greatwork.html");
+	await live("explain", MDN, { prepare: selectQuote });
 	// JSFiddle's ad covers the result, and blocking it stops the editors from loading: close it, as a user would, also
 	// after pi reloads the page.
 	await live("app", "https://jsfiddle.net/", {
@@ -990,28 +1021,18 @@ async function scenes(chrome, play, text, prefix) {
 		await save(issue.page, issue.panel, { head: text.heads.issue, file: `${prefix}issue.png` });
 	}
 
-	if (scene("explain")) {
+	if (LIVE === undefined && scene("explain")) {
 		// Explain: a question about a selected paragraph of MDN, answered with a diagram.
-		const explain = await open(chrome, MDN, (page) =>
-			page.evaluate((quote) => {
-				const paragraph = [...document.querySelectorAll("main p")].find((p) => p.textContent.startsWith(quote));
-				paragraph.scrollIntoView({ block: "center" });
-				const range = document.createRange();
-				range.selectNodeContents(paragraph);
-				getSelection().removeAllRanges();
-				getSelection().addRange(range);
-			}, QUOTE),
+		const explain = await open(chrome, MDN, selectQuote);
+		await play([{ text: text.explain.answer }]);
+		await send(
+			chrome,
+			explain.panel,
+			text.explain.ask,
+			finished(explain.panel, ".msg.assistant .diagram img"),
+			"the diagram",
 		);
-		if (LIVE === undefined) await play([{ text: text.explain.answer }]);
-		const done = LIVE === undefined ? ".msg.assistant .diagram img" : ".msg.assistant:not(.step-note)";
-		await send(chrome, explain.panel, text.explain.ask, finished(explain.panel, done), "the diagram", {
-			ms: 15 * 60_000,
-		});
-		await save(explain.page, explain.panel, {
-			head: text.heads.explain,
-			file: `${prefix}explain.png`,
-			end: LIVE !== undefined,
-		});
+		await save(explain.page, explain.panel, { head: text.heads.explain, file: `${prefix}explain.png` });
 	}
 
 	if (scene("rank")) {
@@ -1182,11 +1203,8 @@ return { placed };`;
 						},
 		});
 		await show(translate.page, false);
-		await save(translate.page, translate.panel, {
-			head: text.heads.translate,
-			file: `${prefix}translate.png`,
-			end: LIVE !== undefined,
-		});
+		// The result is on the page, so the question stays in view even when the chat runs longer.
+		await save(translate.page, translate.panel, { head: text.heads.translate, file: `${prefix}translate.png` });
 	}
 }
 
