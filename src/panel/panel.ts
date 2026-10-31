@@ -1187,13 +1187,14 @@ function entryNode(entry: ChatEntry): HTMLElement {
 		const text = node("span", entry.step ? "step-text" : "", entry.text);
 		if (entry.step) text.title = entry.text;
 		const notice = node("div", entry.step ? "msg notice step" : "msg notice", text);
-		const detail = entry.detail === null ? [] : [node("span", "detail", entry.detail)];
-		// What folds: a script's code and a screenshot. What an action did stays, beside the model's summary of it.
-		const bulky = [...(entry.code === true ? detail : []), ...(entry.image ? [shotNode(entry.id)] : [])];
-		if (entry.code !== true) notice.append(...detail);
+		// What folds: all under a step's line (what it did, a script's code, a screenshot), but not a failure's reason.
+		const under = [
+			...(entry.detail === null ? [] : [node("span", "detail", entry.detail)]),
+			...(entry.image ? [shotNode(entry.id)] : []),
+		];
+		if (entry.step && under.length > 0) foldNode(entry.id, notice, text, under);
+		else notice.append(...under);
 		if (entry.error) notice.append(reasonNode(entry.error));
-		if (entry.step && bulky.length > 0) foldNode(entry.id, notice, text, bulky);
-		else notice.append(...bulky);
 		return notice;
 	}
 	// What the model said before a tool call joins the step log; its answer comes later.

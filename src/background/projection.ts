@@ -516,7 +516,6 @@ function toolNotice(
 			text: summary ?? t("toolFailed", [result.toolName]),
 			error: text,
 			detail: code,
-			...(code === null ? {} : { code: true as const }),
 			// A script that threw may have changed the page before it did.
 			...(result.toolName === "run_script" ? { acted: true as const } : {}),
 		};
@@ -554,7 +553,6 @@ function toolNotice(
 			text: summary ?? t("ranScript"),
 			detail: code,
 			acted: true,
-			...(code === null ? {} : { code: true as const }),
 		};
 	if (result.toolName === "screenshot_page") {
 		// The image stays out of the chat's state, which goes to the panel with each change: the panel asks for it.

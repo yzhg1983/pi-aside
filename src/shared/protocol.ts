@@ -500,8 +500,6 @@ export type ChatEntry = {
 	attachments?: AttachmentInfo[];
 	/** Of a tool's line: an action on a page or a script ran, which Edit does not undo (design 6.34). */
 	acted?: true;
-	/** Of a script's line: `detail` is its code, which the panel folds with the step (design 6.23). */
-	code?: true;
 };
 
 /** An input admitted while the chat is busy, and whether it joins the running task or waits for its answer. */

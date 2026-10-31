@@ -1700,8 +1700,8 @@ body.callback h1 {
 	border-color: var(--bad);
 }
 
-/* A step with a script's code or a screenshot under its line: the line is the button that folds them, and the ring is
-   filled while they are folded (design 6.23). */
+/* A step with something under its line (what it did, a script's code, a screenshot): the line is the button that folds
+   it, and the ring is filled while it is folded (design 6.23). */
 .step-toggle {
 	display: block;
 	width: 100%;

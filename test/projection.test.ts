@@ -293,7 +293,7 @@ it("shows an action as its summary with what pi did, and an observe by its page 
 	]);
 });
 
-it("marks a script's code, which the panel folds, but not what an action did (design 6.23)", () => {
+it("puts a script's code and what an action did in detail (design 6.23)", () => {
 	const script = (id: number, isError: boolean, text: string, details?: unknown) =>
 		toolResult(id, isError, text, details, "run_script");
 	const chat = projectChat(
@@ -305,7 +305,7 @@ it("marks a script's code, which the panel folds, but not what an action did (de
 		]),
 	);
 	expect(chat.entries).toEqual([
-		{ ...step, id: 1, role: "notice", text: "Count rows", detail: "rows.length", acted: true, code: true },
+		{ ...step, id: 1, role: "notice", text: "Count rows", detail: "rows.length", acted: true },
 		{
 			...step,
 			id: 2,
@@ -314,7 +314,6 @@ it("marks a script's code, which the panel folds, but not what an action did (de
 			detail: "rows.length",
 			error: "rows is not defined",
 			acted: true,
-			code: true,
 		},
 		{ ...step, id: 3, role: "notice", text: "run_script failed", error: "The user denied this script", acted: true },
 		{ ...step, id: 4, role: "notice", text: "Open it", detail: "Clicked Open", acted: true },

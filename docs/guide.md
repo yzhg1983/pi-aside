@@ -22,10 +22,10 @@ page first (see [When Chrome stops pi](#when-chrome-stops-pi)). What the model i
 is in [Page tools: what the model sees](page-tools.md).
 
 - **You see every step.** Each read, click (with its reason), script (with its code), and screenshot shows in the chat,
-  and an element pi clicks flashes a blue outline on the page. When the task ends, scripts' code and screenshots fold
-  under their steps; click a step to open it. Stop, or Esc, ends the task; a script already running
-  finishes first (at most 30 s). Messages you sent while pi was busy, and that had not started yet, come back as
-  drafts under the message box.
+  and an element pi clicks flashes a blue outline on the page. When the task ends, each step folds to its line, so
+  your question and the answer stand out; click a step to see what it did, its code, or its screenshot. Why a step
+  failed stays shown. Stop, or Esc, ends the task; a script already running finishes first (at most 30 s). Messages you
+  sent while pi was busy, and that had not started yet, come back as drafts under the message box.
 - **It keeps working in the background.** Switch tabs or chats and the task goes on; several chats can work at once.
   A message sent while pi is busy joins the task after its current step (Enter), or waits for the answer (Alt+Enter);
   Settings > Sending swaps the two.

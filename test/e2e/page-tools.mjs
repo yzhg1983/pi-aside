@@ -677,8 +677,8 @@ try {
 	check("Deny runs nothing", /denied/i.test(got.at(-1)?.text ?? "") && !(await seen()).includes("script"), got.at(-1));
 
 	// Folding (design 6.23): a script's step shows its code while its turn runs and folds to its line when the turn
-	// ends; the line is the button, by mouse and by key, and a step the user opened stays open. What an action did is
-	// not folded.
+	// ends; the line is the button, by mouse and by key, and a step the user opened stays open. What an action did folds
+	// too; a failure's reason does not.
 	const step = (summary) => panel.locator(".msg.step", { hasText: summary });
 	const isOpen = async (summary) =>
 		(await step(summary).locator(".step-toggle").getAttribute("aria-expanded")) === "true" &&
@@ -707,9 +707,12 @@ try {
 			(await panel.locator(".msg.step.folded").count()) >= 4,
 	);
 	check(
-		"what an action did stays under its line",
-		(await panel.locator(".msg.step > .detail").count()) > 0 &&
-			(await panel.locator(".msg.step:has(> .step-toggle) > .detail").count()) === 0,
+		"what an action did folds with its step, and a failure's reason stays",
+		(await panel.locator(".msg.step > .detail").count()) === 0 &&
+			(await panel.locator(".msg.step.folded > .fold-body > .detail").count()) > 0 &&
+			(await panel.locator(".msg.step > .reason").count()) > 0 &&
+			(await panel.locator(".msg.step > .reason:visible").count()) ===
+				(await panel.locator(".msg.step > .reason").count()),
 	);
 	const foldLine = step("Fold one").locator(".step-toggle");
 	await foldLine.click();
