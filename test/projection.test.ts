@@ -343,6 +343,9 @@ it("says in plain words how a stop or a restart ended a step; the model's text a
 			),
 			ended(4, "read_page", "abandoned", "Tool read_page was not started: its caller ended with a restart"),
 			ended(5, "web_search", "aborted", "Tool web_search was aborted"),
+			// Names the model made up stay as they are, an object's own keys too.
+			ended(7, "__proto__", "abandoned", "Tool __proto__ was not started: its caller ended with a restart"),
+			ended(8, "constructor", "aborted", "Tool constructor was aborted"),
 			// Blocked by pi's own hook: not an ending, so its text stays.
 			ended(6, "run_script", "blocked", "Tool call blocked: The user denied this script"),
 		]),
@@ -374,6 +377,14 @@ it("says in plain words how a stop or a restart ended a step; the model's text a
 			error: "Not started: the task ended with a restart.",
 		},
 		{ ...step, id: 5, role: "notice", text: "web_search: stopped", error: "Stopped before this step finished." },
+		{
+			...step,
+			id: 7,
+			role: "notice",
+			text: "__proto__: not started",
+			error: "Not started: the task ended with a restart.",
+		},
+		{ ...step, id: 8, role: "notice", text: "constructor: stopped", error: "Stopped before this step finished." },
 		{
 			...step,
 			id: 6,

@@ -475,16 +475,30 @@ function endOf(data: JsonValue | undefined): Ended | null {
 	return null;
 }
 
-/** The tools by their names in Settings, for a step without the model's summary; another tool keeps its own name. */
-const TOOL_LABELS: Readonly<Record<string, () => string>> = {
-	read_page: () => t("readPage"),
-	observe_page: () => t("observePage"),
-	act_on_page: () => t("actPage"),
-	run_script: () => t("runScript"),
-	screenshot_page: () => t("screenshotPage"),
-	wait_on_page: () => t("waitOnPage"),
-	list_tabs: () => t("listTabs"),
-};
+/**
+ * A tool by its name in Settings, for a step without the model's summary; another name, which the model may have made
+ * up for a call pi-durable ended before it found the tool, shows as it is.
+ */
+function toolLabel(name: string): string {
+	switch (name) {
+		case "read_page":
+			return t("readPage");
+		case "observe_page":
+			return t("observePage");
+		case "act_on_page":
+			return t("actPage");
+		case "run_script":
+			return t("runScript");
+		case "screenshot_page":
+			return t("screenshotPage");
+		case "wait_on_page":
+			return t("waitOnPage");
+		case "list_tabs":
+			return t("listTabs");
+		default:
+			return name;
+	}
+}
 
 /**
  * A tool call pi-durable ended: its line, and why, in the interface language; the model got pi-durable's own text. A
@@ -497,7 +511,7 @@ function endedNotice(
 	code: string | null,
 	ended: Ended,
 ): ChatEntry {
-	const label = TOOL_LABELS[result.toolName]?.() ?? result.toolName;
+	const label = toolLabel(result.toolName);
 	const acted = result.toolName === "act_on_page" || result.toolName === "run_script";
 	const [line, reason] =
 		ended === "aborted"
